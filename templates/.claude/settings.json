@@ -1,0 +1,20 @@
+{
+    "codemod_commands": {
+      "generate-prp": {
+        "description": "Generate a comprehensive PRP from INITIAL.md",
+        "command": "cat .claude/commands/generate-prp.md"
+      },
+      "execute-prp": {
+        "description": "Execute a PRP to implement features",
+        "command": "cat .claude/commands/execute-prp.md"
+      },
+      "test-all": {
+        "description": "Run all tests and report results",
+        "command": "cat .claude/commands/test-all.md"
+      },
+      "check-quality": {
+        "description": "Check code quality comprehensively",
+        "command": "cat .claude/commands/check-quality.md"
+      }
+    }
+}

@@ -1,0 +1,203 @@
+name: Validate Templates
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq shellcheck
+    
+    - name: Validate JSON files
+      run: |
+        echo "🔍 Validating JSON files..."
+        find templates -name "*.json" -type f | while read file; do
+          echo "Checking: $file"
+          jq . "$file" > /dev/null || exit 1
+        done
+        echo "✅ All JSON files are valid"
+    
+    - name: Validate shell scripts
+      run: |
+        echo "🔍 Validating shell scripts..."
+        shellcheck setup-claude-code.sh
+        echo "✅ Shell scripts are valid"
+    
+    - name: Check required template files
+      run: |
+        echo "🔍 Checking required template files..."
+        REQUIRED_FILES=(
+          "templates/.claude/settings.json"
+          "templates/.claude/commands/generate-prp.md"
+          "templates/.claude/commands/execute-prp.md"
+          "templates/.claude/commands/test-all.md"
+          "templates/.claude/commands/check-quality.md"
+          "templates/CLAUDE.md"
+          "templates/INITIAL.md"
+          "templates/PRPs/templates/prp_base.md"
+          "templates/docs/PLANNING.md"
+          "templates/docs/TASK.md"
+          "templates/docs/TROUBLESHOOTING.md"
+          "templates/.gitignore"
+          "templates/.env.example"
+        )
+        
+        missing_files=()
+        for file in "${REQUIRED_FILES[@]}"; do
+          if [ ! -f "$file" ]; then
+            missing_files+=("$file")
+          fi
+        done
+        
+        if [ ${#missing_files[@]} -ne 0 ]; then
+          echo "❌ Missing required files:"
+          printf '%s\n' "${missing_files[@]}"
+          exit 1
+        fi
+        echo "✅ All required template files exist"
+    
+    - name: Test setup script
+      run: |
+        echo "🧪 Testing setup script..."
+        ./setup-claude-code.sh test-project
+        
+        # 프로젝트가 올바르게 생성되었는지 확인
+        if [ ! -d "test-project" ]; then
+          echo "❌ Test project was not created"
+          exit 1
+        fi
+        
+        # 주요 파일들이 존재하는지 확인
+        cd test-project
+        for file in .claude/settings.json CLAUDE.md INITIAL.md README.md; do
+          if [ ! -f "$file" ]; then
+            echo "❌ Missing file in generated project: $file"
+            exit 1
+          fi
+        done
+        
+        # PROJECT_NAME이 올바르게 치환되었는지 확인
+        if grep -q "PROJECT_NAME" CLAUDE.md README.md; then
+          echo "❌ PROJECT_NAME was not replaced properly"
+          exit 1
+        fi
+        
+        echo "✅ Setup script works correctly"
+        
+        # 정리
+        cd ..
+        rm -rf test-project
+    
+    - name: Validate Markdown files
+      run: |
+        echo "🔍 Checking Markdown files..."
+        # 기본적인 Markdown 문법 검사
+        find templates -name "*.md" -type f | while read file; do
+          # 빈 파일 체크
+          if [ ! -s "$file" ]; then
+            echo "⚠️  Warning: Empty file: $file"
+          fi
+          # 매우 큰 파일 체크 (100KB 이상)
+          size=$(stat -c%s "$file" 2>/dev/null || stat -f%z "$file" 2>/dev/null)
+          if [ "$size" -gt 102400 ]; then
+            echo "⚠️  Warning: Large file (>100KB): $file"
+          fi
+        done
+        echo "✅ Markdown files checked"
+    
+    - name: Check template consistency
+      run: |
+        echo "🔍 Checking template consistency..."
+        
+        # settings.json의 명령어와 실제 파일이 일치하는지 확인
+        commands=$(jq -r '.codemod_commands | keys[]' templates/.claude/settings.json)
+        while IFS= read -r cmd; do
+          cmd_file=$(jq -r ".codemod_commands.\"$cmd\".command" templates/.claude/settings.json | awk '{print $2}')
+          if [ ! -f "templates/$cmd_file" ]; then
+            echo "❌ Command file missing: $cmd_file (referenced by $cmd)"
+            exit 1
+          fi
+        done <<< "$commands"
+        
+        echo "✅ Template consistency verified"
+
+  test-different-environments:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
+    - name: Test setup script on ${{ matrix.os }}
+      run: |
+        echo "🧪 Testing on ${{ matrix.os }}..."
+        ./setup-claude-code.sh test-env-project
+        
+        # 기본 검증
+        if [ ! -d "test-env-project/.claude" ]; then
+          echo "❌ .claude directory not created on ${{ matrix.os }}"
+          exit 1
+        fi
+        
+        echo "✅ Setup works on ${{ matrix.os }}"
+        rm -rf test-env-project
+
+  documentation:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
+    - name: Check documentation
+      run: |
+        echo "📚 Checking documentation..."
+        
+        # README.md가 존재하는지 확인
+        if [ ! -f "README.md" ]; then
+          echo "❌ README.md is missing"
+          exit 1
+        fi
+        
+        # CONTRIBUTING.md 확인 (있다면)
+        if [ -f "CONTRIBUTING.md" ]; then
+          echo "✅ CONTRIBUTING.md found"
+        else
+          echo "⚠️  Warning: CONTRIBUTING.md is missing"
+        fi
+        
+        # 문서에 필요한 섹션들이 있는지 확인
+        required_sections=("빠른 시작" "Quick Start" "Installation" "Usage")
+        found=false
+        for section in "${required_sections[@]}"; do
+          if grep -q "$section" README.md; then
+            found=true
+            break
+          fi
+        done
+        
+        if [ "$found" = false ]; then
+          echo "⚠️  Warning: README.md might be missing installation instructions"
+        fi
+        
+        echo "✅ Documentation check complete"
