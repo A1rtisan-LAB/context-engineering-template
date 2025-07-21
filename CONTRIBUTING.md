@@ -41,7 +41,7 @@
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/yourusername/context-engineering-template.git
+   git clone https://github.com/A1rtisan-LAB/context-engineering-template.git
    cd context-engineering-template
    ```
 

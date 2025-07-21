@@ -20,7 +20,7 @@
 
 ### 1. 저장소 클론
 ```bash
-git clone https://github.com/yourusername/context-engineering-template.git
+git clone https://github.com/A1rtisan-LAB/context-engineering-template.git
 cd context-engineering-template
 ```
 
