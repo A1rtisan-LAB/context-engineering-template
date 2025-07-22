@@ -76,6 +76,9 @@ jobs:
     - name: Test setup script
       run: |
         echo "🧪 Testing setup script..."
+        # Git 사용자 설정 (CI 환경용)
+        git config --global user.email "github-actions@github.com"
+        git config --global user.name "GitHub Actions"
         ./setup-claude-code.sh test-project
         
         # 프로젝트가 올바르게 생성되었는지 확인
@@ -151,6 +154,9 @@ jobs:
     - name: Test setup script on ${{ matrix.os }}
       run: |
         echo "🧪 Testing on ${{ matrix.os }}..."
+        # Git 사용자 설정 (CI 환경용)
+        git config --global user.email "github-actions@github.com"
+        git config --global user.name "GitHub Actions"
         ./setup-claude-code.sh test-env-project
         
         # 기본 검증
