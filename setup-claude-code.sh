@@ -35,7 +35,7 @@ NC='\033[0m' # No Color
 echo -e "${CYAN}"
 echo "  ╔═══════════════════════════════════════╗"
 echo "  ║            C O N T E X T              ║"
-echo "  ║       Engineering Template           ║"
+echo "  ║       Engineering Template            ║"
 echo "  ╚═══════════════════════════════════════╝"
 echo "                                        "
 echo "     Engineering Template Setup         "
@@ -107,11 +107,16 @@ create_project_structure() {
     # 프로젝트 디렉토리 확인
     if [ -d "$FULL_PROJECT_PATH" ]; then
         echo -e "${YELLOW}⚠️  경고: 디렉토리 '$FULL_PROJECT_PATH'이 이미 존재합니다.${NC}"
-        read -p "계속하시겠습니까? 기존 파일이 덮어쓰여질 수 있습니다. (y/N) " -n 1 -r
-        echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            echo "취소되었습니다."
-            exit 1
+        # CI 환경에서는 자동으로 덮어쓰기 진행
+        if [[ -n "$CI" || -n "$GITHUB_ACTIONS" ]]; then
+            echo "CI 환경 감지: 기존 디렉토리 자동 덮어쓰기"
+        else
+            read -p "계속하시겠습니까? 기존 파일이 덮어쓰여질 수 있습니다. (y/N) " -n 1 -r
+            echo
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                echo "취소되었습니다."
+                exit 1
+            fi
         fi
     fi
     
@@ -249,10 +254,16 @@ main() {
     customize_project
     
     # Git 초기화 (선택사항)
-    read -p "Git 저장소를 초기화하시겠습니까? (Y/n) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+    # CI 환경에서는 자동으로 Git 초기화를 진행
+    if [[ -n "$CI" || -n "$GITHUB_ACTIONS" ]]; then
+        echo "CI 환경 감지: Git 저장소 자동 초기화"
         initialize_git
+    else
+        read -p "Git 저장소를 초기화하시겠습니까? (Y/n) " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+            initialize_git
+        fi
     fi
     
     # 완료 메시지 및 다음 단계 안내
