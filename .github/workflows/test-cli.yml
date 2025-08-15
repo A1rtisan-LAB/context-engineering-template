@@ -1,0 +1,284 @@
+name: Test CLI
+
+on:
+  push:
+    paths:
+      - 'cli/**'
+      - 'starters/**'
+      - 'packages/**'
+  pull_request:
+    paths:
+      - 'cli/**'
+      - 'starters/**'
+      - 'packages/**'
+  workflow_dispatch:
+
+jobs:
+  test-cli-basic:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        echo "📦 Installing dependencies..."
+        npm ci --ignore-scripts || npm install --ignore-scripts
+    
+    - name: Test CLI help
+      run: |
+        echo "📖 Testing CLI help..."
+        node cli/claude-init.js --help
+        node cli/claude-init.js -h
+    
+    - name: Test CLI version
+      run: |
+        echo "🏷️ Testing CLI version..."
+        node cli/claude-init.js --version
+        node cli/claude-init.js -v
+    
+    - name: Test basic project creation
+      run: |
+        echo "🚀 Testing basic project creation..."
+        
+        # Create test directory
+        TEST_DIR=$(mktemp -d)
+        cd "$TEST_DIR"
+        
+        # Run CLI
+        node "$GITHUB_WORKSPACE/cli/claude-init.js" test-basic basic
+        
+        # Verify project structure
+        if [ ! -d "test-basic" ]; then
+          echo "❌ Project directory not created"
+          exit 1
+        fi
+        
+        cd test-basic
+        
+        # Check essential files
+        REQUIRED_FILES=(
+          "CLAUDE.md"
+          "INITIAL.md"
+          "README.template.md"
+        )
+        
+        for file in "${REQUIRED_FILES[@]}"; do
+          if [ ! -f "$file" ]; then
+            echo "❌ Missing required file: $file"
+            exit 1
+          fi
+        done
+        
+        # Check placeholder replacement
+        if grep -q "PROJECT_NAME" CLAUDE.md; then
+          echo "❌ PROJECT_NAME placeholder not replaced"
+          exit 1
+        fi
+        
+        echo "✅ Basic project creation successful"
+        
+        # Cleanup
+        cd /
+        rm -rf "$TEST_DIR"
+
+  test-all-starters:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        starter: [basic, api, frontend, fullstack]
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci --ignore-scripts || npm install --ignore-scripts
+    
+    - name: Test ${{ matrix.starter }} starter
+      run: |
+        echo "🧪 Testing ${{ matrix.starter }} starter..."
+        
+        # Create test directory
+        TEST_DIR=$(mktemp -d)
+        
+        # Run CLI with starter type
+        node cli/claude-init.js "test-${{ matrix.starter }}" "${{ matrix.starter }}" "$TEST_DIR"
+        
+        # Verify project was created
+        if [ ! -d "$TEST_DIR/test-${{ matrix.starter }}" ]; then
+          echo "❌ ${{ matrix.starter }} project not created"
+          exit 1
+        fi
+        
+        # Check for .claude directory or symlink
+        if [ "${{ matrix.starter }}" = "basic" ]; then
+          # Basic starter should have template files
+          if [ ! -f "$TEST_DIR/test-${{ matrix.starter }}/CLAUDE.md" ]; then
+            echo "❌ Missing CLAUDE.md in ${{ matrix.starter }} starter"
+            exit 1
+          fi
+        fi
+        
+        echo "✅ ${{ matrix.starter }} starter test passed"
+        
+        # Cleanup
+        rm -rf "$TEST_DIR"
+
+  test-cli-errors:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci --ignore-scripts || npm install --ignore-scripts
+    
+    - name: Test invalid starter type
+      run: |
+        echo "🧪 Testing invalid starter type..."
+        
+        # This should fail with error message
+        if node cli/claude-init.js test-invalid invalid-type /tmp 2>&1 | grep -q "Invalid starter type"; then
+          echo "✅ Invalid starter type error handled correctly"
+        else
+          echo "❌ Invalid starter type should produce error"
+          exit 1
+        fi
+    
+    - name: Test existing directory error
+      run: |
+        echo "🧪 Testing existing directory error..."
+        
+        # Create directory first
+        TEST_DIR=$(mktemp -d)
+        mkdir -p "$TEST_DIR/existing-project"
+        
+        # Try to create project in existing directory
+        if node cli/claude-init.js existing-project basic "$TEST_DIR" 2>&1 | grep -q "already exists"; then
+          echo "✅ Existing directory error handled correctly"
+        else
+          echo "❌ Should error when directory exists"
+          exit 1
+        fi
+        
+        # Cleanup
+        rm -rf "$TEST_DIR"
+
+  test-cli-cross-platform:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: [16, 18, 20]
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Node.js ${{ matrix.node }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci --ignore-scripts || npm install --ignore-scripts
+    
+    - name: Test CLI on ${{ matrix.os }}
+      run: |
+        echo "Testing CLI on ${{ matrix.os }} with Node.js ${{ matrix.node }}..."
+        
+        # Basic functionality test
+        node cli/claude-init.js --version
+        
+        # Help should work
+        node cli/claude-init.js --help
+        
+        echo "✅ CLI works on ${{ matrix.os }} with Node.js ${{ matrix.node }}"
+    
+    - name: Create test project
+      shell: bash
+      run: |
+        # Use bash for consistency across platforms
+        TEST_DIR=$(mktemp -d 2>/dev/null || mktemp -d -t 'test')
+        
+        node cli/claude-init.js test-project basic "$TEST_DIR"
+        
+        if [ -d "$TEST_DIR/test-project" ]; then
+          echo "✅ Project created successfully on ${{ matrix.os }}"
+        else
+          echo "❌ Failed to create project on ${{ matrix.os }}"
+          exit 1
+        fi
+        
+        # Cleanup
+        rm -rf "$TEST_DIR"
+
+  performance-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci --ignore-scripts || npm install --ignore-scripts
+    
+    - name: Measure CLI performance
+      run: |
+        echo "⏱️ Measuring CLI performance..."
+        
+        # Measure help command time
+        start=$(date +%s%N)
+        node cli/claude-init.js --help > /dev/null
+        end=$(date +%s%N)
+        help_time=$((($end - $start) / 1000000))
+        echo "Help command: ${help_time}ms"
+        
+        if [ "$help_time" -gt 1000 ]; then
+          echo "⚠️  Warning: Help command took more than 1 second"
+        fi
+        
+        # Measure project creation time
+        TEST_DIR=$(mktemp -d)
+        start=$(date +%s%N)
+        node cli/claude-init.js perf-test basic "$TEST_DIR"
+        end=$(date +%s%N)
+        create_time=$((($end - $start) / 1000000))
+        echo "Project creation: ${create_time}ms"
+        
+        if [ "$create_time" -gt 5000 ]; then
+          echo "⚠️  Warning: Project creation took more than 5 seconds"
+        fi
+        
+        # Cleanup
+        rm -rf "$TEST_DIR"
+        
+        echo "✅ Performance test complete"
