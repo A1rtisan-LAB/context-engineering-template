@@ -3,101 +3,139 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-> 🚀 Claude Code를 위한 Context Engineering 프로젝트 템플릿 - AI와의 효율적인 협업을 위한 구조화된 접근 방식
+> 🚀 Context Engineering project template for Claude Code - A structured approach for efficient AI collaboration
 
-## 🎯 소개
+## 🎯 Introduction
 
-이 템플릿은 Claude Code와 함께 사용하기 위해 설계된 Context Engineering 프레임워크입니다. AI 어시스턴트가 프로젝트의 전체 맥락을 이해하고 일관된 코드를 생성할 수 있도록 돕습니다.
+This template is a Context Engineering framework designed for use with Claude Code. It helps AI assistants understand the full context of your project and generate consistent code.
 
-### 주요 특징
+### Key Features
 
-- 📋 **PRP (Product Requirements Prompt)**: AI를 위한 상세한 구현 청사진
-- 🤖 **Claude Code 통합**: 커스텀 명령어로 워크플로우 자동화
-- 📚 **패턴 라이브러리**: 재사용 가능한 코드 패턴과 베스트 프랙티스
-- 🔄 **단일 진실의 원천**: 템플릿 중복 없이 효율적인 관리
+- 📋 **PRP (Product Requirements Prompt)**: Detailed implementation blueprint for AI
+- 🤖 **Claude Code Integration**: Workflow automation with custom commands
+- 📚 **Pattern Library**: Reusable code patterns and best practices
+- 🔄 **Single Source of Truth**: Efficient management without template duplication
 
-## 🚀 빠른 시작
+## 🚀 Quick Start
 
-### 1. 저장소 클론
+### 1. Clone Repository
 ```bash
 git clone https://github.com/A1rtisan-LAB/context-engineering-template.git
 cd context-engineering-template
 ```
 
-### 2. 새 프로젝트 생성
+### 2. Create New Project
 ```bash
-# 기본 사용법 (현재 디렉토리에 생성)
+# Basic usage (create in current directory)
 ./setup-claude-code.sh my-awesome-project
 ```
 
-### 3. 프로젝트 타입 지정 (선택사항)
+### 3. Specify Project Type (Optional)
 ```bash
-# API 프로젝트
+# API project
 ./setup-claude-code.sh my-api api
 
-# Frontend 프로젝트
+# Frontend project
 ./setup-claude-code.sh my-frontend frontend
 
-# Fullstack 프로젝트
+# Fullstack project
 ./setup-claude-code.sh my-fullstack fullstack
 ```
 
-### 4. 프로젝트 경로 지정 (선택사항)
+### 4. Specify Project Path (Optional)
 ```bash
-# 홈 디렉토리의 Desktop에 생성
+# Create in Desktop directory
 ./setup-claude-code.sh my-project general ~/Desktop
 
-# 절대 경로 지정
+# Specify absolute path
 ./setup-claude-code.sh my-api api /path/to/projects
 
-# 상대 경로 지정
+# Specify relative path
 ./setup-claude-code.sh my-frontend frontend ./projects
 
-# 전체 옵션 사용 예시
+# Full options example
 ./setup-claude-code.sh awesome-app fullstack ~/Development
 ```
 
-## 📁 템플릿 구조
+## 📁 Template Structure
 
 ```
 templates/
-├── .claude/                  # Claude Code 설정
-│   ├── settings.json        # 커스텀 명령어 정의
-│   └── commands/            # 명령어 구현
+├── .claude/                  # Claude Code settings
+│   ├── commands/            # Custom command implementations
+│   └── agents/              # Specialized AI agents
 ├── PRPs/                    # Product Requirements Prompts
-│   └── templates/           # PRP 템플릿
-├── examples/                # 코드 패턴과 예시
-│   └── _patterns/          # 재사용 가능한 패턴
-├── docs/                    # 프로젝트 문서
-├── CLAUDE.md               # AI 어시스턴트 규칙
-├── INITIAL.md              # 기능 요청 템플릿
-└── README.template.md      # 프로젝트 README 템플릿
+│   └── templates/           # PRP templates
+├── examples/                # Code patterns and examples
+│   └── _patterns/          # Reusable patterns
+├── docs/                    # Project documentation
+├── CLAUDE.md               # AI assistant rules
+├── INITIAL.md              # Feature request template
+└── README.template.md      # Project README template
 ```
 
-## 🛠️ Claude Code 명령어
+## 🛠️ Claude Code Commands
 
-생성된 프로젝트에서 사용 가능한 명령어:
+Expert-level commands available in generated projects:
 
-| 명령어 | 설명 |
+### 🔍 **Analysis Commands**
+| Command | Description |
 |--------|------|
-| `/generate-prp [파일]` | INITIAL.md에서 상세한 PRP 생성 |
-| `/execute-prp [파일]` | PRP를 기반으로 기능 구현 |
-| `/test-all` | 모든 테스트 실행 및 결과 보고 |
-| `/check-quality` | 코드 품질 종합 검사 |
+| `/analyze:architecture [target]` | Analyze software architecture, design patterns, and structural quality |
+| `/analyze:code-quality [target]` | Analyze code quality, readability, maintainability, and standards compliance |
+| `/analyze:performance [target]` | Analyze performance bottlenecks, memory usage, and scalability issues |
+| `/analyze:project-context [target]` | Analyze project structure, dependencies, and configuration |
+| `/analyze:security [target]` | Analyze security vulnerabilities, authentication flaws, and data protection issues |
 
-## 📝 워크플로우
+### 🚀 **Implementation Commands**  
+| Command | Description |
+|--------|------|
+| `/implement:feature [feature-name]` | Implement new features and components with expert personas |
+| `/implement:enhancement [target]` | Improve existing code performance, maintainability, and readability |
+| `/implement:cleanup [target]` | Clean up codebase, remove unused code, and optimize structure |
 
-1. **요구사항 작성**: `INITIAL.md`에 구현하고자 하는 기능 설명
-2. **PRP 생성**: Claude Code에서 `/generate-prp INITIAL.md` 실행
-3. **검토 및 수정**: 생성된 PRP 검토 후 필요시 수정
-4. **구현**: `/execute-prp PRPs/[feature].md` 실행
-5. **검증**: `/test-all`과 `/check-quality`로 품질 확인
+### 🔧 **Management Commands**
+| Command | Description |
+|--------|------|
+| `/manage:git [task]` | Intelligent Git operations, automatic commit messages, strategic branch management |
+| `/manage:build [project]` | Build, compile, and package across various languages and build systems |
+| `/manage:test [scope]` | Run tests, analyze results, generate comprehensive test reports |
+| `/manage:workflow [task]` | Intelligent workflow management for complex multi-step tasks |
 
-## 🤝 기여하기
+### 🛠️ **Support Commands**
+| Command | Description |
+|--------|------|
+| `/support:diagnose [issue]` | Diagnose bugs, build failures, deployment issues, and unexpected system behavior |
+| `/support:document [target]` | Generate accurate documentation for code components, functions, and features |
+| `/support:estimate [task]` | Estimate development time for tasks, features, and entire projects |
+| `/support:explain [concept]` | Provide clear explanations of code functionality and programming concepts |
 
-이 프로젝트는 커뮤니티 기여를 환영합니다! 
+### 🎭 **Orchestration Commands**
+| Command | Description |
+|--------|------|
+| `/orchestrate [complex-task]` | Decompose and coordinate complex single-session requests into multi-agent workflows |
+| `/review-agents [agent]` | Review and analyze agent prompt quality, consistency, and effectiveness |
 
-### 기여 방법
+## 📝 Workflow
+
+### 🎯 **Basic Development Workflow**
+1. **Project Understanding**: Use `/analyze:project-context .` to understand project structure
+2. **Feature Implementation**: Use `/implement:feature [feature-name]` to develop new features
+3. **Quality Verification**: Use `/analyze:code-quality .` to check code quality
+4. **Test Execution**: Use `/manage:test all` to run all tests
+5. **Version Control**: Use `/manage:git commit` for intelligent commits and branch management
+
+### 🔧 **Advanced Workflow Patterns**
+- **Comprehensive Analysis**: `/orchestrate "complete project architecture, performance, and security analysis"`
+- **Refactoring**: `/implement:enhancement [module]` + `/implement:cleanup [module]`
+- **Problem Resolution**: `/support:diagnose [issue]` + `/support:explain [solution]`
+- **Project Estimation**: `/support:estimate [entire project]`
+
+## 🤝 Contributing
+
+This project welcomes community contributions!
+
+### How to Contribute
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-pattern`)
@@ -105,85 +143,93 @@ templates/
 4. Push to the branch (`git push origin feature/amazing-pattern`)
 5. Open a Pull Request
 
-자세한 내용은 [CONTRIBUTING.md](CONTRIBUTING.md)를 참조하세요.
+For detailed information, please refer to [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## 📋 템플릿 커스터마이징
+## 📋 Template Customization
 
-### 새로운 패턴 추가
+### Adding New Patterns
 ```bash
-# 새 패턴 파일 생성
+# Create new pattern file
 templates/examples/_patterns/your-pattern.md
 ```
 
-### 프로젝트별 규칙 추가
-`templates/CLAUDE.md`의 "프로젝트별 규칙" 섹션에 추가
+### Adding Project-Specific Rules
+Add to the "Project-Specific Rules" section in `templates/CLAUDE.md`
 
-### 새로운 PRP 템플릿 추가
+### Adding New PRP Templates
 ```bash
 templates/PRPs/templates/prp_your_type.md
 ```
 
-## 🔄 템플릿 관리
+## 🔄 Template Management
 
-### 템플릿 동기화 도구
+### Template Synchronization Tool
 
-`sync-templates.sh`를 사용하여 템플릿의 품질 관리와 기존 프로젝트 동기화를 수행할 수 있습니다.
+Use `sync-templates.sh` to perform template quality management and synchronization with existing projects.
 
-#### 사용 가능한 명령어
+#### Available Commands
 
 ```bash
-# 템플릿 파일 검증
+# Validate template files
 ./sync-templates.sh validate
 
-# 모든 템플릿 파일 목록 확인
+# List all template files
 ./sync-templates.sh list
 
-# 프로젝트와 템플릿 간 차이 분석
+# Analyze differences between templates and project
 ./sync-templates.sh diff my-project
 
-# 기존 프로젝트의 템플릿 업데이트
+# Update templates in existing project
 ./sync-templates.sh update my-project
 ```
 
-#### 주요 기능
+#### Key Features
 
-- **검증 (validate)**: JSON 문법 검사, 필수 파일 확인, 빈 Markdown 파일 감지
-- **목록 (list)**: 카테고리별 템플릿 파일 목록 (Claude 설정, PRP 템플릿, 문서, 예시 등)
-- **차이 분석 (diff)**: 템플릿과 프로젝트 간 수정/추가된 파일 감지
-- **업데이트 (update)**: 안전한 백업 후 선택적 템플릿 업데이트
+- **Validation**: JSON syntax check, required file verification, empty Markdown file detection
+- **List**: Categorized template file listing (Claude settings, PRP templates, documentation, examples, etc.)
+- **Difference Analysis**: Detect modified/added files between templates and project
+- **Update**: Safe backup followed by selective template updates
 
-#### 업데이트 시 주의사항
+#### Update Precautions
 
-- 업데이트 전 자동 백업 생성 (`.template-backup-[타임스탬프]`)
-- Claude 명령어, PRP 템플릿, 예시 패턴은 자동 업데이트
-- 문서 템플릿은 사용자 확인 후 선택적 업데이트
-- 기존 프로젝트 파일은 보존
+- Automatic backup creation before update (`.template-backup-[timestamp]`)
+- Claude commands, PRP templates, example patterns are auto-updated
+- Documentation templates are selectively updated after user confirmation
+- Existing project files are preserved
 
-## 🔧 문제 해결
+## 🔧 Troubleshooting
 
-일반적인 문제와 해결 방법은 `docs/TROUBLESHOOTING.md`를 참조하세요.
+For common issues and solutions, refer to `docs/TROUBLESHOOTING.md`.
 
-### 자주 묻는 질문
+### Frequently Asked Questions
 
-**Q: Claude Code가 명령어를 인식하지 못해요**
-- A: `.claude/settings.json` 파일이 올바른 위치에 있는지 확인하세요 (`.local` 아님!)
+**Q: Claude Code doesn't recognize commands**
+- A: Ensure `.claude/settings.json` file is in the correct location (not `.local`!)
 
-**Q: 템플릿을 수정했는데 반영되지 않아요**
-- A: `setup-claude-code.sh`를 다시 실행하거나 수동으로 파일을 복사하세요
+**Q: Template modifications are not reflected**
+- A: Re-run `setup-claude-code.sh` or manually copy the files
 
-## 📚 리소스
+## 📚 Resources
 
-- [Claude Code 문서](https://docs.anthropic.com/claude-code)
-- [Context Engineering 가이드](docs/CONTEXT_ENGINEERING.md)
-- [베스트 프랙티스](docs/BEST_PRACTICES.md)
+- [Claude Code Documentation](https://docs.anthropic.com/claude-code)
+- [Context Engineering Guide](docs/CONTEXT_ENGINEERING.md)
+- [Best Practices](docs/BEST_PRACTICES.md)
 
-## 📄 라이선스
+## 📄 License
 
-이 프로젝트는 MIT 라이선스 하에 배포됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
+This project is distributed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## 🙏 감사의 말
+## 🙏 Acknowledgments
 
-이 프로젝트는 Claude Code 커뮤니티의 피드백과 기여로 발전하고 있습니다.
+This project is evolving through feedback and contributions from the Claude Code community.
+
+## ☕ Support This Project
+
+If this template has improved your development workflow, consider supporting with a cup of coffee!
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-☕-yellow.svg)](https://buymeacoffee.com/a1rtisan)
+
+Your support provides great motivation for developing better Context Engineering tools and templates. 🚀
 
 ---
 

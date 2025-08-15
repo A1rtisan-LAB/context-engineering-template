@@ -1,51 +1,138 @@
 # Claude Assistant Rules for PROJECT_NAME
 
-## Claude Code 전용 규칙
-- 파일 생성/수정 시 항상 전체 내용 포함
-- 긴 파일은 여러 단계로 나누어 생성
-- 각 변경사항 후 즉시 검증
-- 오류 발생 시 전체 컨텍스트 유지하며 수정
+## 🚀 V2 Context Engineering System
 
-## 프로젝트 인식
-- 작업 시작 전 `PLANNING.md`와 `TASK.md` 확인
-- 완료된 작업은 즉시 `TASK.md`에 표시
-- 작업 중 발견된 새로운 할 일은 "작업 중 발견" 섹션에 추가
+This project leverages the advanced Context Engineering Template V2 with 18 specialized commands and 21 AI agents for comprehensive software development lifecycle management.
 
-## 파일 작업 규칙
-- 새 파일 생성 시 필요한 디렉토리도 함께 생성
-- 파일 경로는 항상 프로젝트 루트 기준
-- 바이너리 파일은 다루지 않음
-- 심볼릭 링크 생성 금지
+## 🎯 Core Development Principles
 
-## 코드 구조
-- 파일당 최대 500줄 제한
-- 한계에 도달하면 모듈로 분리
-- 기능/책임별로 명확하게 모듈 구성
-- 패키지 내에서는 상대 임포트 선호
+### Claude Code Integration
+- Utilize `/analyze:*` commands for comprehensive system understanding before implementation
+- Apply `/implement:*` commands for production-ready feature development with expert personas
+- Execute `/manage:*` commands for intelligent workflow and repository management
+- Leverage `/support:*` commands for problem-solving and documentation
+- Orchestrate complex workflows using `/orchestrate` for multi-agent coordination
 
-## 테스트 요구사항
-- 모든 새 기능에 단위 테스트 작성
-- `/tests` 폴더는 메인 앱 구조를 미러링
-- 테스트 커버리지 80% 이상 목표
-- 각 PR에는 테스트 필수
+### AI Agent Ecosystem
+- **Analysis Agents**: architecture-analyzer, security-analyzer, performance-analyzer, code-quality-analyzer
+- **Implementation Agents**: feature-implementer, code-enhancement-specialist, code-cleanup-optimizer
+- **Management Agents**: git-workflow-manager, build-packager, test-execution-manager, workflow-orchestrator
+- **Support Agents**: issue-diagnostician, concept-explainer, focused-doc-generator, dev-estimator
 
-## 스타일 규칙
-- 주 언어: [Python/TypeScript/JavaScript 중 선택]
-- 코드 포맷터: [black/prettier 중 선택]
-- 린터: [pylint/eslint 중 선택]
-- 타입 힌트/타입스크립트 사용
+## 📋 Project Recognition & Context Awareness
 
-## 문서화 표준
-- 모든 함수에 docstring/JSDoc 작성
-- Google 스타일 docstring 사용
-- 복잡한 로직에는 인라인 주석 추가
-- README.md는 항상 최신 상태 유지
+### Pre-Work Analysis Protocol
+1. **Project Context Discovery**: Execute `/analyze:project-context .` to understand system architecture
+2. **Quality Baseline**: Run `/analyze:code-quality .` to establish current quality metrics
+3. **Security Assessment**: Use `/analyze:security .` for vulnerability and compliance evaluation
+4. **Performance Profile**: Apply `/analyze:performance .` to identify optimization opportunities
 
-## 대화형 개발
-- 각 단계마다 진행 상황 보고
-- 선택이 필요한 경우 옵션 제시
-- 에러 발생 시 즉시 보고 및 해결책 제안
-- 작업 완료 후 다음 단계 제안
+### Documentation-First Development
+- Always consult `docs/ARCHITECTURE.md` for system design decisions
+- Reference `docs/SECURITY.md` for security requirements and patterns
+- Check `docs/PERFORMANCE.md` for performance benchmarks and optimization guidelines
+- Update `docs/API_DOCUMENTATION.md` with any API changes
 
-## 프로젝트별 규칙
-[여기에 프로젝트별 특수 규칙 추가]
+### Task Management Integration
+- Initialize tasks with `/support:estimate [task]` for accurate time planning
+- Track progress in project management system with clear milestone definitions
+- Document decisions in Architecture Decision Records (ADRs)
+- Maintain comprehensive changelogs with semantic versioning
+
+## 🏗️ Advanced File Operations & Architecture
+
+### Modular Architecture Principles
+- **Service Boundaries**: Each service/module should have clear responsibilities and interfaces
+- **Dependency Management**: Use dependency injection and interface segregation
+- **Configuration Management**: Externalize all environment-specific configurations
+- **Database Design**: Follow database-per-service pattern for microservices architectures
+
+### Code Organization Standards
+- **Maximum File Complexity**: 500 lines per file with automatic decomposition triggers
+- **Module Cohesion**: High cohesion within modules, loose coupling between modules
+- **Package Structure**: Domain-driven design with clear bounded contexts
+- **Import Management**: Prefer explicit imports with clear dependency graphs
+
+### Version Control Excellence
+- **Commit Strategy**: Use `/manage:git commit` for intelligent commit message generation
+- **Branch Management**: Apply GitFlow with feature/bugfix/hotfix branch patterns
+- **Code Review Process**: Mandatory peer review with `/analyze:code-quality` validation
+- **Release Management**: Automated versioning with semantic versioning principles
+
+## 🧪 Quality Assurance Framework
+
+### Testing Strategy
+- **Unit Testing**: 85%+ code coverage with behavior-driven testing patterns
+- **Integration Testing**: API contract testing with consumer-driven contracts
+- **End-to-End Testing**: Critical user journey validation with automated testing
+- **Performance Testing**: Load and stress testing with performance regression detection
+
+### Code Quality Gates
+1. **Linting & Formatting**: Automated code style enforcement with pre-commit hooks
+2. **Static Analysis**: Security vulnerability scanning with dependency checking
+3. **Architecture Compliance**: Architectural rule validation with fitness functions
+4. **Documentation**: API documentation generation with OpenAPI specifications
+
+### Deployment & Operations
+- **Containerization**: Docker-based deployment with multi-stage builds
+- **Infrastructure as Code**: Terraform/CloudFormation for reproducible environments
+- **Monitoring & Observability**: Distributed tracing, metrics, and structured logging
+- **Security**: Zero-trust architecture with defense-in-depth strategies
+
+## 🚀 Advanced Workflow Patterns
+
+### Multi-Agent Orchestration
+- **Complex Features**: Use `/orchestrate "implement user authentication with OAuth2, JWT, and RBAC"`
+- **System Analysis**: Apply `/orchestrate "comprehensive architecture, security, and performance review"`
+- **Refactoring**: Execute `/orchestrate "modernize legacy codebase with microservices pattern"`
+- **Quality Improvement**: Run `/orchestrate "code quality enhancement with performance optimization"`
+
+### Specialized Development Workflows
+- **API Development**: `/implement:feature [API]` → `/analyze:security .` → `/support:document [API]`
+- **Frontend Development**: `/analyze:performance .` → `/implement:feature [UI]` → `/analyze:code-quality .`
+- **DevOps Enhancement**: `/analyze:architecture .` → `/manage:build .` → `/manage:workflow [pipeline]`
+- **Legacy Modernization**: `/analyze:project-context .` → `/implement:enhancement [module]` → `/implement:cleanup [codebase]`
+
+## 🎭 Expert Persona Activation
+
+### Technology-Specific Expertise
+- **Cloud Architecture**: AWS/Azure/GCP best practices with serverless and containerization
+- **Security Engineering**: OWASP compliance, threat modeling, and secure coding practices
+- **Performance Engineering**: Profiling, optimization, and scalability patterns
+- **DevOps Excellence**: CI/CD pipeline optimization, infrastructure automation
+
+### Development Methodologies
+- **Agile/Scrum**: Sprint planning with accurate estimation and velocity tracking
+- **Domain-Driven Design**: Bounded context identification and ubiquitous language
+- **Test-Driven Development**: Red-Green-Refactor cycle with comprehensive test coverage
+- **Continuous Integration**: Pipeline-as-code with automated quality gates
+
+## 🔧 Troubleshooting & Problem Resolution
+
+### Diagnostic Workflow
+1. **Problem Identification**: Use `/support:diagnose [issue]` for systematic root cause analysis
+2. **Impact Assessment**: Apply `/analyze:performance .` or `/analyze:security .` as appropriate
+3. **Solution Design**: Leverage `/support:explain [concept]` for knowledge transfer
+4. **Implementation**: Execute `/implement:enhancement [fix]` with comprehensive testing
+
+### Emergency Response Protocol
+- **Critical Issues**: Immediate `/support:diagnose [critical-issue]` with escalation procedures
+- **Performance Degradation**: Emergency `/analyze:performance .` with optimization priorities
+- **Security Incidents**: Urgent `/analyze:security .` with threat containment measures
+- **System Outages**: Rapid `/manage:workflow [recovery]` with business continuity plans
+
+## 📊 Success Metrics & KPIs
+
+### Development Velocity
+- **Lead Time**: Feature conception to production deployment
+- **Cycle Time**: Development start to completion with quality gates
+- **Deployment Frequency**: Automated deployment success rate and frequency
+- **Mean Time to Recovery**: Incident detection to resolution time
+
+### Quality Metrics
+- **Code Coverage**: Minimum 85% with trend analysis and regression detection
+- **Technical Debt**: Automated debt quantification with prioritized remediation
+- **Security Score**: Vulnerability count and severity with compliance tracking
+- **Performance Metrics**: Response time, throughput, and resource utilization trends
+
+Transform your development workflow with intelligent AI assistance, ensuring every line of code meets enterprise-grade standards while accelerating delivery velocity through systematic automation and expert guidance.
