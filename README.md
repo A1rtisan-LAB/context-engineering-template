@@ -3,18 +3,45 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-> 🚀 Context Engineering project template for Claude Code - A structured approach for efficient AI collaboration
+> 🚀 Advanced monorepo template system for Claude Code projects with 22+ specialized AI agents
 
-## 🎯 Introduction
+## 📦 New Monorepo Structure (v3.0)
 
-This template is a Context Engineering framework designed for use with Claude Code. It helps AI assistants understand the full context of your project and generate consistent code.
+This project has been restructured as a modern monorepo for better modularity and maintainability:
 
-### Key Features
+```
+context-engineering-template/
+├── packages/                      # Modular packages
+│   ├── @claude-code/agents/      # AI agent definitions
+│   ├── @claude-code/commands/    # Command templates
+│   ├── @claude-code/workflows/   # Workflow definitions
+│   └── @claude-code/core/        # Core engine
+├── starters/                      # Project starter templates
+│   ├── basic/                    # Basic project template
+│   ├── api/                      # API server template
+│   ├── frontend/                 # Frontend app template
+│   └── fullstack/               # Full-stack template
+├── cli/                          # CLI tools
+│   └── claude-init.js           # Project initializer
+└── package.json                  # Workspace configuration
+```
 
-- 📋 **PRP (Product Requirements Prompt)**: Detailed implementation blueprint for AI
-- 🤖 **Claude Code Integration**: Workflow automation with custom commands
-- 📚 **Pattern Library**: Reusable code patterns and best practices
-- 🔄 **Single Source of Truth**: Efficient management without template duplication
+## 🎯 Key Benefits
+
+### Modularity
+- Each package is independently versioned and maintained
+- Easy to update or replace individual components
+- Clear separation of concerns
+
+### Scalability
+- Community can contribute new agents/commands as packages
+- Plugin ecosystem support
+- Easy to extend with new functionality
+
+### Developer Experience
+- Single entry point: `node cli/claude-init.js`
+- npm/yarn workspace support
+- Modern tooling compatibility
 
 ## 🚀 Quick Start
 
@@ -24,30 +51,20 @@ git clone https://github.com/A1rtisan-LAB/context-engineering-template.git
 cd context-engineering-template
 ```
 
-### 2. Create New Project
+### 2. Install Dependencies
 ```bash
-# Basic usage (create in current directory)
-./setup-claude-code.sh my-awesome-project
+npm install
 ```
 
-### 3. Specify Project Type (Optional)
+### 3. Create New Project
 ```bash
-# API project
-./setup-claude-code.sh my-api api
+# Using the new CLI
+node cli/claude-init.js my-project [starter-type] [target-path]
 
-# Frontend project
-./setup-claude-code.sh my-frontend frontend
-
-# Fullstack project
-./setup-claude-code.sh my-fullstack fullstack
-```
-
-### 4. Specify Project Path (Optional)
-```bash
-# Create in Desktop directory
-./setup-claude-code.sh my-project general ~/Desktop
-
-# Specify absolute path
+# Examples:
+node cli/claude-init.js                        # Basic project in ./my-claude-project
+node cli/claude-init.js my-api api             # API project
+node cli/claude-init.js my-app frontend ~/apps # Frontend app in ~/apps
 ./setup-claude-code.sh my-api api /path/to/projects
 
 # Specify relative path
