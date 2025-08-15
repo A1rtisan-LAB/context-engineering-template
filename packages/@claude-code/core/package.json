@@ -1,0 +1,26 @@
+{
+  "name": "@claude-code/core",
+  "version": "1.0.0",
+  "description": "Core engine for Claude Code template generation and validation",
+  "main": "index.js",
+  "files": [
+    "src/**/*",
+    "README.md"
+  ],
+  "keywords": [
+    "claude-code",
+    "template-engine",
+    "validation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A1rtisan-LAB/context-engineering-template.git",
+    "directory": "packages/@claude-code/core"
+  },
+  "bin": {
+    "claude-validate": "./src/validator.sh",
+    "claude-sync": "./src/synchronizer.sh"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@claude-code/agents",
+  "version": "1.0.0",
+  "description": "Specialized AI agents for Claude Code development tasks",
+  "main": "index.js",
+  "files": [
+    "src/**/*",
+    "README.md"
+  ],
+  "keywords": [
+    "claude-code",
+    "ai-agents",
+    "development-automation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A1rtisan-LAB/context-engineering-template.git",
+    "directory": "packages/@claude-code/agents"
+  }
+}

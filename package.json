@@ -1,0 +1,38 @@
+{
+  "name": "context-engineering-template",
+  "version": "3.0.0",
+  "description": "Advanced Context Engineering Template for Claude Code - Monorepo Edition",
+  "private": true,
+  "workspaces": [
+    "packages/@claude-code/*",
+    "cli"
+  ],
+  "scripts": {
+    "init": "node cli/claude-init.js",
+    "validate": "npm run validate --workspaces",
+    "test": "npm test --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "clean": "rm -rf node_modules packages/*/node_modules",
+    "setup": "npm install && npm run build"
+  },
+  "keywords": [
+    "claude-code",
+    "ai-development",
+    "context-engineering",
+    "template-system",
+    "monorepo"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A1rtisan-LAB/context-engineering-template.git"
+  },
+  "devDependencies": {
+    "lerna": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}
