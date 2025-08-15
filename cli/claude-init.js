@@ -3,11 +3,16 @@
 /**
  * Claude Code Project Initializer
  * Unified CLI entry point for creating new Claude Code projects
+ * 
+ * Performance optimized version using async/await for parallel operations
  */
 
 const { spawn } = require('child_process');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs').promises;
+const fsSync = require('fs');
+const { promisify } = require('util');
+const execAsync = promisify(require('child_process').exec);
 
 // Configuration
 const CONFIG = {
@@ -75,136 +80,183 @@ function validateStarter(starterType) {
   }
 }
 
-// Create project from starter
-async function createProject(projectName, starterType, targetPath) {
-  console.log(`\n🚀 Creating Claude Code project: ${projectName}`);
-  console.log(`   Type: ${starterType}`);
-  console.log(`   Location: ${targetPath}\n`);
-  
-  // Check if target directory exists
-  if (fs.existsSync(targetPath)) {
-    console.error(`Error: Directory ${targetPath} already exists`);
-    process.exit(1);
-  }
-  
-  // Create target directory
-  fs.mkdirSync(targetPath, { recursive: true });
-  
-  // Copy starter files
-  const starterPath = path.join(__dirname, '..', 'starters', starterType);
-  
-  if (!fs.existsSync(starterPath)) {
-    console.error(`Error: Starter template '${starterType}' not found`);
-    process.exit(1);
-  }
-  
-  // Use the core package's generator if available
-  const generatorPath = path.join(__dirname, '..', 'packages', '@claude-code', 'core', 'src', 'generator.sh');
-  
-  if (fs.existsSync(generatorPath)) {
-    // Use the generator script
-    const generator = spawn('bash', [generatorPath, projectName, starterType, targetPath], {
-      stdio: 'inherit'
-    });
-    
-    generator.on('close', (code) => {
-      if (code === 0) {
-        showSuccess(projectName, targetPath);
-      } else {
-        console.error('Error: Project generation failed');
-        process.exit(1);
-      }
-    });
-  } else {
-    // Fallback: Simple copy
-    copyRecursive(starterPath, targetPath);
-    
-    // Create .claude directory structure
-    const claudeDir = path.join(targetPath, '.claude');
-    fs.mkdirSync(claudeDir, { recursive: true });
-    
-    // Link to installed packages
-    linkPackages(targetPath);
-    
-    // Replace placeholders
-    replacePlaceholders(targetPath, projectName);
-    
-    showSuccess(projectName, targetPath);
+// Check if path exists (async version)
+async function pathExists(path) {
+  try {
+    await fs.access(path);
+    return true;
+  } catch {
+    return false;
   }
 }
 
-// Copy files recursively
-function copyRecursive(src, dest) {
-  const stats = fs.statSync(src);
+// Get all files in directory recursively (async)
+async function getFiles(dir) {
+  const dirents = await fs.readdir(dir, { withFileTypes: true });
+  const files = await Promise.all(
+    dirents.map((dirent) => {
+      const res = path.join(dir, dirent.name);
+      return dirent.isDirectory() ? getFiles(res) : res;
+    })
+  );
+  return files.flat();
+}
+
+// Copy files recursively (async version)
+async function copyRecursive(src, dest) {
+  const stats = await fs.stat(src);
   
   if (stats.isDirectory()) {
-    fs.mkdirSync(dest, { recursive: true });
-    fs.readdirSync(src).forEach(childItemName => {
-      copyRecursive(
-        path.join(src, childItemName),
-        path.join(dest, childItemName)
-      );
-    });
+    await fs.mkdir(dest, { recursive: true });
+    const items = await fs.readdir(src);
+    
+    // Copy all items in parallel for better performance
+    await Promise.all(
+      items.map(item =>
+        copyRecursive(
+          path.join(src, item),
+          path.join(dest, item)
+        )
+      )
+    );
   } else {
-    fs.copyFileSync(src, dest);
+    await fs.copyFile(src, dest);
   }
 }
 
-// Link Claude Code packages
-function linkPackages(targetPath) {
+// Link Claude Code packages (async version)
+async function linkPackages(targetPath) {
   const packagesSource = path.join(__dirname, '..', 'packages', '@claude-code');
   const packagesTarget = path.join(targetPath, '.claude');
   
+  // Check and link packages in parallel
+  const linkOperations = [];
+  
   // Link agents
-  if (fs.existsSync(path.join(packagesSource, 'agents', 'src'))) {
+  const agentsSourcePath = path.join(packagesSource, 'agents', 'src');
+  if (await pathExists(agentsSourcePath)) {
     const agentsTarget = path.join(packagesTarget, 'agents');
-    fs.mkdirSync(agentsTarget, { recursive: true });
-    fs.symlinkSync(
-      path.join(packagesSource, 'agents', 'src'),
-      path.join(agentsTarget, 'src'),
-      'dir'
+    linkOperations.push(
+      fs.mkdir(agentsTarget, { recursive: true }).then(() =>
+        fs.symlink(
+          agentsSourcePath,
+          path.join(agentsTarget, 'src'),
+          'dir'
+        )
+      )
     );
   }
   
   // Link commands
-  if (fs.existsSync(path.join(packagesSource, 'commands', 'src'))) {
+  const commandsSourcePath = path.join(packagesSource, 'commands', 'src');
+  if (await pathExists(commandsSourcePath)) {
     const commandsTarget = path.join(packagesTarget, 'commands');
-    fs.mkdirSync(commandsTarget, { recursive: true });
-    fs.symlinkSync(
-      path.join(packagesSource, 'commands', 'src'),
-      path.join(commandsTarget, 'src'),
-      'dir'
+    linkOperations.push(
+      fs.mkdir(commandsTarget, { recursive: true }).then(() =>
+        fs.symlink(
+          commandsSourcePath,
+          path.join(commandsTarget, 'src'),
+          'dir'
+        )
+      )
     );
   }
   
   // Link workflows
-  if (fs.existsSync(path.join(packagesSource, 'workflows', 'src'))) {
+  const workflowsSourcePath = path.join(packagesSource, 'workflows', 'src');
+  if (await pathExists(workflowsSourcePath)) {
     const workflowsTarget = path.join(packagesTarget, 'workflows');
-    fs.mkdirSync(workflowsTarget, { recursive: true });
-    fs.symlinkSync(
-      path.join(packagesSource, 'workflows', 'src'),
-      path.join(workflowsTarget, 'src'),
-      'dir'
+    linkOperations.push(
+      fs.mkdir(workflowsTarget, { recursive: true }).then(() =>
+        fs.symlink(
+          workflowsSourcePath,
+          path.join(workflowsTarget, 'src'),
+          'dir'
+        )
+      )
     );
   }
+  
+  // Execute all link operations in parallel
+  await Promise.all(linkOperations);
 }
 
-// Replace placeholders in files
-function replacePlaceholders(targetPath, projectName) {
+// Replace placeholders in files (async version)
+async function replacePlaceholders(targetPath, projectName) {
   const files = [
     'CLAUDE.md',
     'README.md',
     'package.json'
   ];
   
-  files.forEach(file => {
-    const filePath = path.join(targetPath, file);
-    if (fs.existsSync(filePath)) {
-      let content = fs.readFileSync(filePath, 'utf8');
-      content = content.replace(/PROJECT_NAME/g, projectName);
-      fs.writeFileSync(filePath, content);
-    }
-  });
+  // Process all files in parallel
+  await Promise.all(
+    files.map(async (file) => {
+      const filePath = path.join(targetPath, file);
+      if (await pathExists(filePath)) {
+        let content = await fs.readFile(filePath, 'utf8');
+        content = content.replace(/PROJECT_NAME/g, projectName);
+        await fs.writeFile(filePath, content);
+      }
+    })
+  );
+}
+
+// Create project from starter (async version)
+async function createProject(projectName, starterType, targetPath) {
+  const startTime = Date.now();
+  
+  // Determine the actual project path
+  const projectPath = path.basename(targetPath) === projectName 
+    ? targetPath 
+    : path.join(targetPath, projectName);
+  
+  console.log(`\n🚀 Creating Claude Code project: ${projectName}`);
+  console.log(`   Type: ${starterType}`);
+  console.log(`   Location: ${projectPath}\n`);
+  
+  // Check if project directory exists
+  if (await pathExists(projectPath)) {
+    console.error(`Error: Directory ${projectPath} already exists`);
+    process.exit(1);
+  }
+  
+  // Create project directory
+  await fs.mkdir(projectPath, { recursive: true });
+  
+  // Check if starter exists
+  const starterPath = path.join(__dirname, '..', 'starters', starterType);
+  
+  if (!await pathExists(starterPath)) {
+    console.error(`Error: Starter template '${starterType}' not found`);
+    process.exit(1);
+  }
+  
+  // Optimized async copy
+  console.log('📁 Copying starter files...');
+  
+  // Perform operations in parallel where possible
+  const operations = [];
+  
+  // Copy starter files
+  operations.push(copyRecursive(starterPath, projectPath));
+  
+  // Create .claude directory structure
+  const claudeDir = path.join(projectPath, '.claude');
+  operations.push(fs.mkdir(claudeDir, { recursive: true }));
+  
+  // Wait for initial operations
+  await Promise.all(operations);
+  
+  // Link packages and replace placeholders in parallel
+  await Promise.all([
+    linkPackages(projectPath),
+    replacePlaceholders(projectPath, projectName)
+  ]);
+  
+  const duration = Date.now() - startTime;
+  console.log(`⏱️  Project created in ${duration}ms`);
+  showSuccess(projectName, projectPath);
 }
 
 // Show success message
@@ -225,7 +277,7 @@ Happy coding! 🎉
 `);
 }
 
-// Main execution
+// Main execution (async)
 async function main() {
   try {
     const { projectName, starterType, targetPath } = parseArgs();
@@ -233,9 +285,15 @@ async function main() {
     await createProject(projectName, starterType, targetPath);
   } catch (error) {
     console.error('Error:', error.message);
+    if (error.stack) {
+      console.error('Stack:', error.stack);
+    }
     process.exit(1);
   }
 }
 
 // Run the CLI
-main();
+main().catch(error => {
+  console.error('Fatal error:', error);
+  process.exit(1);
+});

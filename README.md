@@ -229,8 +229,9 @@ For common issues and solutions, refer to `docs/TROUBLESHOOTING.md`.
 ## 📚 Resources
 
 - [Claude Code Documentation](https://docs.anthropic.com/claude-code)
-- [Context Engineering Guide](docs/CONTEXT_ENGINEERING.md)
-- [Best Practices](docs/BEST_PRACTICES.md)
+- [Architecture Overview](docs/ARCHITECTURE.md)
+- **[📋 Improvement Plan](docs/IMPROVEMENT_PLAN.md)** - Track project enhancement progress
+- **[📋 개선 계획 (Korean)](docs/IMPROVEMENT_PLAN.ko.md)** - 프로젝트 개선 진행 상황
 
 ## 📄 License
 

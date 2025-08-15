@@ -10,9 +10,13 @@
   "scripts": {
     "init": "node cli/claude-init.js",
     "validate": "npm run validate --workspaces",
-    "test": "npm test --workspaces --if-present",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --maxWorkers=2",
+    "benchmark": "node scripts/benchmark.js",
     "build": "npm run build --workspaces --if-present",
-    "clean": "rm -rf node_modules packages/*/node_modules",
+    "clean": "rm -rf node_modules packages/*/node_modules coverage",
     "setup": "npm install && npm run build"
   },
   "keywords": [
@@ -29,6 +33,8 @@
     "url": "git+https://github.com/A1rtisan-LAB/context-engineering-template.git"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.15",
+    "jest": "^30.0.5",
     "lerna": "^8.0.0"
   },
   "engines": {
