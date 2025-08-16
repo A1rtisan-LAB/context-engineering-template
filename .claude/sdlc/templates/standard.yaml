@@ -162,41 +162,6 @@ phases:
         name: Deployment Approval
         approvers: [devops, product_owner]
 
-  - name: documentation
-    description: Comprehensive documentation update and knowledge management
-    duration: 1 day
-    required: true
-    tasks:
-      - Update README.md
-      - Generate/update API documentation
-      - Update CHANGELOG.md
-      - Review and update user guides
-      - Test and update code examples
-      - Update troubleshooting guide
-      - Verify architecture diagrams
-      - Update configuration documentation
-    agents:
-      - project-knowledge-curator
-      - focused-doc-generator
-      - git-workflow-manager
-    outputs:
-      - README.md
-      - API.md
-      - CHANGELOG.md
-      - USER_GUIDE.md
-      - TROUBLESHOOTING.md
-      - examples/
-    quality_gates:
-      - type: automated
-        name: Documentation Completeness
-        threshold: 100
-      - type: automated
-        name: API Coverage
-        threshold: all public APIs
-      - type: automated
-        name: Example Validation
-        threshold: all examples run successfully
-
 settings:
   allow_parallel_phases: false
   auto_progression: false

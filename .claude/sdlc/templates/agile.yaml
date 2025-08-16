@@ -103,26 +103,6 @@ phases:
       - release-notes.md
       - deployment-log.txt
 
-  - name: sprint-documentation
-    description: Sprint documentation and knowledge update
-    duration: 2 hours
-    required: true
-    trigger: end_of_sprint
-    tasks:
-      - Update sprint documentation
-      - Document completed features
-      - Update API documentation
-      - Review and update README
-      - Create sprint changelog
-      - Update user stories documentation
-    agents:
-      - project-knowledge-curator
-      - focused-doc-generator
-    outputs:
-      - sprint-docs.md
-      - feature-docs.md
-      - sprint-changelog.md
-
 settings:
   iteration_enabled: true
   continuous_integration: true
