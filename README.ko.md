@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.ko.md)
 
-> 🚀 22개 이상의 전문 AI 에이전트를 포함한 Claude Code 프로젝트용 고급 모노레포(monorepo) 템플릿 시스템
+> 🚀 23개 이상의 전문 AI 에이전트와 SDLC 파이프라인 시스템을 포함한 Claude Code 프로젝트용 고급 모노레포(monorepo) 템플릿 시스템
 
 ## 📦 새로운 모노레포 구조 (v3.0)
 
@@ -65,6 +65,10 @@ node cli/claude-init.js my-project [starter-type] [target-path]
 node cli/claude-init.js                        # ./my-claude-project에 기본 프로젝트 생성
 node cli/claude-init.js my-api api             # API 프로젝트 생성
 node cli/claude-init.js my-app frontend ~/apps # ~/apps에 프론트엔드 앱 생성
+
+# SDLC 파이프라인 시스템 포함:
+node cli/claude-init.js my-project basic . --with-sdlc
+node cli/claude-init.js my-api api . --with-sdlc --sdlc-template=agile
 ./setup-claude-code.sh my-api api /path/to/projects
 
 # 상대 경로 지정
@@ -146,6 +150,15 @@ context-engineering-template/
 | `/support:document [target]` | 코드 컴포넌트, 함수, 기능에 대한 정확한 문서 생성 |
 | `/support:estimate [task]` | 작업, 기능, 전체 프로젝트의 개발 시간 추정 |
 | `/support:explain [concept]` | 코드 기능과 프로그래밍 개념에 대한 명확한 설명 제공 |
+| `/support:sdlc-report [feature]` | 메트릭과 인사이트를 포함한 종합 SDLC 파이프라인 보고서 생성 |
+
+### 🎯 **SDLC 파이프라인 커맨드**
+| 커맨드 | 설명 |
+|--------|---------|
+| `/sdlc [feature] [options]` | 종합적인 소프트웨어 개발 생명주기 파이프라인 실행 |
+| `/analyze:sdlc-readiness` | SDLC 파이프라인 실행을 위한 프로젝트 준비 상태 분석 |
+| `/implement:sdlc-phase [phase]` | 특정 SDLC 파이프라인 단계 실행 |
+| `/manage:sdlc-pipeline [action]` | SDLC 파이프라인 생명주기 및 상태 관리 |
 
 ### 🎭 **오케스트레이션 커맨드**
 | 커맨드 | 설명 |
@@ -167,6 +180,28 @@ context-engineering-template/
 - **리팩토링**: `/implement:enhancement [module]` + `/implement:cleanup [module]`
 - **문제 해결**: `/support:diagnose [issue]` + `/support:explain [solution]`
 - **프로젝트 추정**: `/support:estimate [entire project]`
+
+### 🚀 **SDLC 파이프라인 워크플로우**
+7단계로 구성된 체계적인 개발 생명주기 실행:
+
+```bash
+# 새 기능을 위한 SDLC 파이프라인 초기화
+/sdlc "user-authentication" --init
+
+# 전체 파이프라인 실행 (계획 → 설계 → 구현 → 리뷰 → 테스트 → 배포 → 문서화)
+/sdlc "user-authentication" --full
+
+# 특정 단계 실행
+/sdlc "user-authentication" --phase=design
+
+# 파이프라인 상태 확인
+/sdlc "user-authentication" --status
+
+# 파이프라인 보고서 생성
+/support:sdlc-report "user-authentication"
+```
+
+**사용 가능한 SDLC 템플릿**: `standard` (폭포수), `agile` (스프린트 기반), `hotfix` (긴급)
 
 ## 🤝 기여하기
 
@@ -249,6 +284,7 @@ templates/PRPs/templates/prp_your_type.md
 ## 📚 리소스
 
 - [Claude Code 문서](https://docs.anthropic.com/claude-code)
+- [SDLC 파이프라인 가이드](docs/SDLC_GUIDE.ko.md) - SDLC 파이프라인 시스템 종합 가이드
 - [아키텍처 개요](docs/ARCHITECTURE.ko.md)
 - **[📋 개선 계획](docs/IMPROVEMENT_PLAN.ko.md)** - 프로젝트 개선 진행 상황 추적
 - **[📋 Improvement Plan (English)](docs/IMPROVEMENT_PLAN.md)** - Track project enhancement progress

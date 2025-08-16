@@ -37,6 +37,10 @@ node cli/claude-init.js my-app frontend
 
 # Full-stack project
 node cli/claude-init.js my-fullstack fullstack
+
+# With SDLC Pipeline System
+node cli/claude-init.js my-project basic . --with-sdlc
+node cli/claude-init.js my-api api . --with-sdlc --sdlc-template=agile
 ```
 
 ## Project Structure
@@ -77,6 +81,39 @@ Open your project in Claude Code and use these commands:
 ```
 /manage:git commit
 ```
+
+## Using SDLC Pipeline
+
+The SDLC Pipeline System provides structured development through 7 phases:
+
+### Initialize SDLC Pipeline
+```
+/sdlc "feature-name" --init
+```
+
+### Run Full Pipeline
+```
+/sdlc "feature-name" --full
+```
+
+### Execute Specific Phase
+```
+/sdlc "feature-name" --phase=design
+```
+
+### Check Pipeline Status
+```
+/sdlc "feature-name" --status
+```
+
+### Generate Pipeline Report
+```
+/support:sdlc-report "feature-name"
+```
+
+**Available Templates**: `standard` (waterfall), `agile` (sprint-based), `hotfix` (emergency)
+
+For comprehensive SDLC pipeline guidance, see the [SDLC Pipeline Guide](SDLC_GUIDE.md).
 
 ## Performance Tips
 

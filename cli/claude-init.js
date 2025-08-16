@@ -17,7 +17,12 @@ const execAsync = promisify(require('child_process').exec);
 // Configuration
 const CONFIG = {
   starters: ['basic', 'api', 'frontend', 'fullstack'],
-  defaultStarter: 'basic'
+  defaultStarter: 'basic',
+  sdlc: {
+    available: true,
+    templates: ['standard', 'agile', 'hotfix'],
+    defaultTemplate: 'standard'
+  }
 };
 
 // Parse command line arguments
@@ -38,7 +43,14 @@ function parseArgs() {
   const starterType = args[1] || CONFIG.defaultStarter;
   const targetPath = args[2] || path.join(process.cwd(), projectName);
   
-  return { projectName, starterType, targetPath };
+  // SDLC options
+  const withSDLC = args.includes('--with-sdlc');
+  const sdlcTemplateIndex = args.findIndex(arg => arg.startsWith('--sdlc-template='));
+  const sdlcTemplate = sdlcTemplateIndex !== -1 
+    ? args[sdlcTemplateIndex].split('=')[1] 
+    : CONFIG.sdlc.defaultTemplate;
+  
+  return { projectName, starterType, targetPath, withSDLC, sdlcTemplate };
 }
 
 // Show help message
@@ -47,7 +59,7 @@ function showHelp() {
 Claude Code Project Initializer
 
 Usage:
-  claude-init [project-name] [starter-type] [target-path]
+  claude-init [project-name] [starter-type] [target-path] [options]
 
 Arguments:
   project-name   Name of your project (default: my-claude-project)
@@ -55,13 +67,17 @@ Arguments:
   target-path    Where to create the project (default: ./<project-name>)
 
 Options:
-  --help, -h     Show this help message
-  --version, -v  Show version information
+  --help, -h           Show this help message
+  --version, -v        Show version information
+  --with-sdlc          Include SDLC pipeline configuration
+  --sdlc-template=     SDLC template: ${CONFIG.sdlc.templates.join(', ')} (default: ${CONFIG.sdlc.defaultTemplate})
 
 Examples:
-  claude-init                           # Create basic project in ./my-claude-project
-  claude-init my-api api                # Create API project
-  claude-init my-app frontend ~/apps    # Create frontend app in ~/apps/my-app
+  claude-init                                    # Create basic project
+  claude-init my-api api                         # Create API project
+  claude-init my-app frontend ~/apps             # Create frontend app in ~/apps
+  claude-init my-project basic . --with-sdlc     # Include SDLC pipeline
+  claude-init my-api api . --with-sdlc --sdlc-template=agile  # With Agile SDLC
 `);
 }
 
@@ -230,8 +246,28 @@ async function replacePlaceholders(targetPath, projectName) {
   );
 }
 
+// Copy SDLC guides if enabled
+async function copySDLCGuides(projectPath) {
+  const docsDir = path.join(projectPath, 'docs');
+  await fs.mkdir(docsDir, { recursive: true });
+  
+  const guidesSource = path.join(__dirname, '..', 'docs');
+  const sdlcGuideEn = path.join(guidesSource, 'SDLC_GUIDE.md');
+  const sdlcGuideKo = path.join(guidesSource, 'SDLC_GUIDE.ko.md');
+  
+  if (await pathExists(sdlcGuideEn)) {
+    await fs.copyFile(sdlcGuideEn, path.join(docsDir, 'SDLC_GUIDE.md'));
+  }
+  
+  if (await pathExists(sdlcGuideKo)) {
+    await fs.copyFile(sdlcGuideKo, path.join(docsDir, 'SDLC_GUIDE.ko.md'));
+  }
+  
+  console.log('📚 SDLC guides copied');
+}
+
 // Create project from starter (async version)
-async function createProject(projectName, starterType, targetPath) {
+async function createProject(projectName, starterType, targetPath, withSDLC = false, sdlcTemplate = 'standard') {
   const startTime = Date.now();
   
   // Determine the actual project path
@@ -277,18 +313,30 @@ async function createProject(projectName, starterType, targetPath) {
   await Promise.all(operations);
   
   // Copy package contents and replace placeholders in parallel
-  await Promise.all([
+  const parallelOps = [
     copyPackageContents(projectPath),
     replacePlaceholders(projectPath, projectName)
-  ]);
+  ];
+  
+  // Add SDLC guide copying if enabled
+  if (withSDLC) {
+    parallelOps.push(copySDLCGuides(projectPath));
+    console.log(`📋 Including SDLC Pipeline with ${sdlcTemplate} template`);
+  }
+  
+  await Promise.all(parallelOps);
   
   const duration = Date.now() - startTime;
   console.log(`⏱️  Project created in ${duration}ms`);
-  showSuccess(projectName, projectPath);
+  showSuccess(projectName, projectPath, withSDLC);
 }
 
 // Show success message
-function showSuccess(projectName, targetPath) {
+function showSuccess(projectName, targetPath, withSDLC = false) {
+  const sdlcInfo = withSDLC 
+    ? '\n  • SDLC Pipeline System for structured development\n  • 7-phase development lifecycle management'
+    : '';
+    
   console.log(`
 ✅ Project created successfully!
 
@@ -299,7 +347,7 @@ Next steps:
 Your project includes:
   • Claude Code agents for AI-assisted development
   • Pre-configured commands and workflows
-  • Project templates and best practices
+  • Project templates and best practices${sdlcInfo}
 
 Happy coding! 🎉
 `);
@@ -308,9 +356,9 @@ Happy coding! 🎉
 // Main execution (async)
 async function main() {
   try {
-    const { projectName, starterType, targetPath } = parseArgs();
+    const { projectName, starterType, targetPath, withSDLC, sdlcTemplate } = parseArgs();
     validateStarter(starterType);
-    await createProject(projectName, starterType, targetPath);
+    await createProject(projectName, starterType, targetPath, withSDLC, sdlcTemplate);
   } catch (error) {
     console.error('Error:', error.message);
     if (error.stack) {

@@ -160,6 +160,71 @@ my-project/
 - **Dynamic discovery**: Automatically handles new package types
 - **Future-proof**: New packages in monorepo are automatically included
 
+## SDLC Pipeline System Architecture
+
+### Overview
+The SDLC (Software Development Lifecycle) Pipeline System provides a structured approach to software development through 7 distinct phases with automated quality gates and intelligent agent orchestration.
+
+### Pipeline Phases
+```
+Planning → Design → Implementation → Review → Testing → Deployment → Documentation
+```
+
+### Core Components
+
+#### 1. **SDLC Command** (`/sdlc`)
+- Main entry point for pipeline operations
+- Manages pipeline lifecycle and state
+- Coordinates phase transitions
+- Enforces quality gates
+
+#### 2. **Phase-Specific Commands**
+- `/analyze:sdlc-readiness` - Pre-flight checks
+- `/implement:sdlc-phase` - Execute specific phase
+- `/manage:sdlc-pipeline` - Pipeline management
+- `/support:sdlc-report` - Reporting and metrics
+
+#### 3. **SDLC Coordinator Agent**
+- Orchestrates specialist agents per phase
+- Validates phase completion criteria
+- Manages state transitions
+- Tracks quality metrics
+
+### Pipeline Templates
+
+#### Standard Template (Waterfall)
+- Sequential phase execution
+- Strict quality gates
+- Comprehensive documentation
+- 10-12 day typical duration
+
+#### Agile Template (Sprint-based)
+- 2-week sprint cycles
+- Iterative development
+- Daily standup integration
+- Continuous delivery focus
+
+#### Hotfix Template (Emergency)
+- 4-hour SLA
+- Expedited phases
+- Automatic rollback
+- Post-mortem required
+
+### State Management
+```
+.claude/sdlc/
+├── pipelines/          # Active pipeline states
+├── templates/          # Pipeline templates
+├── history/            # Completed pipelines
+└── config/            # Configuration files
+```
+
+### Quality Gates
+- **Automated**: Code coverage, tests, linting
+- **Manual**: Design review, deployment approval
+- **Metrics**: Quality score, performance benchmarks
+- **Override**: Requires justification and approval
+
 ## Future Architecture
 
 ### Planned Enhancements
@@ -167,6 +232,7 @@ my-project/
 2. **Web Interface** - Optional web-based project generator
 3. **Template Registry** - Community template sharing
 4. **Advanced Validation** - Schema-based template validation
+5. **SDLC Analytics** - Pipeline performance insights and optimization
 
 ### Migration Path
 The current system is designed to support gradual migration to more advanced architectures while maintaining backward compatibility.

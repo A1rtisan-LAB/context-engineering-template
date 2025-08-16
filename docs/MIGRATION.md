@@ -276,7 +276,7 @@ git checkout v2.0.0
 
 ## Deprecation Timeline
 
-- **v2.x**: Maintenance mode until 2025-01-01
+- **v2.x**: Maintenance mode until 2025-08-01
 - **v1.x**: No longer supported
 
 ## Next Steps

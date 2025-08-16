@@ -1,0 +1,108 @@
+name: Hotfix Pipeline
+description: Expedited pipeline for critical production issues
+version: 1.0.0
+
+urgency: critical
+sla: 4 hours
+
+phases:
+  - name: triage
+    description: Issue assessment and impact analysis
+    duration: 30 minutes
+    required: true
+    tasks:
+      - Reproduce issue
+      - Assess severity
+      - Determine impact
+      - Identify root cause
+    agents:
+      - issue-diagnostician
+      - project-context-analyzer
+    outputs:
+      - issue-report.md
+      - impact-assessment.md
+      - root-cause.md
+
+  - name: fix
+    description: Implement and test fix
+    duration: 2 hours
+    required: true
+    tasks:
+      - Implement fix
+      - Write regression test
+      - Local testing
+      - Code review
+    agents:
+      - feature-implementer
+      - code-quality-analyzer
+    outputs:
+      - patch code
+      - regression test
+      - review notes
+    quality_gates:
+      - type: automated
+        name: Fix Validation
+        threshold: all tests pass
+
+  - name: verify
+    description: Verify fix in staging
+    duration: 1 hour
+    required: true
+    tasks:
+      - Deploy to staging
+      - Run regression tests
+      - Verify fix
+      - Performance check
+    agents:
+      - test-execution-manager
+      - performance-analyzer
+    outputs:
+      - test-results.json
+      - verification-report.md
+
+  - name: deploy
+    description: Emergency production deployment
+    duration: 30 minutes
+    required: true
+    tasks:
+      - Create hotfix release
+      - Deploy to production
+      - Monitor deployment
+      - Verify in production
+    agents:
+      - build-packager
+      - git-workflow-manager
+    outputs:
+      - hotfix-release.tag
+      - deployment-log.txt
+      - monitoring-alerts.json
+    quality_gates:
+      - type: manual
+        name: Emergency Approval
+        approvers: [on_call_lead]
+
+settings:
+  skip_optional_checks: true
+  fast_track: true
+  auto_rollback: true
+  alert_stakeholders: true
+  
+rollback:
+  automatic: true
+  threshold: error_rate > 5%
+  strategy: blue_green
+
+notification:
+  channels:
+    - pagerduty
+    - slack
+    - email
+  recipients:
+    - on_call_team
+    - engineering_lead
+    - product_owner
+
+post_mortem:
+  required: true
+  timeline: within 48 hours
+  template: incident_report.md

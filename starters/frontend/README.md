@@ -1,8 +1,8 @@
-# Frontend Project Template
+# Frontend Starter Template
 
-This is an example of a frontend application created with Claude Code Template.
+Context Engineering Template for frontend applications with 23+ specialized AI agents and SDLC Pipeline System.
 
-## Project Structure
+## 🚀 Project Structure
 
 ```
 frontend-project/
@@ -13,12 +13,65 @@ frontend-project/
 │   ├── hooks/          # Custom React hooks
 │   └── utils/          # Utility functions
 ├── public/             # Static assets
+├── tests/              # Test files
+├── docs/               # Documentation including SDLC guides
 ├── .claude/            # Claude Code configuration
 ├── package.json        # Node.js dependencies
 └── index.html         # Main HTML file
 ```
 
-## Features
+## 📊 SDLC Pipeline System
+
+### Quick Start
+```bash
+# Initialize SDLC Pipeline for frontend project
+/sdlc "ui-feature" --init --template=agile
+
+# Check pipeline status
+/sdlc "ui-feature" --status
+
+# Generate progress report
+/support:sdlc-report "ui-feature"
+```
+
+### Frontend Development Workflow
+```bash
+# Phase 1: Planning (Sprint 1, Day 1-2)
+/sdlc "ui-feature" --phase=planning
+/support:estimate component-development
+
+# Phase 2: Design (Sprint 1, Day 3-5)
+/sdlc "ui-feature" --phase=design
+/implement:feature ui-mockups
+/analyze:architecture component-structure
+
+# Phase 3: Implementation (Sprint 1-2)
+/sdlc "ui-feature" --phase=implementation
+/implement:feature react-components
+/implement:enhancement accessibility
+/implement:feature responsive-design
+
+# Phase 4: Review (Sprint 2, Day 11)
+/sdlc "ui-feature" --phase=review
+/analyze:code-quality components
+/analyze:performance rendering
+
+# Phase 5: Testing (Sprint 2, Day 12-13)
+/sdlc "ui-feature" --phase=testing
+/manage:test component-tests
+/manage:test e2e-tests
+
+# Phase 6: Deployment (Sprint 2, Day 14)
+/sdlc "ui-feature" --phase=deployment
+/manage:build production
+/analyze:performance bundle-size
+
+# Phase 7: Documentation (Sprint 2, Day 14)
+/sdlc "ui-feature" --phase=documentation
+/support:document component-library
+```
+
+## 🛠️ Features
 
 - Modern React application
 - Component-based architecture
@@ -26,27 +79,66 @@ frontend-project/
 - Styled components/CSS modules
 - Build optimization
 - Development server with hot reload
+- Responsive design
+- Accessibility compliance
+- Performance optimization
+- Testing framework integration
 
-## Getting Started
+## 🚀 Getting Started
 
 1. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Start the development server:
+2. Initialize SDLC Pipeline (optional):
+   ```bash
+   /sdlc "my-ui" --init --template=agile
+   ```
+
+3. Start the development server:
    ```bash
    npm start
    ```
 
-3. Build for production:
+4. Build for production:
    ```bash
    npm run build
    ```
 
-## Claude Code Commands
+## 🤖 Claude Code Commands
 
+### Analysis Commands
 - `/analyze:code-quality` - Code quality analysis
 - `/analyze:performance` - Performance optimization
+- `/analyze:architecture` - Component architecture review
+- `/analyze:security` - Security audit
+
+### Implementation Commands
 - `/implement:feature` - Add new components
 - `/implement:enhancement` - Improve existing code
+- `/implement:cleanup` - Code refactoring
+
+### Management Commands
+- `/manage:test` - Run test suites
+- `/manage:build` - Build for production
+- `/manage:git` - Version control
+- `/manage:workflow` - CI/CD pipeline
+
+### Support Commands
+- `/support:document` - Generate documentation
+- `/support:estimate` - Development time estimation
+- `/support:diagnose` - Troubleshooting
+- `/support:sdlc-report` - SDLC progress reports
+
+## 📚 Documentation
+
+- [SDLC Pipeline Guide](docs/SDLC_GUIDE.md) ([한국어](docs/SDLC_GUIDE.ko.md))
+- [Component Guidelines](docs/COMPONENTS.md)
+- [Performance Optimization](docs/PERFORMANCE.md)
+- [Testing Strategy](docs/TESTING.md)
+
+## 🌏 Languages
+
+This document is also available in:
+- [한국어](README.ko.md)

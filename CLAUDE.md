@@ -20,6 +20,23 @@ node cli/claude-init.js my-api api ~/projects
 node cli/claude-init.js                        # Basic project
 node cli/claude-init.js my-app frontend        # Frontend project
 node cli/claude-init.js my-api api ./projects  # API project in ./projects
+
+# With SDLC Pipeline System
+node cli/claude-init.js my-project basic . --with-sdlc
+node cli/claude-init.js my-api api . --with-sdlc --sdlc-template=agile
+```
+
+### SDLC Pipeline Commands
+```bash
+# Initialize and run SDLC pipeline
+/sdlc "feature-name" --init            # Initialize pipeline
+/sdlc "feature-name" --full            # Run all phases
+/sdlc "feature-name" --phase=design    # Run specific phase
+/sdlc "feature-name" --status          # Check status
+
+# SDLC support commands
+/analyze:sdlc-readiness                # Check project readiness
+/support:sdlc-report "feature-name"    # Generate report
 ```
 
 ### Development Commands
@@ -44,9 +61,9 @@ npm run clean && npm install
 context-engineering-template/
 ├── packages/                      # Modular packages
 │   └── @claude-code/
-│       ├── agents/               # 22 AI agents
+│       ├── agents/               # 23 AI agents (including sdlc-coordinator)
 │       │   └── src/             # Agent .md files
-│       ├── commands/             # 18 commands
+│       ├── commands/             # 24 commands (including 5 SDLC commands)
 │       │   └── src/             # Command .md files
 │       ├── workflows/            # Workflow definitions
 │       │   └── src/             # Workflow .md files

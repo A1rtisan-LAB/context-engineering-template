@@ -1,8 +1,8 @@
 # Claude Assistant Rules for PROJECT_NAME
 
-## 🚀 V2 Context Engineering System
+## 🚀 Context Engineering System
 
-This project leverages the advanced Context Engineering Template V2 with 18 specialized commands and 21 AI agents for comprehensive software development lifecycle management.
+This project leverages the advanced Context Engineering Template with 23+ specialized commands, 23+ AI agents, and SDLC Pipeline System for comprehensive software development lifecycle management.
 
 ## 🎯 Core Development Principles
 
@@ -135,4 +135,49 @@ This project leverages the advanced Context Engineering Template V2 with 18 spec
 - **Security Score**: Vulnerability count and severity with compliance tracking
 - **Performance Metrics**: Response time, throughput, and resource utilization trends
 
-Transform your development workflow with intelligent AI assistance, ensuring every line of code meets enterprise-grade standards while accelerating delivery velocity through systematic automation and expert guidance.
+## 📚 Bilingual Documentation Requirements
+
+### Documentation Standards
+All major documentation MUST be provided in both English and Korean versions:
+
+**Required Bilingual Documents**:
+- README.md / README.ko.md - Project overview
+- CONTRIBUTING.md / CONTRIBUTING.ko.md - Contribution guidelines
+- API documentation - API.md / API.ko.md
+- Architecture guides - ARCHITECTURE.md / ARCHITECTURE.ko.md
+- SDLC guides - SDLC_GUIDE.md / SDLC_GUIDE.ko.md
+
+**File Naming Convention**:
+- English (default): `{filename}.md`
+- Korean version: `{filename}.ko.md`
+
+**Translation Guidelines**:
+- Technical terms: Keep English with Korean explanation
+  Example: "파이프라인(pipeline)", "에이전트(agent)"
+- Code examples: Translate comments only
+- Keep versions synchronized
+
+## 🔄 SDLC Pipeline Integration
+
+### Pipeline-Driven Development
+- Use `/sdlc [feature] --init` to start any major feature development
+- Follow the 7-phase lifecycle: Planning → Design → Implementation → Review → Testing → Deployment → Documentation
+- Quality gates ensure each phase meets standards before progression
+- Templates available: standard (waterfall), agile (sprint-based), hotfix (emergency)
+
+### Pipeline Commands
+```bash
+# Initialize pipeline
+/sdlc "feature-name" --init --template=standard
+
+# Check status and progress
+/sdlc "feature-name" --status
+/support:sdlc-report "feature-name"
+
+# Execute phases
+/sdlc "feature-name" --phase=planning
+/sdlc "feature-name" --continue
+/sdlc "feature-name" --full
+```
+
+Transform your development workflow with intelligent AI assistance, SDLC Pipeline System, and bilingual documentation, ensuring every line of code meets enterprise-grade standards while accelerating delivery velocity through systematic automation and expert guidance.

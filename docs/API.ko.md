@@ -26,6 +26,8 @@ node cli/claude-init.js [project-name] [starter-type] [target-path]
 |------|------|------|
 | `--help` | `-h` | 도움말 메시지 표시 |
 | `--version` | `-v` | 버전 정보 표시 |
+| `--with-sdlc` | | 프로젝트에 SDLC 파이프라인 설정 포함 |
+| `--sdlc-template=<type>` | | SDLC 템플릿 유형: `standard`, `agile`, 또는 `hotfix` (기본값: `standard`) |
 
 #### 예제
 
@@ -38,6 +40,12 @@ node cli/claude-init.js my-api api
 
 # 특정 디렉토리에 프론트엔드 프로젝트 생성
 node cli/claude-init.js my-app frontend ~/projects
+
+# SDLC 파이프라인이 포함된 프로젝트 생성
+node cli/claude-init.js my-project basic . --with-sdlc
+
+# Agile SDLC 템플릿이 포함된 API 프로젝트 생성
+node cli/claude-init.js my-api api . --with-sdlc --sdlc-template=agile
 ```
 
 ## 프로그래밍 API

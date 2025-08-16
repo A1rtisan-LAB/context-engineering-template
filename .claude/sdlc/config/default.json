@@ -1,0 +1,105 @@
+{
+  "pipeline": {
+    "default_template": "standard",
+    "auto_progression": false,
+    "quality_gates_enabled": true,
+    "notifications_enabled": true
+  },
+  "phases": {
+    "planning": {
+      "required": true,
+      "default_duration": "1 day",
+      "agents": ["prd-workflow-generator", "dev-estimator", "project-context-analyzer"],
+      "quality_criteria": {
+        "requirements_clarity": 90,
+        "estimates_confidence": 80
+      }
+    },
+    "design": {
+      "required": true,
+      "default_duration": "2 days",
+      "agents": ["system-architect", "architecture-analyzer", "security-analyzer"],
+      "quality_criteria": {
+        "design_completeness": 100,
+        "security_review": "passed"
+      }
+    },
+    "implementation": {
+      "required": true,
+      "default_duration": "5 days",
+      "agents": ["feature-implementer", "code-enhancement-specialist", "git-workflow-manager"],
+      "quality_criteria": {
+        "code_coverage": 80,
+        "linting_errors": 0
+      }
+    },
+    "review": {
+      "required": true,
+      "default_duration": "1 day",
+      "agents": ["code-quality-analyzer", "security-analyzer", "performance-analyzer"],
+      "quality_criteria": {
+        "quality_score": 85,
+        "security_vulnerabilities": 0
+      }
+    },
+    "testing": {
+      "required": true,
+      "default_duration": "2 days",
+      "agents": ["test-execution-manager", "issue-diagnostician", "build-packager"],
+      "quality_criteria": {
+        "test_pass_rate": 100,
+        "coverage": 80
+      }
+    },
+    "deployment": {
+      "required": false,
+      "default_duration": "1 day",
+      "agents": ["build-packager", "git-workflow-manager", "project-knowledge-curator"],
+      "quality_criteria": {
+        "build_success": true,
+        "deployment_validation": "passed"
+      }
+    },
+    "documentation": {
+      "required": true,
+      "default_duration": "1 day",
+      "agents": ["project-knowledge-curator", "focused-doc-generator", "git-workflow-manager"],
+      "quality_criteria": {
+        "documentation_completeness": 100,
+        "api_documented": true,
+        "readme_updated": true,
+        "changelog_updated": true,
+        "examples_tested": true
+      }
+    }
+  },
+  "quality_gates": {
+    "strict": {
+      "allow_override": false,
+      "require_approval": true,
+      "auto_rollback": true
+    },
+    "standard": {
+      "allow_override": true,
+      "require_approval": false,
+      "auto_rollback": false
+    },
+    "relaxed": {
+      "allow_override": true,
+      "require_approval": false,
+      "auto_rollback": false
+    }
+  },
+  "metrics": {
+    "track_velocity": true,
+    "track_quality": true,
+    "track_time": true,
+    "track_costs": false
+  },
+  "notifications": {
+    "phase_complete": true,
+    "quality_gate_failed": true,
+    "pipeline_complete": true,
+    "blocker_detected": true
+  }
+}

@@ -1,0 +1,217 @@
+name: Standard SDLC Pipeline
+description: Complete software development lifecycle with all quality gates
+version: 1.0.0
+
+phases:
+  - name: planning
+    description: Requirements analysis and project planning
+    duration: 1 day
+    required: true
+    tasks:
+      - Gather requirements
+      - Create user stories
+      - Define acceptance criteria
+      - Estimate effort
+      - Identify dependencies
+      - Assess risks
+    agents:
+      - prd-workflow-generator
+      - dev-estimator
+      - project-context-analyzer
+    outputs:
+      - requirements.md
+      - user-stories.md
+      - estimates.json
+      - risks.md
+    quality_gates:
+      - type: manual
+        name: Requirements Approval
+        approvers: [product_owner, tech_lead]
+      - type: automated
+        name: Clarity Score
+        threshold: 90
+
+  - name: design
+    description: System architecture and technical design
+    duration: 2 days
+    required: true
+    tasks:
+      - Design system architecture
+      - Define API contracts
+      - Create database schema
+      - Plan security model
+      - Design user interface
+    agents:
+      - system-architect
+      - architecture-analyzer
+      - security-analyzer
+    outputs:
+      - architecture.md
+      - api-spec.yaml
+      - database-schema.sql
+      - security-model.md
+    quality_gates:
+      - type: automated
+        name: Design Completeness
+        threshold: 100
+      - type: manual
+        name: Architecture Review
+        approvers: [architect, tech_lead]
+
+  - name: implementation
+    description: Code development and unit testing
+    duration: 5 days
+    required: true
+    tasks:
+      - Implement core features
+      - Write unit tests
+      - Add error handling
+      - Implement logging
+      - Create documentation
+    agents:
+      - feature-implementer
+      - code-enhancement-specialist
+      - git-workflow-manager
+    outputs:
+      - source code
+      - unit tests
+      - documentation
+    quality_gates:
+      - type: automated
+        name: Code Coverage
+        threshold: 80
+      - type: automated
+        name: Linting
+        threshold: 0 errors
+
+  - name: review
+    description: Code review and quality assessment
+    duration: 1 day
+    required: true
+    tasks:
+      - Conduct code review
+      - Run security scan
+      - Performance analysis
+      - Check best practices
+      - Update documentation
+    agents:
+      - code-quality-analyzer
+      - security-analyzer
+      - performance-analyzer
+    outputs:
+      - review-report.md
+      - security-report.md
+      - performance-report.md
+    quality_gates:
+      - type: automated
+        name: Quality Score
+        threshold: 85
+      - type: automated
+        name: Security Scan
+        threshold: 0 critical
+
+  - name: testing
+    description: Comprehensive testing and validation
+    duration: 2 days
+    required: true
+    tasks:
+      - Run unit tests
+      - Execute integration tests
+      - Perform E2E testing
+      - Load testing
+      - User acceptance testing
+    agents:
+      - test-execution-manager
+      - issue-diagnostician
+      - build-packager
+    outputs:
+      - test-results.json
+      - coverage-report.html
+      - bug-reports.md
+    quality_gates:
+      - type: automated
+        name: Test Pass Rate
+        threshold: 100
+      - type: automated
+        name: Coverage
+        threshold: 80
+
+  - name: deployment
+    description: Production deployment and monitoring
+    duration: 1 day
+    required: false
+    tasks:
+      - Create release build
+      - Deploy to staging
+      - Run smoke tests
+      - Deploy to production
+      - Setup monitoring
+    agents:
+      - build-packager
+      - git-workflow-manager
+      - project-knowledge-curator
+    outputs:
+      - release-notes.md
+      - deployment-log.txt
+      - monitoring-config.yaml
+    quality_gates:
+      - type: automated
+        name: Build Success
+        threshold: true
+      - type: manual
+        name: Deployment Approval
+        approvers: [devops, product_owner]
+
+  - name: documentation
+    description: Comprehensive documentation update and knowledge management
+    duration: 1 day
+    required: true
+    tasks:
+      - Update README.md
+      - Generate/update API documentation
+      - Update CHANGELOG.md
+      - Review and update user guides
+      - Test and update code examples
+      - Update troubleshooting guide
+      - Verify architecture diagrams
+      - Update configuration documentation
+    agents:
+      - project-knowledge-curator
+      - focused-doc-generator
+      - git-workflow-manager
+    outputs:
+      - README.md
+      - API.md
+      - CHANGELOG.md
+      - USER_GUIDE.md
+      - TROUBLESHOOTING.md
+      - examples/
+    quality_gates:
+      - type: automated
+        name: Documentation Completeness
+        threshold: 100
+      - type: automated
+        name: API Coverage
+        threshold: all public APIs
+      - type: automated
+        name: Example Validation
+        threshold: all examples run successfully
+
+settings:
+  allow_parallel_phases: false
+  auto_progression: false
+  rollback_on_failure: true
+  notification_channels:
+    - console
+    - file
+  
+metrics:
+  velocity_tracking: true
+  quality_tracking: true
+  time_tracking: true
+  cost_tracking: false
+
+templates:
+  commit_message: "feat(sdlc): {phase} phase - {description}"
+  branch_naming: "sdlc/{pipeline_id}/{phase}"
+  artifact_path: ".claude/sdlc/artifacts/{pipeline_id}/{phase}/"

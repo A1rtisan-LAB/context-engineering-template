@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "template": "standard",
+  "pipeline": {
+    "auto_progression": false,
+    "quality_gates": "standard"
+  },
+  "phases": {
+    "planning": { "duration": "1 day" },
+    "design": { "duration": "2 days" },
+    "implementation": { "duration": "5 days" },
+    "review": { "duration": "1 day" },
+    "testing": { "duration": "2 days" },
+    "documentation": { "duration": "1 day", "required": true }
+  }
+}

@@ -1,12 +1,12 @@
 # Project Name
 
-*V2 Context Engineering System Integration*
+*Context Engineering Template with SDLC Pipeline System*
 
 ## 🚀 Overview
 
 Brief description of your project with business value proposition and target users.
 
-**Built with**: V2 Context Engineering Template featuring 18 specialized commands and 21 AI agents for enterprise-grade development.
+**Built with**: Context Engineering Template featuring 23+ specialized commands, 23+ AI agents, and SDLC Pipeline System for enterprise-grade development.
 
 ## 📋 Quick Start
 
@@ -21,7 +21,7 @@ Brief description of your project with business value proposition and target use
 git clone <repository-url>
 cd <project-name>
 
-# V2 Context Engineering initialization
+# Context Engineering initialization
 cp CLAUDE.md.template CLAUDE.md
 # Customize CLAUDE.md with project-specific requirements
 
@@ -30,7 +30,7 @@ cp .env.example .env
 # Configure environment variables for your setup
 ```
 
-### V2 Development Workflow
+### Development Workflow
 ```bash
 # Initial project analysis
 /analyze:project-context .
@@ -48,6 +48,40 @@ cp .env.example .env
 /manage:git [semantic-commit]
 ```
 
+## 📊 SDLC Pipeline System
+
+### 7-Phase Development Lifecycle
+The SDLC Pipeline System provides structured development through 7 distinct phases:
+
+```bash
+# Initialize SDLC Pipeline
+/sdlc "feature-name" --init --template=standard
+
+# Available Templates:
+# - standard: Traditional waterfall (10-12 days)
+# - agile: Sprint-based iterative (2-week sprints)  
+# - hotfix: Emergency fixes (4-hour SLA)
+```
+
+### Pipeline Commands
+```bash
+/sdlc "feature-name" --status       # Check pipeline status
+/sdlc "feature-name" --continue     # Continue to next phase
+/sdlc "feature-name" --full         # Run full pipeline
+/support:sdlc-report "feature-name" # Generate progress report
+```
+
+### Development Phases
+1. **Planning** - Requirements analysis and task breakdown
+2. **Design** - Architecture and API specifications
+3. **Implementation** - Feature development with AI agents
+4. **Review** - Code quality and security analysis
+5. **Testing** - Comprehensive test execution
+6. **Deployment** - Production release management
+7. **Documentation** - Complete knowledge management
+
+For detailed guidance, see [SDLC Pipeline Guide](docs/SDLC_GUIDE.md) ([한국어](docs/SDLC_GUIDE.ko.md))
+
 ## 🏗️ Architecture
 
 ### System Design
@@ -62,7 +96,7 @@ cp .env.example .env
 - **Database**: PostgreSQL with Redis for caching
 - **Infrastructure**: Docker, Kubernetes, cloud-native deployment
 
-### V2 Memory Integration
+### Memory Integration
 Project leverages hierarchical memory management:
 - **Project Context**: `@import .claude/memory/project-context.md`
 - **Team Standards**: `@import .claude/memory/team-preferences.md`
@@ -70,8 +104,8 @@ Project leverages hierarchical memory management:
 
 ## 🛠️ Development
 
-### V2 Command Usage
-Essential V2 Context Engineering commands for this project:
+### Command Usage
+Essential Context Engineering commands for this project:
 
 ```bash
 # Analysis Commands
@@ -113,7 +147,7 @@ This project utilizes specialized AI agents:
 
 ### Testing Strategy
 ```bash
-# Comprehensive testing with V2 commands
+# Comprehensive testing with Context Engineering commands
 /manage:test unit-tests          # Unit test execution
 /manage:test integration-tests   # Integration test validation
 /manage:test e2e-tests          # End-to-end user journey testing
@@ -122,7 +156,7 @@ This project utilizes specialized AI agents:
 
 ## 🔐 Security
 
-Security implementation with V2 security-analyzer agent:
+Security implementation with security-analyzer agent:
 - **Authentication**: [Authentication method and implementation]
 - **Authorization**: [Access control and permission model]
 - **Data Protection**: [Encryption and data handling practices]
@@ -152,8 +186,8 @@ Performance optimization with performance-analyzer agent:
 
 ## 📚 Documentation
 
-### V2 Documentation Generation
-Documentation is automatically generated and maintained using V2 commands:
+### Documentation Generation
+Documentation is automatically generated and maintained using Context Engineering commands:
 
 ```bash
 /support:document api-specification    # OpenAPI documentation generation
@@ -171,9 +205,9 @@ Documentation is automatically generated and maintained using V2 commands:
 
 ## 🚀 Deployment
 
-### V2 Deployment Orchestration
+### Deployment Orchestration
 ```bash
-# Production deployment with V2 system
+# Production deployment with Context Engineering system
 /manage:build production-deployment    # Production-ready build
 /analyze:security deployment-security  # Security validation
 /manage:workflow ci-cd-pipeline       # Automated deployment pipeline
@@ -192,7 +226,7 @@ Documentation is automatically generated and maintained using V2 commands:
 
 ## 🤝 Contributing
 
-### V2 Development Workflow
+### Development Workflow
 1. **Project Analysis**: `/analyze:project-context .`
 2. **Feature Planning**: `/support:estimate [feature-implementation]`
 3. **Development**: `/implement:feature [feature-name]`
@@ -209,7 +243,7 @@ Documentation is automatically generated and maintained using V2 commands:
 
 ### Pull Request Process
 1. Create feature branch with descriptive name
-2. Implement changes using V2 commands for quality assurance
+2. Implement changes using Context Engineering commands for quality assurance
 3. Run comprehensive test suite: `/manage:test all-tests`
 4. Update documentation: `/support:document [changes]`
 5. Submit pull request with detailed description and validation results
@@ -232,7 +266,7 @@ Documentation is automatically generated and maintained using V2 commands:
 
 ## 🔄 Continuous Improvement
 
-### V2 Quality Enhancement
+### Quality Enhancement
 ```bash
 # Continuous improvement workflow
 /analyze:code-quality technical-debt   # Technical debt assessment
@@ -243,7 +277,7 @@ Documentation is automatically generated and maintained using V2 commands:
 
 ## 📞 Support
 
-### Issue Resolution with V2 System
+### Issue Resolution
 ```bash
 # Problem diagnosis and resolution
 /support:diagnose [issue-description]  # Systematic issue diagnosis
@@ -253,14 +287,14 @@ Documentation is automatically generated and maintained using V2 commands:
 ```
 
 ### Contact & Resources
-- **Technical Issues**: Use GitHub issues with V2 diagnostic information
+- **Technical Issues**: Use GitHub issues with diagnostic information
 - **Architecture Questions**: Reference architecture documentation
 - **Performance Issues**: Include performance analysis results
 - **Security Concerns**: Follow security incident response procedures
 
 ## ☕ Support This Project
 
-If this V2 Context Engineering Template has enhanced your development workflow, consider supporting continued innovation:
+If this Context Engineering Template has enhanced your development workflow, consider supporting continued innovation:
 
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-☕-yellow.svg)](https://buymeacoffee.com/a1rtisan)
 
@@ -272,4 +306,4 @@ Your support drives the development of advanced AI-assisted development tools an
 
 ---
 
-*This project leverages the V2 Context Engineering Template for systematic development, comprehensive quality assurance, and enterprise-grade software delivery. Use V2 commands for all development, testing, and maintenance activities.*
+*This project leverages the Context Engineering Template with SDLC Pipeline System for systematic development, comprehensive quality assurance, and enterprise-grade software delivery. Use Context Engineering commands for all development, testing, and maintenance activities.*

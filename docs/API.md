@@ -26,6 +26,8 @@ node cli/claude-init.js [project-name] [starter-type] [target-path]
 |--------|-------|-------------|
 | `--help` | `-h` | Show help message |
 | `--version` | `-v` | Show version information |
+| `--with-sdlc` | | Include SDLC pipeline configuration in the project |
+| `--sdlc-template=<type>` | | SDLC template type: `standard`, `agile`, or `hotfix` (default: `standard`) |
 
 #### Examples
 
@@ -38,6 +40,12 @@ node cli/claude-init.js my-api api
 
 # Create a frontend project in a specific directory
 node cli/claude-init.js my-app frontend ~/projects
+
+# Create a project with SDLC pipeline
+node cli/claude-init.js my-project basic . --with-sdlc
+
+# Create an API project with Agile SDLC template
+node cli/claude-init.js my-api api . --with-sdlc --sdlc-template=agile
 ```
 
 ## Programmatic API

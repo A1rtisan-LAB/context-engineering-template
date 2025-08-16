@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-> 🚀 Advanced monorepo template system for Claude Code projects with 22+ specialized AI agents
+> 🚀 Advanced monorepo template system for Claude Code projects with 23+ specialized AI agents and SDLC Pipeline System
 
 ## 📦 New Monorepo Structure (v3.0)
 
@@ -65,6 +65,10 @@ node cli/claude-init.js my-project [starter-type] [target-path]
 node cli/claude-init.js                        # Basic project in ./my-claude-project
 node cli/claude-init.js my-api api             # API project
 node cli/claude-init.js my-app frontend ~/apps # Frontend app in ~/apps
+
+# With SDLC Pipeline System:
+node cli/claude-init.js my-project basic . --with-sdlc
+node cli/claude-init.js my-api api . --with-sdlc --sdlc-template=agile
 ./setup-claude-code.sh my-api api /path/to/projects
 
 # Specify relative path
@@ -146,6 +150,15 @@ Expert-level commands available in generated projects:
 | `/support:document [target]` | Generate accurate documentation for code components, functions, and features |
 | `/support:estimate [task]` | Estimate development time for tasks, features, and entire projects |
 | `/support:explain [concept]` | Provide clear explanations of code functionality and programming concepts |
+| `/support:sdlc-report [feature]` | Generate comprehensive SDLC pipeline reports with metrics and insights |
+
+### 🎯 **SDLC Pipeline Commands**
+| Command | Description |
+|--------|------|
+| `/sdlc [feature] [options]` | Execute comprehensive Software Development Lifecycle pipeline |
+| `/analyze:sdlc-readiness` | Analyze project readiness for SDLC pipeline execution |
+| `/implement:sdlc-phase [phase]` | Execute specific SDLC pipeline phase |
+| `/manage:sdlc-pipeline [action]` | Manage SDLC pipeline lifecycle and state |
 
 ### 🎭 **Orchestration Commands**
 | Command | Description |
@@ -167,6 +180,28 @@ Expert-level commands available in generated projects:
 - **Refactoring**: `/implement:enhancement [module]` + `/implement:cleanup [module]`
 - **Problem Resolution**: `/support:diagnose [issue]` + `/support:explain [solution]`
 - **Project Estimation**: `/support:estimate [entire project]`
+
+### 🚀 **SDLC Pipeline Workflow**
+Execute systematic development lifecycle with 7 phases:
+
+```bash
+# Initialize SDLC pipeline for a new feature
+/sdlc "user-authentication" --init
+
+# Run complete pipeline (Planning → Design → Implementation → Review → Testing → Deployment → Documentation)
+/sdlc "user-authentication" --full
+
+# Execute specific phase
+/sdlc "user-authentication" --phase=design
+
+# Check pipeline status
+/sdlc "user-authentication" --status
+
+# Generate pipeline report
+/support:sdlc-report "user-authentication"
+```
+
+**SDLC Templates Available**: `standard` (waterfall), `agile` (sprint-based), `hotfix` (emergency)
 
 ## 🤝 Contributing
 
@@ -249,6 +284,7 @@ For common issues and solutions, refer to `docs/TROUBLESHOOTING.md`.
 ## 📚 Resources
 
 - [Claude Code Documentation](https://docs.anthropic.com/claude-code)
+- [SDLC Pipeline Guide](docs/SDLC_GUIDE.md) - Comprehensive guide to the SDLC Pipeline System
 - [Architecture Overview](docs/ARCHITECTURE.md)
 - **[📋 Improvement Plan](docs/IMPROVEMENT_PLAN.md)** - Track project enhancement progress
 - **[📋 개선 계획 (Korean)](docs/IMPROVEMENT_PLAN.ko.md)** - 프로젝트 개선 진행 상황

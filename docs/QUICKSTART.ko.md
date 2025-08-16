@@ -37,6 +37,10 @@ node cli/claude-init.js my-app frontend
 
 # 풀스택 프로젝트
 node cli/claude-init.js my-fullstack fullstack
+
+# SDLC 파이프라인 시스템 포함
+node cli/claude-init.js my-project basic . --with-sdlc
+node cli/claude-init.js my-api api . --with-sdlc --sdlc-template=agile
 ```
 
 ## 프로젝트 구조
@@ -77,6 +81,39 @@ Claude Code에서 프로젝트를 열고 다음 명령어를 사용하세요:
 ```
 /manage:git commit
 ```
+
+## SDLC 파이프라인 사용
+
+SDLC 파이프라인 시스템은 7단계를 통한 체계적인 개발을 제공합니다:
+
+### SDLC 파이프라인 초기화
+```
+/sdlc "feature-name" --init
+```
+
+### 전체 파이프라인 실행
+```
+/sdlc "feature-name" --full
+```
+
+### 특정 단계 실행
+```
+/sdlc "feature-name" --phase=design
+```
+
+### 파이프라인 상태 확인
+```
+/sdlc "feature-name" --status
+```
+
+### 파이프라인 보고서 생성
+```
+/support:sdlc-report "feature-name"
+```
+
+**사용 가능한 템플릿**: `standard` (폭포수), `agile` (스프린트 기반), `hotfix` (긴급)
+
+종합적인 SDLC 파이프라인 가이드는 [SDLC 파이프라인 가이드](SDLC_GUIDE.ko.md)를 참조하세요.
 
 ## 성능 팁
 
