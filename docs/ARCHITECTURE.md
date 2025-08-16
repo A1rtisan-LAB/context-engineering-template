@@ -170,3 +170,8 @@ my-project/
 
 ### Migration Path
 The current system is designed to support gradual migration to more advanced architectures while maintaining backward compatibility.
+
+## 🌏 Languages
+
+This document is also available in:
+- [한국어](ARCHITECTURE.ko.md)
