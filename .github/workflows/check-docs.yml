@@ -275,7 +275,7 @@ jobs:
           # Skip certain files that don't need translation
           basename=$(basename "$file")
           if [[ "$basename" != "LICENSE" ]] && [[ "$basename" != "CHANGELOG.md" ]]; then
-            ((expected++))
+            expected=$((expected + 1))
           fi
         done < /tmp/md_files.txt
         
