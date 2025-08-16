@@ -45,9 +45,12 @@ context-engineering-template/
 ├── packages/                      # Modular packages
 │   └── @claude-code/
 │       ├── agents/               # 22 AI agents
+│       │   └── src/             # Agent .md files
 │       ├── commands/             # 18 commands
+│       │   └── src/             # Command .md files
 │       ├── workflows/            # Workflow definitions
-│       └── core/                 # Core engine
+│       │   └── src/             # Workflow .md files
+│       └── core/                 # Core engine (internal tools)
 ├── starters/                     # Project templates
 │   ├── basic/                   # Basic starter
 │   ├── api/                     # API starter
@@ -58,6 +61,32 @@ context-engineering-template/
 ├── docs/                        # Documentation
 └── .claude/                     # Project's own Claude config
 ```
+
+### Generated Project Structure
+When you create a new project using `node cli/claude-init.js`, the generated project has a clean structure:
+
+```
+my-project/
+├── .claude/                     # Claude Code configuration
+│   ├── agents/                 # AI agents (files directly here)
+│   │   ├── agent-prompt-reviewer.md
+│   │   ├── architecture-analyzer.md
+│   │   └── ... (other .md files)
+│   ├── commands/               # Commands (files directly here)
+│   │   ├── orchestrate.md
+│   │   ├── review-agents.md
+│   │   ├── analyze/           # Organized subdirectories
+│   │   │   └── *.md
+│   │   └── ...
+│   └── workflows/              # Workflows (files directly here)
+│       ├── development-lifecycle.md
+│       └── quality-assurance.md
+├── CLAUDE.md                   # AI assistant instructions
+├── INITIAL.md                  # Feature request template
+└── README.md                   # Project documentation
+```
+
+**Important:** The monorepo stores files in `packages/@claude-code/*/src/` directories, but generated projects receive these files directly in `.claude/*/` without the `src/` subdirectory. This ensures Claude Code can properly recognize and use the agents, commands, and workflows.
 
 ### Package Categories
 - **Agent Packages**: 22 specialized AI agents for different development tasks

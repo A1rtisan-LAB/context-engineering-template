@@ -1,5 +1,67 @@
 # Migration Guide
 
+## Migrating to v3.0.1 - Directory Structure Fix
+
+### Overview
+
+Version 3.0.1 fixes an issue where generated projects had incorrect `.claude/` directory structure with unwanted `src/` subdirectories.
+
+### What Changed
+
+**Before (v3.0.0 - incorrect):**
+```
+my-project/.claude/
+├── agents/
+│   └── src/ -> symlink to monorepo
+├── commands/
+│   └── src/ -> symlink to monorepo
+└── workflows/
+    └── src/ -> symlink to monorepo
+```
+
+**After (v3.0.1 - correct):**
+```
+my-project/.claude/
+├── agents/
+│   ├── agent-prompt-reviewer.md
+│   ├── architecture-analyzer.md
+│   └── ... (files directly here)
+├── commands/
+│   ├── orchestrate.md
+│   ├── analyze/
+│   └── ... (files directly here)
+└── workflows/
+    ├── development-lifecycle.md
+    └── ... (files directly here)
+```
+
+### How to Fix Existing Projects
+
+If you created a project with v3.0.0 and have the incorrect structure:
+
+1. **Remove the old .claude directory:**
+```bash
+rm -rf .claude
+```
+
+2. **Re-create the project structure:**
+```bash
+# From the template repository
+node cli/claude-init.js temp-project basic /tmp
+cp -r /tmp/temp-project/.claude .
+rm -rf /tmp/temp-project
+```
+
+3. **Or manually fix by copying files:**
+```bash
+# Copy agent files
+cp path/to/template/packages/@claude-code/agents/src/*.md .claude/agents/
+# Copy command files (preserving structure)
+cp -r path/to/template/packages/@claude-code/commands/src/* .claude/commands/
+# Copy workflow files
+cp path/to/template/packages/@claude-code/workflows/src/*.md .claude/workflows/
+```
+
 ## Migrating from v2.x to v3.0 (Monorepo)
 
 ### Overview

@@ -1,5 +1,67 @@
 # 마이그레이션 가이드
 
+## v3.0.1로 마이그레이션 - 디렉토리 구조 수정
+
+### 개요
+
+버전 3.0.1은 생성된 프로젝트에서 원하지 않는 `src/` 하위 디렉토리가 있는 잘못된 `.claude/` 디렉토리 구조 문제를 수정합니다.
+
+### 변경 사항
+
+**이전 (v3.0.0 - 잘못됨):**
+```
+my-project/.claude/
+├── agents/
+│   └── src/ -> 모노레포로의 심링크
+├── commands/
+│   └── src/ -> 모노레포로의 심링크
+└── workflows/
+    └── src/ -> 모노레포로의 심링크
+```
+
+**이후 (v3.0.1 - 올바름):**
+```
+my-project/.claude/
+├── agents/
+│   ├── agent-prompt-reviewer.md
+│   ├── architecture-analyzer.md
+│   └── ... (파일이 여기에 직접)
+├── commands/
+│   ├── orchestrate.md
+│   ├── analyze/
+│   └── ... (파일이 여기에 직접)
+└── workflows/
+    ├── development-lifecycle.md
+    └── ... (파일이 여기에 직접)
+```
+
+### 기존 프로젝트 수정 방법
+
+v3.0.0으로 프로젝트를 생성하여 잘못된 구조를 가지고 있다면:
+
+1. **이전 .claude 디렉토리 제거:**
+```bash
+rm -rf .claude
+```
+
+2. **프로젝트 구조 재생성:**
+```bash
+# 템플릿 저장소에서
+node cli/claude-init.js temp-project basic /tmp
+cp -r /tmp/temp-project/.claude .
+rm -rf /tmp/temp-project
+```
+
+3. **또는 수동으로 파일 복사:**
+```bash
+# 에이전트 파일 복사
+cp path/to/template/packages/@claude-code/agents/src/*.md .claude/agents/
+# 명령 파일 복사 (구조 유지)
+cp -r path/to/template/packages/@claude-code/commands/src/* .claude/commands/
+# 워크플로우 파일 복사
+cp path/to/template/packages/@claude-code/workflows/src/*.md .claude/workflows/
+```
+
 ## v2.x에서 v3.0 (모노레포)로 마이그레이션
 
 ### 개요

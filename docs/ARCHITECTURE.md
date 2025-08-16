@@ -93,16 +93,22 @@ Template Processing → File Generation → Validation → Output
 3. Permission profiles activated
 
 ### 3. Generation
-1. Template files located and processed
-2. Placeholder replacement performed
-3. Directory structure created
-4. Files copied with safety checks
+1. Starter template files copied to target
+2. `.claude/` directory structure created
+3. Package contents dynamically discovered and copied:
+   - Packages under `@claude-code/` automatically found
+   - Contents from `src/` directories copied without the `src/` level
+   - Internal packages (e.g., 'core') skipped
+   - Unnecessary files excluded (package.json, tests, etc.)
+4. Placeholder replacement performed
+5. Files written with safety checks
 
 ### 4. Validation
 1. Generated project structure validated
-2. JSON syntax checks
-3. Claude Code compliance verification
-4. Final quality assurance
+2. Correct `.claude/` structure verified (no `src/` subdirectories)
+3. JSON syntax checks
+4. Claude Code compliance verification
+5. Final quality assurance
 
 ## Performance Characteristics
 
@@ -124,6 +130,35 @@ Template Processing → File Generation → Validation → Output
 - Package manager integration
 - Docker environment setup
 - CI/CD pipeline templates
+
+## Generated Project Architecture
+
+### Directory Structure
+Projects created by the CLI have a clean, Claude Code-compliant structure:
+
+```
+my-project/
+├── .claude/                     # Claude Code configuration
+│   ├── agents/                 # AI agents (files directly here)
+│   │   ├── *.md               # No src/ subdirectory
+│   ├── commands/               # Commands (files directly here)
+│   │   ├── *.md               # Command definitions
+│   │   ├── analyze/           # Organized by category
+│   │   ├── implement/
+│   │   ├── manage/
+│   │   └── support/
+│   └── workflows/              # Workflows (files directly here)
+│       └── *.md               # Workflow definitions
+├── CLAUDE.md                   # AI assistant instructions
+├── INITIAL.md                  # Feature request template
+└── README.md                   # Project documentation
+```
+
+### Key Design Decisions
+- **No symlinks**: Projects are self-contained with actual file copies
+- **No src/ subdirectories**: Files appear directly in their categories
+- **Dynamic discovery**: Automatically handles new package types
+- **Future-proof**: New packages in monorepo are automatically included
 
 ## Future Architecture
 

@@ -95,6 +95,35 @@ Replaces PROJECT_NAME placeholders in files.
 
 **Returns:** Promise<void>
 
+#### `copyPackageContents(targetPath)`
+
+Dynamically copies package contents from monorepo to generated project.
+
+**Parameters:**
+- `targetPath` (string): Target project directory path
+
+**Returns:** Promise<void>
+
+**Description:**
+This function dynamically discovers all packages under `@claude-code/` and copies their contents to the generated project's `.claude/` directory. It handles the following:
+- Automatically discovers all package directories
+- For packages with `src/` directories, copies contents directly to `.claude/[package-name]/` (without src/)
+- Skips internal packages like 'core' that aren't needed in projects
+- Excludes unnecessary files (package.json, tests, node_modules, etc.)
+- Future-proof: automatically handles new packages added to the monorepo
+
+**Example Result:**
+```
+.claude/
+├── agents/          # Contents from packages/@claude-code/agents/src/
+│   ├── *.md        # Agent files directly here, no src/ subdirectory
+├── commands/        # Contents from packages/@claude-code/commands/src/
+│   ├── *.md        # Command files directly here
+│   └── analyze/    # Subdirectories preserved
+└── workflows/       # Contents from packages/@claude-code/workflows/src/
+    └── *.md        # Workflow files directly here
+```
+
 ## Benchmark API
 
 ### `Benchmark` Class

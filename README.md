@@ -74,22 +74,42 @@ node cli/claude-init.js my-app frontend ~/apps # Frontend app in ~/apps
 ./setup-claude-code.sh awesome-app fullstack ~/Development
 ```
 
-## 📁 Template Structure
+## 📁 Project Structure
+
+### Generated Project Structure
+When you create a new project, it will have this structure:
 
 ```
-templates/
-├── .claude/                  # Claude Code settings
-│   ├── commands/            # Custom command implementations
-│   └── agents/              # Specialized AI agents
-├── PRPs/                    # Product Requirements Prompts
-│   └── templates/           # PRP templates
-├── examples/                # Code patterns and examples
-│   └── _patterns/          # Reusable patterns
-├── docs/                    # Project documentation
-├── CLAUDE.md               # AI assistant rules
-├── INITIAL.md              # Feature request template
-└── README.template.md      # Project README template
+my-project/
+├── .claude/                  # Claude Code configuration
+│   ├── agents/              # AI agents (*.md files directly here)
+│   ├── commands/            # Commands organized by category
+│   │   ├── analyze/         # Analysis commands
+│   │   ├── implement/       # Implementation commands
+│   │   ├── manage/          # Management commands
+│   │   └── support/         # Support commands
+│   └── workflows/           # Workflow definitions
+├── CLAUDE.md                # AI assistant instructions
+├── INITIAL.md               # Feature request template
+└── README.md                # Project documentation
 ```
+
+### Monorepo Structure (Development)
+This template repository uses a monorepo structure:
+
+```
+context-engineering-template/
+├── packages/@claude-code/    # Modular packages
+│   ├── agents/src/          # Agent definitions
+│   ├── commands/src/        # Command implementations
+│   ├── workflows/src/       # Workflow definitions
+│   └── core/src/            # Core engine (internal)
+├── starters/                # Starter templates
+├── cli/                     # CLI tools
+└── docs/                    # Documentation
+```
+
+**Note:** The CLI copies content from `packages/@claude-code/*/src/` to generated projects' `.claude/*/` directories without the `src/` subdirectory.
 
 ## 🛠️ Claude Code Commands
 

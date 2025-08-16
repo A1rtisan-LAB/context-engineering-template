@@ -95,6 +95,35 @@ await createProject('my-project', 'basic', '/path/to/projects');
 
 **반환값:** Promise<void>
 
+#### `copyPackageContents(targetPath)`
+
+모노레포에서 생성된 프로젝트로 패키지 콘텐츠를 동적으로 복사합니다.
+
+**매개변수:**
+- `targetPath` (string): 대상 프로젝트 디렉토리 경로
+
+**반환값:** Promise<void>
+
+**설명:**
+이 함수는 `@claude-code/` 아래의 모든 패키지를 동적으로 발견하고 생성된 프로젝트의 `.claude/` 디렉토리로 콘텐츠를 복사합니다. 다음을 처리합니다:
+- 모든 패키지 디렉토리를 자동으로 발견
+- `src/` 디렉토리가 있는 패키지의 경우, 콘텐츠를 `.claude/[package-name]/`으로 직접 복사 (src/ 없이)
+- 프로젝트에 필요하지 않은 'core'와 같은 내부 패키지 건너뛰기
+- 불필요한 파일 제외 (package.json, 테스트, node_modules 등)
+- 미래 대비: 모노레포에 추가된 새 패키지를 자동으로 처리
+
+**결과 예시:**
+```
+.claude/
+├── agents/          # packages/@claude-code/agents/src/의 콘텐츠
+│   ├── *.md        # 에이전트 파일이 여기에 직접, src/ 하위디렉토리 없음
+├── commands/        # packages/@claude-code/commands/src/의 콘텐츠  
+│   ├── *.md        # 명령 파일이 여기에 직접
+│   └── analyze/    # 하위디렉토리 유지
+└── workflows/       # packages/@claude-code/workflows/src/의 콘텐츠
+    └── *.md        # 워크플로우 파일이 여기에 직접
+```
+
 ## 벤치마크 API
 
 ### `Benchmark` 클래스
