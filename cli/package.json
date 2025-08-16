@@ -1,0 +1,28 @@
+{
+  "name": "@claude-code/cli",
+  "version": "1.0.0",
+  "description": "CLI for initializing Claude Code projects",
+  "main": "claude-init.js",
+  "bin": {
+    "claude-init": "./claude-init.js"
+  },
+  "files": [
+    "claude-init.js",
+    "README.md"
+  ],
+  "keywords": [
+    "claude-code",
+    "cli",
+    "project-generator"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A1rtisan-LAB/context-engineering-template.git",
+    "directory": "cli"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

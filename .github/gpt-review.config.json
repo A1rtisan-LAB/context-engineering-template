@@ -1,0 +1,43 @@
+{
+  "model": "gpt-4o-mini",
+  "max_files_per_review": 10,
+  "max_lines_per_file": 500,
+  "max_tokens_per_review": 4000,
+  "daily_review_limit": 10,
+  "review_file_extensions": [
+    ".py", ".js", ".ts", ".jsx", ".tsx", 
+    ".java", ".cpp", ".c", ".h", ".hpp",
+    ".go", ".rs", ".rb", ".php", ".swift", 
+    ".kt", ".scala", ".sh", ".yml", ".yaml", 
+    ".json", ".md"
+  ],
+  "skip_patterns": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.git/**",
+    "**/vendor/**",
+    "**/*.min.js",
+    "**/*.min.css"
+  ],
+  "review_focus": {
+    "code_quality": true,
+    "bugs": true,
+    "security": true,
+    "performance": true,
+    "best_practices": true,
+    "documentation": true
+  },
+  "cost_limits": {
+    "max_cost_per_review": 0.10,
+    "max_daily_cost": 1.00,
+    "max_monthly_cost": 10.00
+  },
+  "messages": {
+    "review_header": "🤖 AI Code Review by GPT",
+    "skip_draft": "Skipping review for draft PR",
+    "skip_wip": "Skipping review for WIP PR",
+    "daily_limit": "Daily review limit reached",
+    "size_limit": "PR too large for automatic review"
+  }
+}

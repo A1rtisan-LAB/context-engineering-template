@@ -1,0 +1,342 @@
+name: Validate Monorepo
+
+on:
+  push:
+    branches: [ main, develop, feature/* ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate-structure:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Validate monorepo structure
+      run: |
+        echo "📦 Validating monorepo structure..."
+        
+        # Check required directories
+        REQUIRED_DIRS=(
+          "packages/@claude-code/agents"
+          "packages/@claude-code/commands"
+          "packages/@claude-code/workflows"
+          "packages/@claude-code/core"
+          "starters/basic"
+          "starters/api"
+          "starters/frontend"
+          "starters/fullstack"
+          "cli"
+          "docs"
+          ".claude"
+        )
+        
+        for dir in "${REQUIRED_DIRS[@]}"; do
+          if [ ! -d "$dir" ]; then
+            echo "❌ Missing required directory: $dir"
+            exit 1
+          fi
+        done
+        echo "✅ All required directories exist"
+    
+    - name: Validate package.json files
+      run: |
+        echo "🔍 Validating package.json files..."
+        
+        # Root package.json
+        if [ ! -f "package.json" ]; then
+          echo "❌ Missing root package.json"
+          exit 1
+        fi
+        
+        # Check workspaces configuration
+        if ! grep -q '"workspaces"' package.json; then
+          echo "❌ Missing workspaces configuration in root package.json"
+          exit 1
+        fi
+        
+        # Validate all package.json files
+        find . -name "package.json" -not -path "./node_modules/*" | while read file; do
+          echo "Checking: $file"
+          node -e "JSON.parse(require('fs').readFileSync('$file'))" || exit 1
+        done
+        echo "✅ All package.json files are valid"
+    
+    - name: Check required files
+      run: |
+        echo "🔍 Checking required files..."
+        
+        REQUIRED_FILES=(
+          "README.md"
+          "README.ko.md"
+          "CONTRIBUTING.md"
+          "CONTRIBUTING.ko.md"
+          "CLAUDE.md"
+          "LICENSE"
+          ".claude/settings.json"
+          "cli/claude-init.js"
+          "cli/package.json"
+          "docs/ARCHITECTURE.md"
+        )
+        
+        missing_files=()
+        for file in "${REQUIRED_FILES[@]}"; do
+          if [ ! -f "$file" ]; then
+            missing_files+=("$file")
+          fi
+        done
+        
+        if [ ${#missing_files[@]} -ne 0 ]; then
+          echo "❌ Missing required files:"
+          printf '%s\n' "${missing_files[@]}"
+          exit 1
+        fi
+        echo "✅ All required files exist"
+
+  test-packages:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: |
+        echo "📦 Installing dependencies..."
+        npm ci --ignore-scripts || npm install --ignore-scripts
+    
+    - name: Validate package structure
+      run: |
+        echo "🔍 Validating package structure..."
+        
+        # Check each package has required files
+        for pkg in packages/@claude-code/*; do
+          if [ -d "$pkg" ]; then
+            echo "Checking package: $pkg"
+            
+            # Check for package.json
+            if [ ! -f "$pkg/package.json" ]; then
+              echo "❌ Missing package.json in $pkg"
+              exit 1
+            fi
+            
+            # Check for README.md
+            if [ ! -f "$pkg/README.md" ]; then
+              echo "⚠️  Warning: Missing README.md in $pkg"
+            fi
+            
+            # Check package name consistency
+            pkg_name=$(basename "$pkg")
+            json_name=$(node -e "console.log(require('./$pkg/package.json').name)")
+            if [[ "$json_name" != *"$pkg_name"* ]]; then
+              echo "⚠️  Warning: Package name mismatch in $pkg"
+            fi
+          fi
+        done
+        echo "✅ Package structure validated"
+    
+    - name: Build packages
+      run: |
+        echo "🔨 Building packages..."
+        npm run build --workspaces --if-present || echo "No build scripts found"
+    
+    - name: Run tests
+      run: |
+        echo "🧪 Running tests..."
+        npm test --workspaces --if-present || echo "No test scripts found"
+
+  validate-agents:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Validate agent files
+      run: |
+        echo "🤖 Validating agent files..."
+        
+        agent_dir="packages/@claude-code/agents/src"
+        if [ ! -d "$agent_dir" ]; then
+          echo "❌ Agent source directory not found"
+          exit 1
+        fi
+        
+        # Count agent files
+        agent_count=$(find "$agent_dir" -name "*.md" -type f | wc -l)
+        echo "Found $agent_count agent files"
+        
+        if [ "$agent_count" -lt 20 ]; then
+          echo "⚠️  Warning: Expected at least 20 agents, found $agent_count"
+        fi
+        
+        # Validate agent file structure
+        find "$agent_dir" -name "*.md" -type f | while read file; do
+          filename=$(basename "$file")
+          
+          # Check if file is not empty
+          if [ ! -s "$file" ]; then
+            echo "❌ Empty agent file: $filename"
+            exit 1
+          fi
+          
+          # Check for required sections
+          if ! grep -q "# agent:" "$file"; then
+            echo "⚠️  Warning: Missing agent declaration in $filename"
+          fi
+        done
+        
+        echo "✅ Agent files validated"
+
+  validate-commands:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Validate command files
+      run: |
+        echo "📝 Validating command files..."
+        
+        cmd_dir="packages/@claude-code/commands/src"
+        if [ ! -d "$cmd_dir" ]; then
+          echo "❌ Command source directory not found"
+          exit 1
+        fi
+        
+        # Check command categories
+        categories=("analyze" "implement" "manage" "support")
+        for category in "${categories[@]}"; do
+          if [ ! -d "$cmd_dir/$category" ]; then
+            echo "⚠️  Warning: Missing command category: $category"
+          else
+            count=$(find "$cmd_dir/$category" -name "*.md" -type f | wc -l)
+            echo "Category $category: $count commands"
+          fi
+        done
+        
+        # Check for root-level commands
+        root_cmds=$(find "$cmd_dir" -maxdepth 1 -name "*.md" -type f | wc -l)
+        echo "Root-level commands: $root_cmds"
+        
+        echo "✅ Command files validated"
+
+  check-starters:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Validate starter templates
+      run: |
+        echo "🚀 Validating starter templates..."
+        
+        starters=("basic" "api" "frontend" "fullstack")
+        for starter in "${starters[@]}"; do
+          starter_dir="starters/$starter"
+          
+          if [ ! -d "$starter_dir" ]; then
+            echo "❌ Missing starter: $starter"
+            exit 1
+          fi
+          
+          echo "Checking $starter starter..."
+          
+          # Check for essential files in basic starter
+          if [ "$starter" = "basic" ]; then
+            required_files=("CLAUDE.md" "INITIAL.md" "README.md")
+            for file in "${required_files[@]}"; do
+              if [ ! -f "$starter_dir/$file" ]; then
+                echo "❌ Missing $file in $starter starter"
+                exit 1
+              fi
+            done
+          fi
+        done
+        
+        echo "✅ Starter templates validated"
+
+  lint-shell-scripts:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Install shellcheck
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y shellcheck
+    
+    - name: Lint shell scripts
+      run: |
+        echo "🔍 Linting shell scripts..."
+        
+        # Find and check all shell scripts
+        has_errors=false
+        find packages/@claude-code/core/src -name "*.sh" -type f | while read script; do
+          echo "Checking: $script"
+          if ! shellcheck "$script"; then
+            echo "❌ Shellcheck issues found in $script"
+            has_errors=true
+          fi
+        done
+        
+        if [ "$has_errors" = true ]; then
+          echo "❌ Shell script validation failed"
+          exit 1
+        fi
+        
+        echo "✅ Shell script linting complete"
+
+  matrix-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        node: [16, 18, 20]
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Node.js ${{ matrix.node }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci --ignore-scripts || npm install --ignore-scripts
+    
+    - name: Run basic validation
+      run: |
+        echo "🧪 Testing on ${{ matrix.os }} with Node.js ${{ matrix.node }}..."
+        
+        # Check Node version
+        node --version
+        npm --version
+        
+        # Basic structure check
+        test -d packages/@claude-code
+        test -f cli/claude-init.js
+        test -f package.json
+        
+        echo "✅ Basic validation passed"

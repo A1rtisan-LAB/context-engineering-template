@@ -1,165 +1,226 @@
 # Contributing to Context Engineering Template
 
-먼저, 이 프로젝트에 기여하는 것을 고려해 주셔서 감사합니다! 🎉
+First, thank you for considering contributing to this project! 🎉
 
-## 행동 강령
+## 📋 Table of Contents
 
-이 프로젝트는 모든 참여자가 존중받고 환영받는 환경을 만들기 위해 노력합니다. 기여자는 다음을 준수해야 합니다:
-- 건설적이고 친절한 피드백 제공
-- 다양한 관점과 경험 존중
-- 우아하게 비판 수용
-- 커뮤니티의 최선을 위한 집중
+- [Code of Conduct](#code-of-conduct)
+- [How to Contribute](#how-to-contribute)
+- [Development Environment](#development-environment)
+- [Coding Standards](#coding-standards)
+- [Documentation Guidelines](#documentation-guidelines)
+- [Pull Request Process](#pull-request-process)
+- [Issue Reporting](#issue-reporting)
 
-## 기여 방법
+## Code of Conduct
 
-### 🐛 버그 리포트
+This project strives to create an environment where all participants are respected and welcomed. All participants must comply with the following:
 
-버그를 발견하셨나요? GitHub Issues를 통해 알려주세요:
+- Provide constructive and friendly feedback
+- Respect diverse perspectives and experiences
+- Accept criticism gracefully
+- Focus on what's best for the community
 
-1. **기존 이슈 확인**: 동일한 문제가 이미 보고되었는지 확인
-2. **새 이슈 생성**: 명확한 제목과 상세한 설명 포함
-3. **정보 제공**:
-   - 운영체제 및 버전
-   - 재현 단계
-   - 예상 동작 vs 실제 동작
-   - 가능하다면 스크린샷이나 로그
+## How to Contribute
 
-### 💡 기능 제안
+### 1. Adding New Agents
 
-새로운 아이디어가 있으신가요?
+```bash
+# Create new agent package
+mkdir -p packages/@claude-code/agents/src
+touch packages/@claude-code/agents/src/your-agent.md
 
-1. **이슈 생성**: `enhancement` 라벨 사용
-2. **설명 포함**:
-   - 해결하고자 하는 문제
-   - 제안하는 해결책
-   - 대안 고려사항
-
-### 🔧 Pull Request
-
-#### 준비 사항
-
-1. Fork the repository
-2. Clone your fork:
-   ```bash
-   git clone https://github.com/A1rtisan-LAB/context-engineering-template.git
-   cd context-engineering-template
-   ```
-
-3. 새 브랜치 생성:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-#### 개발 가이드라인
-
-##### 템플릿 수정 시
-
-1. **파일 위치**: 모든 템플릿은 `templates/` 디렉토리에 위치
-2. **테스트**: 수정 후 `setup-claude-code.sh` 실행하여 검증
-3. **문서화**: 새로운 기능은 적절한 문서 포함
-
-##### 코드 스타일
-
-**Markdown 파일**:
-- 제목은 `#`로 시작 (공백 포함)
-- 코드 블록은 언어 명시
-- 링크는 상대 경로 사용 (가능한 경우)
-
-**Shell Scripts**:
-- ShellCheck 통과 필수
-- 의미 있는 변수명 사용
-- 에러 처리 포함
-
-**JSON 파일**:
-- 유효한 JSON 문법
-- 2칸 들여쓰기
-- 후행 쉼표 없음
-
-#### 커밋 메시지
-
-```
-<type>: <subject>
-
-<body>
-
-<footer>
+# Update README (English + Korean)
+# packages/@claude-code/agents/README.md
+# packages/@claude-code/agents/README.ko.md
 ```
 
-**Types**:
-- `feat`: 새로운 기능
-- `fix`: 버그 수정
-- `docs`: 문서 변경
-- `style`: 코드 스타일 변경
-- `refactor`: 리팩토링
-- `test`: 테스트 추가/수정
-- `chore`: 기타 변경사항
+### 2. Adding New Commands
 
-**예시**:
-```
-feat: API 프로젝트를 위한 새로운 PRP 템플릿 추가
-
-- prp_api.md 템플릿 생성
-- API 특화 섹션 포함
-- 예시 엔드포인트 문서화
+```bash
+# Add command to appropriate category
+mkdir -p packages/@claude-code/commands/src/[category]
+touch packages/@claude-code/commands/src/[category]/your-command.md
 ```
 
-#### PR 체크리스트
+### 3. Documentation Improvements
 
-- [ ] 코드가 프로젝트 스타일 가이드를 따름
-- [ ] 자가 리뷰 완료
-- [ ] 문서 업데이트 (필요한 경우)
-- [ ] 테스트 추가/업데이트
-- [ ] GitHub Actions 모든 체크 통과
+All documentation must be written in both languages (English/Korean):
+- English: `filename.md`
+- Korean: `filename.ko.md`
 
-### 📚 문서 기여
+## Development Environment
 
-문서 개선은 언제나 환영합니다:
+### Prerequisites
 
-- 오타 수정
-- 명확성 개선
-- 예시 추가
-- 번역
+- Node.js 16.0.0 or higher
+- npm 8.0.0 or higher
+- Git
 
-### 🧪 테스트
+### Setup Steps
 
-새로운 기능 추가 시:
+```bash
+# 1. Fork and clone repository
+git clone https://github.com/your-username/context-engineering-template.git
+cd context-engineering-template
 
-1. **수동 테스트**:
-   ```bash
-   ./setup-claude-code.sh test-project
-   cd test-project
-   # 새 기능 검증
-   ```
+# 2. Install dependencies
+npm install
 
-2. **자동화 테스트**:
-   - GitHub Actions 워크플로우 확인
-   - 필요시 새로운 테스트 케이스 추가
+# 3. Create development branch
+git checkout -b feature/your-feature-name
+```
 
-## 릴리스 프로세스
+## Coding Standards
 
-1. **버전 태깅**: Semantic Versioning 사용
-   - MAJOR: 호환되지 않는 변경
-   - MINOR: 새로운 기능 (하위 호환)
-   - PATCH: 버그 수정
+### Agent Writing Guide
 
-2. **변경 로그**: CHANGELOG.md 업데이트
+Agent files must follow this structure:
 
-## 도움 받기
+```markdown
+# agent: agent-name
 
-- **Discord**: [커뮤니티 서버 링크]
-- **GitHub Discussions**: 질문과 아이디어 공유
-- **이메일**: maintainer@example.com
+## Role
+Clear description of the agent's role and purpose
 
-## 인정
+## Capabilities
+- Key capability 1
+- Key capability 2
+- Key capability 3
 
-기여자는 다음에 추가됩니다:
-- README.md의 Contributors 섹션
-- 릴리스 노트
+## Instructions
+Detailed work instructions
+```
 
-## 라이선스
+### Command Writing Guide
 
-기여하신 내용은 프로젝트와 동일한 [MIT 라이선스](LICENSE)로 배포됩니다.
+```markdown
+# command: command-name
+
+## Description
+Purpose and usage scenarios of the command
+
+## Usage
+`/command-name [parameters]`
+
+## Parameters
+- parameter1: description
+- parameter2: description
+
+## Examples
+Real usage examples
+```
+
+## Documentation Guidelines
+
+**Important**: All documentation must follow the [Documentation Guidelines in CLAUDE.md](CLAUDE.md#documentation-guidelines).
+
+### Bilingual Documentation
+
+1. **File Naming Convention**:
+   - English: `README.md`
+   - Korean: `README.ko.md`
+
+2. **Translation Standards**:
+   - Technical terms should include English: "monorepo(모노레포)"
+   - Only translate comments in code examples
+   - Ensure natural and clear translations
+
+3. **Keep Synchronized**:
+   - Update Korean version when modifying English version
+   - Specify language version in commit messages
+
+## Pull Request Process
+
+### 1. PR Checklist
+
+- [ ] Code follows project style guide
+- [ ] All tests pass (`npm test --workspaces`)
+- [ ] Documentation is bilingual
+- [ ] Commit messages are clear
+
+### 2. PR Template
+
+```markdown
+## Changes
+Brief description of changes
+
+## Type of Change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Documentation improvement
+- [ ] Performance improvement
+
+## Testing
+Describe how you tested
+
+## Checklist
+- [ ] Code style guide compliance
+- [ ] Tests added/updated
+- [ ] Documentation updated (English/Korean)
+```
+
+### 3. Commit Message Format
+
+```
+type(scope): brief description
+
+Detailed description (optional)
+
+Closes #issue-number
+```
+
+Types:
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes
+- `refactor`: Code refactoring
+- `test`: Adding/modifying tests
+- `chore`: Build process or tool changes
+
+## Issue Reporting
+
+### Bug Reports
+
+When finding a bug, please create an issue with the following information:
+
+1. **Bug Description**: Clear and concise description
+2. **Reproduction Steps**: Steps to reproduce the bug
+3. **Expected Behavior**: What you expected to happen
+4. **Actual Behavior**: What actually happened
+5. **Screenshots**: If applicable
+6. **Environment Information**:
+   - OS and version
+   - Node.js version
+   - npm version
+
+### Feature Requests
+
+To suggest a new feature:
+
+1. **Feature Description**: Clear description of the proposed feature
+2. **Use Case**: Why this feature is needed and scenarios
+3. **Alternatives**: Other alternatives considered
+4. **Additional Context**: Related screenshots or references
+
+## Getting Help
+
+If you have questions:
+
+1. First check the [documentation](docs/)
+2. Search [existing issues](https://github.com/A1rtisan-LAB/context-engineering-template/issues)
+3. If you still can't find an answer, create a new issue or start a discussion
+
+## License
+
+By contributing, you agree that your contributions will be licensed under the MIT License.
 
 ---
 
-감사합니다! 🙏 여러분의 기여가 이 프로젝트를 더 좋게 만듭니다.
+Thank you for making Context Engineering Template better for everyone! 🚀
+
+## 🌏 Languages
+
+This document is also available in:
+- [한국어](CONTRIBUTING.ko.md)

@@ -1,0 +1,302 @@
+name: Check Documentation
+
+on:
+  push:
+    paths:
+      - '**.md'
+      - 'docs/**'
+      - 'CLAUDE.md'
+  pull_request:
+    paths:
+      - '**.md'
+      - 'docs/**'
+      - 'CLAUDE.md'
+  workflow_dispatch:
+
+jobs:
+  check-bilingual-docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Check bilingual documentation
+      run: |
+        echo "🌏 Checking bilingual documentation..."
+        
+        # Required bilingual documents
+        BILINGUAL_DOCS=(
+          "README"
+          "CONTRIBUTING"
+          "docs/ARCHITECTURE"
+        )
+        
+        missing_translations=()
+        
+        for doc in "${BILINGUAL_DOCS[@]}"; do
+          if [ -f "${doc}.md" ]; then
+            if [ ! -f "${doc}.ko.md" ]; then
+              missing_translations+=("${doc}.ko.md")
+            fi
+          fi
+        done
+        
+        if [ ${#missing_translations[@]} -ne 0 ]; then
+          echo "⚠️  Missing Korean translations:"
+          printf '%s\n' "${missing_translations[@]}"
+        else
+          echo "✅ All required documents have Korean translations"
+        fi
+        
+        # Check for orphaned translations
+        find . -name "*.ko.md" -not -path "./node_modules/*" | while read ko_file; do
+          en_file="${ko_file%.ko.md}.md"
+          if [ ! -f "$en_file" ]; then
+            echo "⚠️  Orphaned Korean translation: $ko_file (missing $en_file)"
+          fi
+        done
+    
+    - name: Validate documentation structure
+      run: |
+        echo "📚 Validating documentation structure..."
+        
+        # Check main documentation files
+        REQUIRED_DOCS=(
+          "README.md"
+          "CONTRIBUTING.md"
+          "CLAUDE.md"
+          "LICENSE"
+        )
+        
+        for doc in "${REQUIRED_DOCS[@]}"; do
+          if [ ! -f "$doc" ]; then
+            echo "❌ Missing required document: $doc"
+            exit 1
+          fi
+        done
+        
+        # Check docs directory
+        if [ ! -d "docs" ]; then
+          echo "❌ Missing docs directory"
+          exit 1
+        fi
+        
+        echo "✅ Documentation structure validated"
+    
+    - name: Check markdown formatting
+      run: |
+        echo "📝 Checking markdown formatting..."
+        
+        # Check for empty files
+        find . -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | while read file; do
+          if [ ! -s "$file" ]; then
+            echo "⚠️  Empty markdown file: $file"
+          fi
+        done
+        
+        # Check for very large files (>500KB)
+        find . -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | while read file; do
+          # Cross-platform file size check
+          if [ -f "$file" ]; then
+            size=$(wc -c < "$file" | tr -d ' ')
+            if [ "$size" -gt 512000 ]; then
+              size_kb=$((size / 1024))
+              echo "⚠️  Large markdown file: $file (${size_kb}KB)"
+            fi
+          fi
+        done
+        
+        echo "✅ Markdown formatting check complete"
+    
+    - name: Validate CLAUDE.md guidelines
+      run: |
+        echo "📋 Validating CLAUDE.md documentation guidelines..."
+        
+        if [ ! -f "CLAUDE.md" ]; then
+          echo "❌ CLAUDE.md not found"
+          exit 1
+        fi
+        
+        # Check for required sections
+        required_sections=(
+          "Documentation Guidelines"
+          "Bilingual Documentation Policy"
+          "File Naming Convention"
+          "Translation Standards"
+        )
+        
+        for section in "${required_sections[@]}"; do
+          if ! grep -q "$section" CLAUDE.md; then
+            echo "❌ Missing section in CLAUDE.md: $section"
+            exit 1
+          fi
+        done
+        
+        echo "✅ CLAUDE.md contains all required documentation guidelines"
+    
+    - name: Check package documentation
+      run: |
+        echo "📦 Checking package documentation..."
+        
+        # Each package should have a README
+        for pkg in packages/@claude-code/*; do
+          if [ -d "$pkg" ]; then
+            pkg_name=$(basename "$pkg")
+            
+            if [ ! -f "$pkg/README.md" ]; then
+              echo "⚠️  Missing README.md in package: $pkg_name"
+            fi
+            
+            # Check for Korean version
+            if [ -f "$pkg/README.md" ] && [ ! -f "$pkg/README.ko.md" ]; then
+              echo "⚠️  Missing README.ko.md in package: $pkg_name"
+            fi
+          fi
+        done
+        
+        echo "✅ Package documentation check complete"
+
+  lint-markdown:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+    
+    - name: Basic markdown validation
+      run: |
+        echo "🔍 Performing basic markdown validation..."
+        
+        # Check for broken internal links
+        find . -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | while read file; do
+          # Extract markdown links
+          grep -Eo '\[([^]]+)\]\(([^)]+)\)' "$file" | grep -Eo '\]\([^)]+\)' | sed 's/](\(.*\))/\1/' | while read link; do
+            # Skip external links
+            if [[ "$link" == http* ]] || [[ "$link" == mailto:* ]]; then
+              continue
+            fi
+            
+            # Skip anchors
+            if [[ "$link" == "#"* ]]; then
+              continue
+            fi
+            
+            # Check if internal link exists
+            dir=$(dirname "$file")
+            target="$dir/$link"
+            target=$(echo "$target" | sed 's|/\./|/|g')
+            
+            if [ ! -f "$target" ] && [ ! -d "$target" ]; then
+              echo "⚠️  Broken link in $file: $link"
+            fi
+          done
+        done
+        
+        echo "✅ Basic markdown validation complete"
+
+  check-api-docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Check for API documentation
+      run: |
+        echo "🔌 Checking API documentation..."
+        
+        # Check if API docs exist
+        if [ -f "docs/API.md" ]; then
+          echo "✅ API.md exists"
+          
+          # Check for Korean version
+          if [ ! -f "docs/API.ko.md" ]; then
+            echo "⚠️  Missing Korean version: docs/API.ko.md"
+          fi
+        else
+          echo "ℹ️  Note: docs/API.md not yet created"
+        fi
+        
+        # Check if QUICKSTART exists
+        if [ -f "docs/QUICKSTART.md" ]; then
+          echo "✅ QUICKSTART.md exists"
+          
+          if [ ! -f "docs/QUICKSTART.ko.md" ]; then
+            echo "⚠️  Missing Korean version: docs/QUICKSTART.ko.md"
+          fi
+        else
+          echo "ℹ️  Note: docs/QUICKSTART.md not yet created"
+        fi
+        
+        # Check if MIGRATION guide exists
+        if [ -f "docs/MIGRATION.md" ]; then
+          echo "✅ MIGRATION.md exists"
+          
+          if [ ! -f "docs/MIGRATION.ko.md" ]; then
+            echo "⚠️  Missing Korean version: docs/MIGRATION.ko.md"
+          fi
+        else
+          echo "ℹ️  Note: docs/MIGRATION.md not yet created"
+        fi
+        
+        echo "✅ API documentation check complete"
+
+  documentation-coverage:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Calculate documentation coverage
+      shell: bash
+      run: |
+        echo "📊 Calculating documentation coverage..."
+        
+        # Count total markdown files
+        total_md=$(find . -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | wc -l)
+        echo "Total markdown files: $total_md"
+        
+        # Count Korean translations
+        total_ko=$(find . -name "*.ko.md" -not -path "./node_modules/*" -not -path "./.git/*" | wc -l)
+        echo "Korean translations: $total_ko"
+        
+        # Count expected translations (files that should have .ko.md)
+        # Using temporary file to avoid subshell variable issue
+        expected=0
+        find . -name "*.md" -not -name "*.ko.md" -not -path "./node_modules/*" -not -path "./.git/*" > /tmp/md_files.txt
+        while IFS= read -r file; do
+          # Skip certain files that don't need translation
+          basename=$(basename "$file")
+          if [[ "$basename" != "LICENSE" ]] && [[ "$basename" != "CHANGELOG.md" ]]; then
+            expected=$((expected + 1))
+          fi
+        done < /tmp/md_files.txt
+        
+        # Calculate percentage
+        if [ "$expected" -gt 0 ]; then
+          coverage=$((total_ko * 100 / expected))
+          echo "Translation coverage: ${coverage}% ($total_ko/$expected)"
+          
+          if [ "$coverage" -lt 50 ]; then
+            echo "⚠️  Warning: Translation coverage is below 50%"
+          elif [ "$coverage" -lt 80 ]; then
+            echo "ℹ️  Note: Translation coverage could be improved"
+          else
+            echo "✅ Good translation coverage"
+          fi
+        fi
+        
+        # List documentation by category
+        echo ""
+        echo "📁 Documentation by category:"
+        echo "- Root docs: $(find . -maxdepth 1 -name "*.md" | wc -l)"
+        echo "- /docs: $(find docs -name "*.md" 2>/dev/null | wc -l || echo 0)"
+        echo "- Package docs: $(find packages -name "README*.md" 2>/dev/null | wc -l || echo 0)"
+        echo "- Starter docs: $(find starters -name "*.md" 2>/dev/null | wc -l || echo 0)"

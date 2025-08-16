@@ -1,0 +1,61 @@
+{
+  "name": "context-engineering-template",
+  "version": "3.0.0",
+  "description": "Development configuration for the Context Engineering Template project itself",
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "MultiEdit(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "TodoWrite",
+      "Task",
+      "Bash(npm:*)",
+      "Bash(git:*)",
+      "Bash(node:*)",
+      "Bash(echo:*)",
+      "Bash(cat:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(sudo:*)",
+      "Bash(su:*)"
+    ]
+  },
+  "tools": {
+    "bash": {
+      "enabled": true,
+      "timeout": 120000
+    },
+    "task": {
+      "enabled": true,
+      "preferredAgents": [
+        "feature-implementer",
+        "code-enhancement-specialist",
+        "project-knowledge-curator"
+      ]
+    },
+    "webSearch": {
+      "enabled": true
+    }
+  },
+  "documentation": {
+    "bilingual": true,
+    "languages": ["en", "ko"],
+    "defaultLanguage": "en"
+  },
+  "workspace": {
+    "type": "monorepo",
+    "packageManager": "npm",
+    "workspaces": [
+      "packages/@claude-code/*",
+      "cli"
+    ]
+  }
+}

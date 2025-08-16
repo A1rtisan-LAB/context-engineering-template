@@ -1,0 +1,138 @@
+name: Agile Sprint Pipeline
+description: Iterative development with sprint-based cycles
+version: 1.0.0
+
+sprint:
+  duration: 2 weeks
+  velocity_target: 40 points
+  ceremonies:
+    - sprint_planning
+    - daily_standup
+    - sprint_review
+    - retrospective
+
+phases:
+  - name: sprint-planning
+    description: Sprint planning and backlog refinement
+    duration: 4 hours
+    required: true
+    tasks:
+      - Review product backlog
+      - Estimate story points
+      - Define sprint goal
+      - Commit to sprint backlog
+      - Identify dependencies
+    agents:
+      - prd-workflow-generator
+      - dev-estimator
+    outputs:
+      - sprint-goal.md
+      - sprint-backlog.md
+      - capacity-plan.md
+
+  - name: development
+    description: Iterative development with daily cycles
+    duration: 8 days
+    required: true
+    parallel: true
+    daily_cycle:
+      - standup
+      - development
+      - testing
+      - integration
+    tasks:
+      - Implement user stories
+      - Write tests
+      - Code review
+      - Continuous integration
+    agents:
+      - feature-implementer
+      - code-enhancement-specialist
+      - test-execution-manager
+    outputs:
+      - working software
+      - test results
+      - daily progress
+
+  - name: sprint-review
+    description: Demo and stakeholder feedback
+    duration: 2 hours
+    required: true
+    tasks:
+      - Prepare demo
+      - Present completed work
+      - Gather feedback
+      - Update backlog
+    agents:
+      - project-knowledge-curator
+    outputs:
+      - demo-script.md
+      - feedback-notes.md
+      - backlog-updates.md
+
+  - name: retrospective
+    description: Team reflection and improvement
+    duration: 1.5 hours
+    required: true
+    tasks:
+      - Review sprint metrics
+      - Discuss what went well
+      - Identify improvements
+      - Create action items
+    agents:
+      - sdlc-coordinator
+    outputs:
+      - retrospective-notes.md
+      - action-items.md
+      - metrics-report.md
+
+  - name: release
+    description: Optional release to production
+    duration: 2 hours
+    required: false
+    trigger: end_of_sprint
+    tasks:
+      - Create release candidate
+      - Run regression tests
+      - Deploy to production
+      - Update documentation
+    agents:
+      - build-packager
+      - git-workflow-manager
+    outputs:
+      - release-notes.md
+      - deployment-log.txt
+
+settings:
+  iteration_enabled: true
+  continuous_integration: true
+  auto_testing: true
+  feature_flags: true
+  
+metrics:
+  velocity: true
+  burndown: true
+  cycle_time: true
+  lead_time: true
+  defect_rate: true
+
+kanban:
+  columns:
+    - backlog
+    - in_progress
+    - in_review
+    - testing
+    - done
+  wip_limits:
+    in_progress: 5
+    in_review: 3
+    testing: 3
+
+team:
+  size: 5-7
+  roles:
+    - product_owner
+    - scrum_master
+    - developers
+    - qa_engineer
+    - ux_designer

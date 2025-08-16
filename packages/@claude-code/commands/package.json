@@ -1,0 +1,22 @@
+{
+  "name": "@claude-code/commands",
+  "version": "1.0.0",
+  "description": "Claude Code command templates for workflow automation",
+  "main": "index.js",
+  "files": [
+    "src/**/*",
+    "README.md"
+  ],
+  "keywords": [
+    "claude-code",
+    "commands",
+    "automation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A1rtisan-LAB/context-engineering-template.git",
+    "directory": "packages/@claude-code/commands"
+  }
+}

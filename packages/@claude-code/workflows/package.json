@@ -1,0 +1,22 @@
+{
+  "name": "@claude-code/workflows",
+  "version": "1.0.0",
+  "description": "Development workflow templates for Claude Code projects",
+  "main": "index.js",
+  "files": [
+    "src/**/*",
+    "README.md"
+  ],
+  "keywords": [
+    "claude-code",
+    "workflows",
+    "development-lifecycle"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A1rtisan-LAB/context-engineering-template.git",
+    "directory": "packages/@claude-code/workflows"
+  }
+}
