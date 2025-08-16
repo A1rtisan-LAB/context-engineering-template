@@ -97,10 +97,13 @@ jobs:
         
         # Check for very large files (>500KB)
         find . -name "*.md" -not -path "./node_modules/*" -not -path "./.git/*" | while read file; do
-          size=$(stat -c%s "$file" 2>/dev/null || stat -f%z "$file" 2>/dev/null || echo 0)
-          if [ "$size" -gt 512000 ]; then
-            size_kb=$((size / 1024))
-            echo "⚠️  Large markdown file: $file (${size_kb}KB)"
+          # Cross-platform file size check
+          if [ -f "$file" ]; then
+            size=$(wc -c < "$file" | tr -d ' ')
+            if [ "$size" -gt 512000 ]; then
+              size_kb=$((size / 1024))
+              echo "⚠️  Large markdown file: $file (${size_kb}KB)"
+            fi
           fi
         done
         
@@ -264,15 +267,15 @@ jobs:
         echo "Korean translations: $total_ko"
         
         # Count expected translations (files that should have .ko.md)
+        # Using process substitution to avoid subshell variable issue
         expected=0
-        find . -name "*.md" -not -name "*.ko.md" -not -path "./node_modules/*" -not -path "./.git/*" | while read file; do
+        while IFS= read -r file; do
           # Skip certain files that don't need translation
           basename=$(basename "$file")
-          if [[ "$basename" == "LICENSE" ]] || [[ "$basename" == "CHANGELOG.md" ]]; then
-            continue
+          if [[ "$basename" != "LICENSE" ]] && [[ "$basename" != "CHANGELOG.md" ]]; then
+            ((expected++))
           fi
-          ((expected++))
-        done
+        done < <(find . -name "*.md" -not -name "*.ko.md" -not -path "./node_modules/*" -not -path "./.git/*")
         
         # Calculate percentage
         if [ "$expected" -gt 0 ]; then
