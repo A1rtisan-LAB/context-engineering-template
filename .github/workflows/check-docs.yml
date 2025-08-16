@@ -255,6 +255,7 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Calculate documentation coverage
+      shell: bash
       run: |
         echo "📊 Calculating documentation coverage..."
         
@@ -267,15 +268,16 @@ jobs:
         echo "Korean translations: $total_ko"
         
         # Count expected translations (files that should have .ko.md)
-        # Using process substitution to avoid subshell variable issue
+        # Using temporary file to avoid subshell variable issue
         expected=0
+        find . -name "*.md" -not -name "*.ko.md" -not -path "./node_modules/*" -not -path "./.git/*" > /tmp/md_files.txt
         while IFS= read -r file; do
           # Skip certain files that don't need translation
           basename=$(basename "$file")
           if [[ "$basename" != "LICENSE" ]] && [[ "$basename" != "CHANGELOG.md" ]]; then
             ((expected++))
           fi
-        done < <(find . -name "*.md" -not -name "*.ko.md" -not -path "./node_modules/*" -not -path "./.git/*")
+        done < /tmp/md_files.txt
         
         # Calculate percentage
         if [ "$expected" -gt 0 ]; then
