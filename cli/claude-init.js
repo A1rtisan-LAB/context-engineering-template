@@ -124,61 +124,89 @@ async function copyRecursive(src, dest) {
   }
 }
 
-// Link Claude Code packages (async version)
-async function linkPackages(targetPath) {
+// Copy Claude Code package contents dynamically
+async function copyPackageContents(targetPath) {
   const packagesSource = path.join(__dirname, '..', 'packages', '@claude-code');
-  const packagesTarget = path.join(targetPath, '.claude');
+  const claudeTarget = path.join(targetPath, '.claude');
   
-  // Check and link packages in parallel
-  const linkOperations = [];
+  // Packages to skip (internal tools, not needed in projects)
+  const skipPackages = ['core'];
   
-  // Link agents
-  const agentsSourcePath = path.join(packagesSource, 'agents', 'src');
-  if (await pathExists(agentsSourcePath)) {
-    const agentsTarget = path.join(packagesTarget, 'agents');
-    linkOperations.push(
-      fs.mkdir(agentsTarget, { recursive: true }).then(() =>
-        fs.symlink(
-          agentsSourcePath,
-          path.join(agentsTarget, 'src'),
-          'dir'
-        )
-      )
-    );
-  }
+  // Files/patterns to exclude when copying
+  const excludePatterns = [
+    'package.json',
+    'README.md',
+    'README.ko.md',
+    'node_modules',
+    '__tests__',
+    '*.test.js',
+    '*.spec.js',
+    '.DS_Store'
+  ];
   
-  // Link commands
-  const commandsSourcePath = path.join(packagesSource, 'commands', 'src');
-  if (await pathExists(commandsSourcePath)) {
-    const commandsTarget = path.join(packagesTarget, 'commands');
-    linkOperations.push(
-      fs.mkdir(commandsTarget, { recursive: true }).then(() =>
-        fs.symlink(
-          commandsSourcePath,
-          path.join(commandsTarget, 'src'),
-          'dir'
-        )
-      )
-    );
-  }
+  // Check if file/dir should be excluded
+  const shouldExclude = (name) => {
+    return excludePatterns.some(pattern => {
+      if (pattern.includes('*')) {
+        const regex = new RegExp(pattern.replace('*', '.*'));
+        return regex.test(name);
+      }
+      return name === pattern;
+    });
+  };
   
-  // Link workflows
-  const workflowsSourcePath = path.join(packagesSource, 'workflows', 'src');
-  if (await pathExists(workflowsSourcePath)) {
-    const workflowsTarget = path.join(packagesTarget, 'workflows');
-    linkOperations.push(
-      fs.mkdir(workflowsTarget, { recursive: true }).then(() =>
-        fs.symlink(
-          workflowsSourcePath,
-          path.join(workflowsTarget, 'src'),
-          'dir'
-        )
-      )
-    );
-  }
+  // Recursively copy directory contents
+  const copyDirContents = async (srcDir, destDir) => {
+    await fs.mkdir(destDir, { recursive: true });
+    const items = await fs.readdir(srcDir, { withFileTypes: true });
+    
+    const copyOperations = items
+      .filter(item => !shouldExclude(item.name))
+      .map(async (item) => {
+        const srcPath = path.join(srcDir, item.name);
+        const destPath = path.join(destDir, item.name);
+        
+        if (item.isDirectory()) {
+          await copyDirContents(srcPath, destPath);
+        } else {
+          await fs.copyFile(srcPath, destPath);
+        }
+      });
+    
+    await Promise.all(copyOperations);
+  };
   
-  // Execute all link operations in parallel
-  await Promise.all(linkOperations);
+  // Get all package directories
+  const packageDirs = await fs.readdir(packagesSource, { withFileTypes: true });
+  
+  // Process each package in parallel
+  const copyOperations = packageDirs
+    .filter(dir => dir.isDirectory() && !skipPackages.includes(dir.name))
+    .map(async (dir) => {
+      const packageName = dir.name;
+      const packagePath = path.join(packagesSource, packageName);
+      const targetDir = path.join(claudeTarget, packageName);
+      
+      // Check if package has a src directory
+      const srcPath = path.join(packagePath, 'src');
+      if (await pathExists(srcPath)) {
+        // Copy contents of src/ to .claude/[package-name]/
+        await copyDirContents(srcPath, targetDir);
+      } else {
+        // Check if package has any content files to copy
+        const packageContents = await fs.readdir(packagePath, { withFileTypes: true });
+        const hasContent = packageContents.some(item => 
+          !shouldExclude(item.name) && (item.isFile() || item.isDirectory())
+        );
+        
+        if (hasContent) {
+          // Copy package contents directly
+          await copyDirContents(packagePath, targetDir);
+        }
+      }
+    });
+  
+  await Promise.all(copyOperations);
 }
 
 // Replace placeholders in files (async version)
@@ -248,9 +276,9 @@ async function createProject(projectName, starterType, targetPath) {
   // Wait for initial operations
   await Promise.all(operations);
   
-  // Link packages and replace placeholders in parallel
+  // Copy package contents and replace placeholders in parallel
   await Promise.all([
-    linkPackages(projectPath),
+    copyPackageContents(projectPath),
     replacePlaceholders(projectPath, projectName)
   ]);
   

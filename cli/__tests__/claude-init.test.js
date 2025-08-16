@@ -69,6 +69,31 @@ describe('Claude Code CLI', () => {
       const claudeDir = path.join(projectPath, '.claude');
       const claudeStats = await fs.stat(claudeDir);
       expect(claudeStats.isDirectory()).toBe(true);
+      
+      // Verify NO src/ subdirectories exist
+      const agentsSrcPath = path.join(claudeDir, 'agents', 'src');
+      await expect(fs.stat(agentsSrcPath)).rejects.toThrow();
+      
+      const commandsSrcPath = path.join(claudeDir, 'commands', 'src');
+      await expect(fs.stat(commandsSrcPath)).rejects.toThrow();
+      
+      const workflowsSrcPath = path.join(claudeDir, 'workflows', 'src');
+      await expect(fs.stat(workflowsSrcPath)).rejects.toThrow();
+      
+      // Verify files exist directly in directories
+      const agentsDir = path.join(claudeDir, 'agents');
+      const agentFiles = await fs.readdir(agentsDir);
+      expect(agentFiles.length).toBeGreaterThan(0);
+      expect(agentFiles.some(f => f.endsWith('.md'))).toBe(true);
+      
+      const commandsDir = path.join(claudeDir, 'commands');
+      const commandFiles = await fs.readdir(commandsDir);
+      expect(commandFiles.length).toBeGreaterThan(0);
+      
+      const workflowsDir = path.join(claudeDir, 'workflows');
+      const workflowFiles = await fs.readdir(workflowsDir);
+      expect(workflowFiles.length).toBeGreaterThan(0);
+      expect(workflowFiles.some(f => f.endsWith('.md'))).toBe(true);
     });
     
     test('should fail if directory already exists', async () => {
@@ -183,6 +208,60 @@ describe('Claude Code CLI', () => {
         expect(content).not.toContain('PROJECT_NAME');
       } catch (error) {
         // File might not exist, that's okay
+      }
+    });
+  });
+  
+  describe('Claude Directory Structure', () => {
+    test('should have correct .claude structure without src subdirectories', async () => {
+      const projectTypes = ['basic', 'api', 'frontend', 'fullstack'];
+      
+      for (const projectType of projectTypes) {
+        const projectName = `structure-test-${projectType}`;
+        const projectPath = path.join(tempDir, projectName);
+        
+        await exec(`node ${CLI_PATH} ${projectName} ${projectType} ${tempDir}`);
+        
+        const claudeDir = path.join(projectPath, '.claude');
+        
+        // Check agents directory
+        const agentsDir = path.join(claudeDir, 'agents');
+        const agentsExists = await fs.stat(agentsDir).then(() => true).catch(() => false);
+        if (agentsExists) {
+          // Should NOT have src subdirectory
+          const agentsSrc = path.join(agentsDir, 'src');
+          await expect(fs.stat(agentsSrc)).rejects.toThrow();
+          
+          // Should have .md files directly
+          const agentFiles = await fs.readdir(agentsDir);
+          expect(agentFiles.some(f => f.endsWith('.md'))).toBe(true);
+        }
+        
+        // Check commands directory
+        const commandsDir = path.join(claudeDir, 'commands');
+        const commandsExists = await fs.stat(commandsDir).then(() => true).catch(() => false);
+        if (commandsExists) {
+          // Should NOT have src subdirectory
+          const commandsSrc = path.join(commandsDir, 'src');
+          await expect(fs.stat(commandsSrc)).rejects.toThrow();
+          
+          // Should have content directly
+          const commandContent = await fs.readdir(commandsDir);
+          expect(commandContent.length).toBeGreaterThan(0);
+        }
+        
+        // Check workflows directory
+        const workflowsDir = path.join(claudeDir, 'workflows');
+        const workflowsExists = await fs.stat(workflowsDir).then(() => true).catch(() => false);
+        if (workflowsExists) {
+          // Should NOT have src subdirectory
+          const workflowsSrc = path.join(workflowsDir, 'src');
+          await expect(fs.stat(workflowsSrc)).rejects.toThrow();
+          
+          // Should have .md files directly
+          const workflowFiles = await fs.readdir(workflowsDir);
+          expect(workflowFiles.some(f => f.endsWith('.md'))).toBe(true);
+        }
       }
     });
   });
