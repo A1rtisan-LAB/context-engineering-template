@@ -1,0 +1,129 @@
+name: GPT Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  code-review:
+    # Skip if PR is draft or has WIP in title
+    if: |
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft && !contains(github.event.pull_request.title, 'WIP')) ||
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '/review'))
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        pip install openai PyGithub requests
+    
+    - name: Get PR details
+      id: pr_details
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        if [ "${{ github.event_name }}" = "issue_comment" ]; then
+          PR_NUMBER="${{ github.event.issue.number }}"
+        else
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+        fi
+        echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+        
+        # Get PR diff size
+        DIFF_SIZE=$(gh pr diff $PR_NUMBER | wc -l)
+        echo "diff_size=$DIFF_SIZE" >> $GITHUB_OUTPUT
+        
+        # Check if diff is too large (>1000 lines)
+        if [ $DIFF_SIZE -gt 1000 ]; then
+          echo "skip_reason=PR too large ($DIFF_SIZE lines)" >> $GITHUB_OUTPUT
+          echo "should_skip=true" >> $GITHUB_OUTPUT
+        else
+          echo "should_skip=false" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Check daily limit
+      id: check_limit
+      run: |
+        DATE=$(date +%Y-%m-%d)
+        LIMIT_FILE="/tmp/gpt-review-limit-$DATE.txt"
+        
+        # Check if we've hit daily limit (10 reviews)
+        if [ -f "$LIMIT_FILE" ]; then
+          COUNT=$(cat "$LIMIT_FILE")
+          if [ "$COUNT" -ge 10 ]; then
+            echo "Daily limit reached ($COUNT/10)" 
+            echo "should_skip=true" >> $GITHUB_OUTPUT
+            echo "skip_reason=Daily limit reached (10 reviews)" >> $GITHUB_OUTPUT
+          else
+            echo $((COUNT + 1)) > "$LIMIT_FILE"
+            echo "should_skip=false" >> $GITHUB_OUTPUT
+          fi
+        else
+          echo "1" > "$LIMIT_FILE"
+          echo "should_skip=false" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Run GPT Review
+      if: steps.pr_details.outputs.should_skip != 'true' && steps.check_limit.outputs.should_skip != 'true'
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUMBER: ${{ steps.pr_details.outputs.pr_number }}
+      run: |
+        python .github/scripts/gpt_review.py
+    
+    - name: Post skip message
+      if: steps.pr_details.outputs.should_skip == 'true' || steps.check_limit.outputs.should_skip == 'true'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PR_NUMBER: ${{ steps.pr_details.outputs.pr_number }}
+      run: |
+        REASON="${{ steps.pr_details.outputs.skip_reason }}${{ steps.check_limit.outputs.skip_reason }}"
+        gh pr comment $PR_NUMBER --body "⏭️ **AI Review Skipped**
+        
+        Reason: $REASON
+        
+        To force a review, comment \`/review\` on this PR."
+
+  usage-report:
+    if: github.event_name == 'issue_comment' && contains(github.event.comment.body, '/usage')
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Report usage
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        DATE=$(date +%Y-%m-%d)
+        LIMIT_FILE="/tmp/gpt-review-limit-$DATE.txt"
+        
+        if [ -f "$LIMIT_FILE" ]; then
+          COUNT=$(cat "$LIMIT_FILE")
+        else
+          COUNT=0
+        fi
+        
+        gh issue comment ${{ github.event.issue.number }} --body "📊 **GPT Review Usage**
+        
+        Today's usage: $COUNT/10 reviews
+        Status: $([ $COUNT -ge 10 ] && echo '🔴 Limit reached' || echo '🟢 Available')
+        
+        Reset time: Tomorrow at 00:00 UTC"
