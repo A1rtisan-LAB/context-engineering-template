@@ -217,15 +217,15 @@ npm test
 ## 다음 단계
 
 1. [전체 문서](../README.md) 읽기
-2. [사용 가능한 에이전트](.claude/agents/) 탐색
-3. [API 문서](API.ko.md) 확인
+2. `.claude/agents/` 디렉토리에서 사용 가능한 에이전트 탐색
+3. API 문서 (프로젝트에 `docs/API.ko.md` 생성) 확인
 4. 커뮤니티 토론 참여
 
 ## 도움 받기
 
 - [GitHub 이슈](https://github.com/A1rtisan-LAB/context-engineering-template/issues)
 - [문서](https://docs.anthropic.com/claude-code)
-- [기여 가이드](../CONTRIBUTING.ko.md)
+- 기여 가이드 (프로젝트에 `CONTRIBUTING.ko.md` 생성)
 
 ---
 

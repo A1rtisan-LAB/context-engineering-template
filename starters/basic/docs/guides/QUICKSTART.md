@@ -219,15 +219,15 @@ npm test
 ## Next Steps
 
 1. Read the [full documentation](../README.md)
-2. Explore [available agents](.claude/agents/)
-3. Check the [API documentation](API.md)
+2. Explore available agents in your `.claude/agents/` directory
+3. Check the API documentation (create `docs/API.md` for your project)
 4. Join the community discussions
 
 ## Getting Help
 
 - [GitHub Issues](https://github.com/A1rtisan-LAB/context-engineering-template/issues)
 - [Documentation](https://docs.anthropic.com/claude-code)
-- [Contributing Guide](../CONTRIBUTING.md)
+- Contributing Guide (create `CONTRIBUTING.md` for your project)
 
 ---
 

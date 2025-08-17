@@ -440,4 +440,4 @@ PRDs are the foundation of successful development. They ensure everyone understa
 - [PRD Templates](../../docs/prd/templates/)
 - [PRD Guide](../guides/PRD_GUIDE.md)
 - [SDLC Integration](../guides/SDLC_GUIDE.md#integration-with-prd)
-- [Example PRDs](../../docs/prd/examples/)
+- Example PRDs (see templates in `starters/*/docs/templates/prd/`)

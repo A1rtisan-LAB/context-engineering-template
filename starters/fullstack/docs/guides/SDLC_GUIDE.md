@@ -936,10 +936,10 @@ The SDLC Pipeline System transforms software development from ad-hoc processes i
 ### Further Resources
 
 - [PRD Guide](PRD_GUIDE.md) - Product Requirements Document guide
-- [Architecture Guide](ARCHITECTURE.md#sdlc-pipeline-system-architecture)
+- Architecture Guide (create `docs/ARCHITECTURE.md` for your project)
 - [Quick Start Guide](QUICKSTART.md#sdlc-pipeline-usage)
-- [API Documentation](API.md#sdlc-cli-options)
-- [Agent Documentation](.claude/agents/sdlc-coordinator.md)
+- API Documentation (create `docs/API.md` for your project)
+- Agent Documentation (see `.claude/agents/sdlc-coordinator.md` in your project)
 
 ---
 
