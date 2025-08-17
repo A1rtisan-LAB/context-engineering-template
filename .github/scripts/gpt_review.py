@@ -1,8 +1,29 @@
 #!/usr/bin/env python3
 """
-GPT-based PR Code Review Script with Chunking Support
-Uses OpenAI's GPT-4o-mini for cost-effective code reviews
-Supports large PRs through intelligent chunking
+GPT-based PR Code Review Script with Intelligent Chunking Support
+
+This script provides automated code review for GitHub Pull Requests using OpenAI's GPT-4o-mini model.
+It supports large PRs through intelligent file chunking to handle up to 20,000 lines of code changes.
+
+Main Features:
+- Automatic PR diff analysis and file filtering
+- Intelligent chunking for large PRs (>2,000 lines)
+- Cost-effective GPT-4o-mini model usage
+- Structured review feedback with severity levels
+- GitHub comment integration with update support
+
+Environment Variables Required:
+- GITHUB_TOKEN: GitHub API token for PR access
+- OPENAI_API_KEY: OpenAI API key for GPT access
+- PR_NUMBER: Pull request number to review
+- USE_CHUNKS: Enable chunking for large PRs (optional)
+- DEBUG_MODE: Enable debug output (optional)
+
+Usage:
+    python gpt_review.py
+
+Author: Claude Code Context Engineering Template
+Version: 2.0.0
 """
 
 import os
@@ -10,7 +31,7 @@ import sys
 import json
 import re
 import time
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Optional
 from github import Github
 import openai
 from openai import OpenAI
@@ -40,18 +61,53 @@ FILE_PRIORITY = {
 }
 
 class ChunkManager:
-    """Manages intelligent chunking of PR files for review"""
+    """Manages intelligent chunking of PR files for review.
+    
+    This class handles the splitting of large PRs into manageable chunks
+    for GPT review. It prioritizes files by type and ensures logical
+    boundaries are preserved when splitting.
+    
+    Attributes:
+        max_lines (int): Maximum lines per chunk (default: 2000)
+        chunks (List[List[Dict]]): List of file chunks for review
+    
+    Example:
+        >>> manager = ChunkManager(max_lines_per_chunk=2000)
+        >>> files = [{'filename': 'main.py', 'additions': 100, 'deletions': 50, ...}]
+        >>> chunks = manager.create_chunks(files)
+        >>> print(f"Created {len(chunks)} chunks")
+    """
     
     def __init__(self, max_lines_per_chunk=MAX_LINES_PER_CHUNK):
         self.max_lines = max_lines_per_chunk
         self.chunks = []
     
     def create_chunks(self, files: List[Dict[str, Any]]) -> List[List[Dict[str, Any]]]:
-        """Create optimized chunks from files"""
+        """Create optimized chunks from PR files.
+        
+        Args:
+            files: List of file dictionaries containing filename, additions,
+                  deletions, status, and patch information
+        
+        Returns:
+            List of file chunks, where each chunk contains files that total
+            less than max_lines changes
+        
+        Note:
+            Files are sorted by priority (code files first, docs last) and
+            large files are automatically split at logical boundaries.
+        """
+        # Input validation
+        if not files:
+            return []
+        
+        if not isinstance(files, list):
+            raise TypeError(f"Expected list of files, got {type(files)}")
+        
         # Sort files by priority
         sorted_files = sorted(files, 
                              key=lambda f: FILE_PRIORITY.get(
-                                 self._get_extension(f['filename']), 0), 
+                                 self._get_extension(f.get('filename', '')), 0), 
                              reverse=True)
         
         current_chunk = []
@@ -92,8 +148,24 @@ class ChunkManager:
         return self.chunks
     
     def _split_large_file(self, file: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Split a large file into smaller chunks at logical boundaries"""
-        patches = file['patch'].split('\n')
+        """Split a large file into smaller chunks at logical boundaries.
+        
+        Args:
+            file: File dictionary with patch content exceeding max_lines
+        
+        Returns:
+            List of file chunks with preserved logical boundaries
+            (e.g., function/class definitions)
+        
+        Note:
+            Attempts to split at function/class boundaries for code files,
+            falls back to line-based splitting if necessary.
+        """
+        # Input validation
+        if not file or 'patch' not in file:
+            return [file] if file else []
+        
+        patches = file.get('patch', '').split('\n')
         chunks = []
         current_patch = []
         current_lines = 0
@@ -161,7 +233,16 @@ class ChunkManager:
         return False
     
     def _get_extension(self, filename: str) -> str:
-        """Get file extension"""
+        """Get file extension from filename.
+        
+        Args:
+            filename: Path to file or filename
+        
+        Returns:
+            File extension including dot (e.g., '.py', '.js')
+        """
+        if not filename:
+            return ''
         for ext in FILE_PRIORITY.keys():
             if filename.endswith(ext):
                 return ext
@@ -169,7 +250,22 @@ class ChunkManager:
 
 
 class GPTReviewer:
-    def __init__(self, enable_chunking=ENABLE_CHUNKING):
+    """Main class for GPT-based PR code review.
+    
+    Handles GitHub PR interaction, GPT API calls, and review posting.
+    Supports both standard and chunked review modes for large PRs.
+    
+    Attributes:
+        client: OpenAI client instance
+        github: GitHub API client
+        repo: GitHub repository object
+        pr_number: Pull request number to review
+        pr: Pull request object
+        enable_chunking: Whether to enable chunking for large PRs
+        chunk_manager: ChunkManager instance for handling large PRs
+    """
+    
+    def __init__(self, enable_chunking: bool = ENABLE_CHUNKING):
         self.client = OpenAI(api_key=os.environ['OPENAI_API_KEY'])
         self.github = Github(os.environ['GITHUB_TOKEN'])
         self.repo = self.github.get_repo(os.environ['GITHUB_REPOSITORY'])
@@ -179,6 +275,7 @@ class GPTReviewer:
         self.total_cost = 0.0
         self.enable_chunking = enable_chunking
         self.chunk_manager = ChunkManager() if enable_chunking else None
+        self.debug_mode = os.environ.get('DEBUG_MODE', 'false').lower() == 'true'
         self.all_reviews = []  # Store all chunk reviews
         
     def should_review_file(self, filename: str) -> bool:
@@ -333,6 +430,11 @@ Changed Files:
         """Main review process with optional chunking"""
         print(f"Starting GPT review for PR #{self.pr_number}")
         
+        if self.debug_mode:
+            print(f"[DEBUG] Chunking enabled: {self.enable_chunking}")
+            print(f"[DEBUG] Max lines per chunk: {MAX_LINES_PER_CHUNK}")
+            print(f"[DEBUG] Max files per review: {MAX_FILES_PER_REVIEW}")
+        
         # Get files to review
         files = self.get_pr_files()
         if not files:
@@ -345,6 +447,10 @@ Changed Files:
         
         # Check if chunking is needed
         total_lines = sum(f['additions'] + f['deletions'] for f in files)
+        
+        if self.debug_mode:
+            print(f"[DEBUG] Total files: {len(files)}")
+            print(f"[DEBUG] Total lines: {total_lines}")
         
         if self.enable_chunking and total_lines > MAX_LINES_PER_CHUNK:
             print(f"Large PR detected ({total_lines} lines). Using chunked review...")
@@ -370,6 +476,11 @@ Changed Files:
         # Create chunks
         chunks = self.chunk_manager.create_chunks(files)
         print(f"Created {len(chunks)} chunks for review")
+        
+        if self.debug_mode:
+            for i, chunk in enumerate(chunks):
+                chunk_lines = sum(f['additions'] + f['deletions'] for f in chunk)
+                print(f"[DEBUG] Chunk {i+1}: {len(chunk)} files, {chunk_lines} lines")
         
         chunk_reviews = []
         files_reviewed = set()

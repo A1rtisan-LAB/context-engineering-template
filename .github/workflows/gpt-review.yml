@@ -41,6 +41,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WORKFLOW_VERSION: "2.0.0"
+        DEBUG_MODE: ${{ secrets.DEBUG_MODE || 'false' }}
       run: |
         echo "🚀 Running GPT Review v2.0.0 with intelligent chunking support"
         if [ "${{ github.event_name }}" = "issue_comment" ]; then
@@ -54,19 +55,23 @@ jobs:
         DIFF_SIZE=$(gh pr diff $PR_NUMBER | wc -l)
         echo "diff_size=$DIFF_SIZE" >> $GITHUB_OUTPUT
         
-        # Debug: Show current thresholds
-        echo "📊 PR Review Thresholds:"
-        echo "  - Chunk activation: 2,000 lines"
-        echo "  - Maximum reviewable: 20,000 lines"
-        echo "  - Current PR size: $DIFF_SIZE lines"
+        # Debug output (only if DEBUG_MODE is enabled)
+        if [ "$DEBUG_MODE" = "true" ]; then
+          echo "📊 [DEBUG] PR Review Thresholds:"
+          echo "  - Chunk activation: 2,000 lines"
+          echo "  - Maximum reviewable: 20,000 lines"
+        fi
+        echo "📊 Current PR size: $DIFF_SIZE lines"
         
         # Check if diff is too large (>20000 lines - chunking will handle it)
         if [ $DIFF_SIZE -gt 20000 ]; then
           echo "skip_reason=PR too large ($DIFF_SIZE lines) - exceeds chunking limit" >> $GITHUB_OUTPUT
           echo "should_skip=true" >> $GITHUB_OUTPUT
         elif [ $DIFF_SIZE -gt 2000 ]; then
-          echo "✅ Chunking enabled for large PR ($DIFF_SIZE lines)" 
-          echo "📦 Will process in ~$(($DIFF_SIZE / 2000 + 1)) chunks"
+          if [ "$DEBUG_MODE" = "true" ]; then
+            echo "✅ [DEBUG] Chunking enabled for large PR ($DIFF_SIZE lines)" 
+            echo "📦 [DEBUG] Will process in ~$(($DIFF_SIZE / 2000 + 1)) chunks"
+          fi
           echo "use_chunks=true" >> $GITHUB_OUTPUT
           echo "should_skip=false" >> $GITHUB_OUTPUT
         else
@@ -103,11 +108,14 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PR_NUMBER: ${{ steps.pr_details.outputs.pr_number }}
         USE_CHUNKS: ${{ steps.pr_details.outputs.use_chunks }}
+        DEBUG_MODE: ${{ secrets.DEBUG_MODE || 'false' }}
       run: |
-        echo "🔧 GPT Review Configuration:"
-        echo "  - Workflow version: 2.0.0"
-        echo "  - Chunking enabled: ${USE_CHUNKS:-false}"
-        echo "  - PR size: ${{ steps.pr_details.outputs.diff_size }} lines"
+        if [ "$DEBUG_MODE" = "true" ]; then
+          echo "🔧 [DEBUG] GPT Review Configuration:"
+          echo "  - Workflow version: 2.0.0"
+          echo "  - Chunking enabled: ${USE_CHUNKS:-false}"
+          echo "  - PR size: ${{ steps.pr_details.outputs.diff_size }} lines"
+        fi
         
         if [ "$USE_CHUNKS" = "true" ]; then
           echo "📦 Running chunked review for large PR..."
