@@ -144,7 +144,7 @@ docs/
 
 ### doc-sync.js 스크립트
 
-위치: `packages/@claude-code/core/src/doc-sync.js`
+위치: `packages/@claude-code/packages/@claude-code/core/src/doc-sync.js`
 
 #### 기능
 - 모든 마크다운 파일 검증
@@ -155,7 +155,7 @@ docs/
 #### 사용법
 ```bash
 # 검증 실행
-node packages/@claude-code/core/src/doc-sync.js
+node packages/@claude-code/packages/@claude-code/core/src/doc-sync.js
 
 # 출력 예시
 🔍 문서 검증 시작...
@@ -195,7 +195,7 @@ node packages/@claude-code/core/src/doc-sync.js
 ```bash
 #!/bin/sh
 # .git/hooks/pre-commit
-node packages/@claude-code/core/src/doc-sync.js || exit 1
+node packages/@claude-code/packages/@claude-code/core/src/doc-sync.js || exit 1
 ```
 
 ### Post-merge Hook
@@ -396,7 +396,7 @@ meta:
 ### 파일 위치
 - 에이전트: `packages/@claude-code/agents/src/doc-manager.md`
 - 명령어: `packages/@claude-code/commands/src/manage/docs.md`
-- 스크립트: `packages/@claude-code/core/src/doc-sync.js`
+- 스크립트: `packages/@claude-code/packages/@claude-code/core/src/doc-sync.js`
 - 워크플로우: `.github/workflows/doc-validation.yml`
 
 ---

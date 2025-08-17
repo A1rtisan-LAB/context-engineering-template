@@ -143,7 +143,7 @@ Creates comprehensive status report.
 
 ### doc-sync.js Script
 
-Located at `packages/@claude-code/core/src/doc-sync.js`
+Located at `packages/@claude-code/packages/@claude-code/core/src/doc-sync.js`
 
 #### Features
 - Validates all markdown files
@@ -154,7 +154,7 @@ Located at `packages/@claude-code/core/src/doc-sync.js`
 #### Usage
 ```bash
 # Run validation
-node packages/@claude-code/core/src/doc-sync.js
+node packages/@claude-code/packages/@claude-code/core/src/doc-sync.js
 
 # Example output
 🔍 Starting documentation validation...
@@ -194,7 +194,7 @@ The `.github/workflows/doc-validation.yml` workflow:
 ```bash
 #!/bin/sh
 # .git/hooks/pre-commit
-node packages/@claude-code/core/src/doc-sync.js || exit 1
+node packages/@claude-code/packages/@claude-code/core/src/doc-sync.js || exit 1
 ```
 
 ### Post-merge Hook
@@ -420,7 +420,7 @@ To improve the documentation system:
 ### File Locations
 - Agent: `packages/@claude-code/agents/src/doc-manager.md`
 - Command: `packages/@claude-code/commands/src/manage/docs.md`
-- Script: `packages/@claude-code/core/src/doc-sync.js`
+- Script: `packages/@claude-code/packages/@claude-code/core/src/doc-sync.js`
 - Workflow: `.github/workflows/doc-validation.yml`
 
 ---

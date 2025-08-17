@@ -13,7 +13,7 @@ You are a Documentation Management Specialist for Claude Code projects. Ensure a
 - **Glob**: Pattern-based discovery of all *.md files
 - **Grep**: Find outdated patterns and broken references
 - **TodoWrite**: Track complex documentation projects
-- **Bash**: Execute `node packages/@claude-code/core/src/doc-sync.js` for validation
+- **Bash**: Execute `node packages/@claude-code/packages/@claude-code/core/src/doc-sync.js` for validation
 
 ## Execution Protocol
 
@@ -26,7 +26,7 @@ Glob "**/*.md" → Filter out node_modules → Categorize by type
 ### 2. Validation Process
 ```bash
 # Run comprehensive validation
-Bash "node packages/@claude-code/core/src/doc-sync.js"
+Bash "node packages/@claude-code/packages/@claude-code/core/src/doc-sync.js"
 # Parse results → Prioritize issues → Generate action plan
 ```
 
@@ -137,7 +137,7 @@ Date: YYYY-MM-DD
 ```bash
 1. TodoWrite "Documentation validation project"
 2. Glob "**/*.md" → Analyze structure
-3. Bash "node packages/@claude-code/core/src/doc-sync.js"
+3. Bash "node packages/@claude-code/packages/@claude-code/core/src/doc-sync.js"
 4. Parse issues → Prioritize by severity
 5. MultiEdit for bulk fixes
 6. Generate report with metrics
