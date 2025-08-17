@@ -1,0 +1,163 @@
+name: Documentation Validation
+
+on:
+  pull_request:
+    paths:
+      - '**.md'
+      - 'docs/**'
+      - '**/docs/**'
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - '**.md'
+      - 'docs/**'
+      - '**/docs/**'
+  workflow_dispatch:
+
+jobs:
+  validate-docs:
+    name: Validate Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Fetch all history for proper file comparison
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run documentation validation
+      id: doc-validation
+      run: |
+        echo "## 📋 Documentation Validation Report" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Run the validation script and capture output
+        if node packages/@claude-code/core/src/doc-sync.js > validation.log 2>&1; then
+          echo "✅ Documentation validation passed!" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat validation.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Documentation validation failed!" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat validation.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
+    
+    - name: Check for missing Korean translations
+      if: always()
+      run: |
+        echo "## 🌐 Translation Status" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Find English files without Korean counterparts
+        missing_ko=""
+        for file in $(find . -name "*.md" -not -name "*.ko.md" -not -path "./node_modules/*" -not -path "./.git/*"); do
+          ko_file="${file%.md}.ko.md"
+          if [ ! -f "$ko_file" ] && [[ ! "$file" == *"node_modules"* ]] && [[ ! "$file" == *"docs/changelog/CHANGELOG"* ]] && [[ ! "$file" == *"LICENSE"* ]]; then
+            missing_ko="$missing_ko- ${file#./}\n"
+          fi
+        done
+        
+        if [ -z "$missing_ko" ]; then
+          echo "✅ All documents have Korean translations!" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "⚠️ The following files are missing Korean translations:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo -e "$missing_ko" >> $GITHUB_STEP_SUMMARY
+        fi
+    
+    - name: Generate documentation checklist
+      if: github.event_name == 'pull_request'
+      run: |
+        echo "## 📝 Documentation Checklist" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Please ensure the following before merging:" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- [ ] All new features are documented" >> $GITHUB_STEP_SUMMARY
+        echo "- [ ] Both English and Korean versions are updated" >> $GITHUB_STEP_SUMMARY
+        echo "- [ ] No broken internal links" >> $GITHUB_STEP_SUMMARY
+        echo "- [ ] Code examples are tested and working" >> $GITHUB_STEP_SUMMARY
+        echo "- [ ] API changes are reflected in documentation" >> $GITHUB_STEP_SUMMARY
+        echo "- [ ] README files are up to date" >> $GITHUB_STEP_SUMMARY
+    
+    - name: Comment PR with validation results
+      if: github.event_name == 'pull_request' && failure()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const validation = fs.readFileSync('validation.log', 'utf8');
+          
+          const comment = `## 📋 Documentation Validation Failed
+          
+          Please fix the following documentation issues:
+          
+          \`\`\`
+          ${validation}
+          \`\`\`
+          
+          ### 🔧 How to fix:
+          1. Run \`node packages/@claude-code/core/src/doc-sync.js\` locally
+          2. Fix the reported issues
+          3. Ensure all documents have both English and Korean versions
+          4. Update outdated references
+          5. Fix broken links
+          `;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+
+  check-doc-structure:
+    name: Check Documentation Structure
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
+    - name: Verify documentation structure
+      run: |
+        echo "## 📁 Documentation Structure Check" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Check if main docs follow the new structure
+        if [ -d "docs/guides" ] && [ -d "docs/architecture" ] && [ -d "docs/reports" ]; then
+          echo "✅ Main documentation structure is correct!" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Documentation structure needs update. Expected:" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "docs/" >> $GITHUB_STEP_SUMMARY
+          echo "├── guides/" >> $GITHUB_STEP_SUMMARY
+          echo "├── architecture/" >> $GITHUB_STEP_SUMMARY
+          echo "└── reports/" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          exit 1
+        fi
+        
+        # Check starter documentation structures
+        for starter in basic api frontend fullstack; do
+          if [ -d "starters/$starter/docs" ]; then
+            if [ -f "starters/$starter/docs/README.md" ]; then
+              echo "✅ $starter starter has documentation index" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⚠️ $starter starter missing docs/README.md" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+        done

@@ -133,7 +133,7 @@ Task git-workflow-manager "Version documentation changes"
 # Validate documentation outputs
 - README.md current and accurate
 - API documentation complete
-- CHANGELOG.md updated
+- docs/changelog/CHANGELOG.md updated
 - Code examples tested
 - User guides updated
 - Troubleshooting guide current

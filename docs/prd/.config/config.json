@@ -1,0 +1,15 @@
+{
+  "enabled": true,
+  "template": "basic",
+  "autoTranslate": true,
+  "states": [
+    "draft",
+    "review",
+    "approved",
+    "in-development",
+    "completed",
+    "archived"
+  ],
+  "templates_path": "docs/prd/templates",
+  "storage_path": "docs/prd"
+}

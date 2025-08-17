@@ -1,3 +1,13 @@
+---
+title: Contributing Guide
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: documentation
+tags: [contributing, guidelines, development, collaboration]
+language: en
+---
+
 # Contributing to Context Engineering Template
 
 First, thank you for considering contributing to this project! 🎉
@@ -48,6 +58,22 @@ touch packages/@claude-code/commands/src/[category]/your-command.md
 All documentation must be written in both languages (English/Korean):
 - English: `filename.md`
 - Korean: `filename.ko.md`
+
+Documentation structure:
+```
+docs/
+├── api/          # API reference docs
+├── tutorials/    # Step-by-step guides
+├── guides/       # User and developer guides
+└── architecture/ # Technical documentation
+```
+
+When adding documentation:
+1. Add metadata header (title, author, date, version, category, tags, language)
+2. Include table of contents for documents > 200 lines
+3. Add examples and code snippets
+4. Create both English and Korean versions
+5. Update docs/README.md and docs/README.ko.md indexes
 
 ## Development Environment
 

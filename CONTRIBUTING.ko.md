@@ -1,3 +1,13 @@
+---
+title: 기여 가이드
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: documentation
+tags: [contributing, guidelines, development, collaboration]
+language: ko
+---
+
 # 기여 가이드
 
 Context Engineering Template 프로젝트에 기여해 주셔서 감사합니다! 이 문서는 프로젝트에 기여하는 방법을 안내합니다.
