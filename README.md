@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-> 🚀 Advanced monorepo template system for Claude Code projects with 23+ specialized AI agents, SDLC Pipeline System, and PRD-driven development workflow
+> 🚀 Advanced monorepo template system for Claude Code projects with 25 specialized AI agents, 26 commands, SDLC Pipeline System, and PRD-driven development workflow
 
 ## 📦 New Monorepo Structure (v3.0)
 
@@ -330,11 +330,9 @@ For common issues and solutions, refer to `docs/TROUBLESHOOTING.md`.
 ## 📚 Resources
 
 - [Claude Code Documentation](https://docs.anthropic.com/claude-code)
-- [PRD Guide](docs/PRD_GUIDE.md) - Product Requirements Document guide
-- [SDLC Pipeline Guide](docs/SDLC_GUIDE.md) - Comprehensive guide to the SDLC Pipeline System
-- [Architecture Overview](docs/ARCHITECTURE.md)
-- **[📋 Improvement Plan](docs/IMPROVEMENT_PLAN.md)** - Track project enhancement progress
-- **[📋 개선 계획 (Korean)](docs/IMPROVEMENT_PLAN.ko.md)** - 프로젝트 개선 진행 상황
+- [PRD Guide](docs/guides/PRD_GUIDE.md) - Product Requirements Document guide
+- [SDLC Pipeline Guide](docs/guides/SDLC_GUIDE.md) - Comprehensive guide to the SDLC Pipeline System
+- [Architecture Overview](docs/architecture/ARCHITECTURE.md)
 
 ## 📄 License
 

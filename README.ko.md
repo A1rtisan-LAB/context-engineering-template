@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.ko.md)
 
-> 🚀 23개 이상의 전문 AI 에이전트, SDLC 파이프라인 시스템, PRD 기반 개발 워크플로우를 포함한 Claude Code 프로젝트용 고급 모노레포(monorepo) 템플릿 시스템
+> 🚀 25개의 전문 AI 에이전트, 26개의 커맨드, SDLC 파이프라인 시스템, PRD 기반 개발 워크플로우를 포함한 Claude Code 프로젝트용 고급 모노레포(monorepo) 템플릿 시스템
 
 ## 📦 새로운 모노레포 구조 (v3.0)
 
@@ -330,11 +330,9 @@ context-engineering-template/
 ## 📚 리소스
 
 - [Claude Code 문서](https://docs.anthropic.com/claude-code)
-- [PRD 가이드](docs/PRD_GUIDE.ko.md) - 제품 요구사항 문서 가이드
-- [SDLC 파이프라인 가이드](docs/SDLC_GUIDE.ko.md) - SDLC 파이프라인 시스템 종합 가이드
-- [아키텍처 개요](docs/ARCHITECTURE.ko.md)
-- **[📋 개선 계획](docs/IMPROVEMENT_PLAN.ko.md)** - 프로젝트 개선 진행 상황 추적
-- **[📋 Improvement Plan (English)](docs/IMPROVEMENT_PLAN.md)** - Track project enhancement progress
+- [PRD 가이드](docs/guides/PRD_GUIDE.ko.md) - 제품 요구사항 문서 가이드
+- [SDLC 파이프라인 가이드](docs/guides/SDLC_GUIDE.ko.md) - SDLC 파이프라인 시스템 종합 가이드
+- [아키텍처 개요](docs/architecture/ARCHITECTURE.ko.md)
 
 ## 📄 라이선스
 
