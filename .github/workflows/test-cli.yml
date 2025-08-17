@@ -66,7 +66,6 @@ jobs:
         # Check essential files
         REQUIRED_FILES=(
           "CLAUDE.md"
-          "INITIAL.md"
           "README.md"
         )
         
@@ -80,6 +79,17 @@ jobs:
         # Check placeholder replacement
         if grep -q "PROJECT_NAME" CLAUDE.md; then
           echo "❌ PROJECT_NAME placeholder not replaced"
+          exit 1
+        fi
+        
+        # Check PRD system is included by default
+        if [ ! -d "docs/prd" ]; then
+          echo "❌ PRD system directory not created"
+          exit 1
+        fi
+        
+        if [ ! -f "docs/PRD_GUIDE.md" ]; then
+          echo "❌ PRD guide not found"
           exit 1
         fi
         
