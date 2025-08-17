@@ -159,8 +159,10 @@ class DocSync {
       { pattern: /templates\//g, message: 'References legacy templates/ structure' },
       { pattern: /scripts\//g, message: 'References legacy scripts/ structure' },
       { pattern: /IMPROVEMENT_PLAN/g, message: 'References removed IMPROVEMENT_PLAN document' },
-      { pattern: /22 agents/gi, message: 'Outdated agent count (should be 25)' },
-      { pattern: /23\+ agents/gi, message: 'Outdated agent count (should be 25)' },
+      { pattern: /22 agents/gi, message: 'Outdated agent count (should be 26)' },
+      { pattern: /23\+ agents/gi, message: 'Outdated agent count (should be 26)' },
+      { pattern: /24 agents/gi, message: 'Outdated agent count (should be 26)' },
+      { pattern: /25 agents/gi, message: 'Outdated agent count (should be 26)' },
       { pattern: /18 commands/gi, message: 'Outdated command count (should be 26)' }
     ];
     
