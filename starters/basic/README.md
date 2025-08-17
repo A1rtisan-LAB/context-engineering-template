@@ -6,7 +6,7 @@
 
 Brief description of your project with business value proposition and target users.
 
-**Built with**: Context Engineering Template featuring 23+ specialized commands, 23+ AI agents, and SDLC Pipeline System for enterprise-grade development.
+**Built with**: Context Engineering Template featuring 26 specialized commands, 26 AI agents, and SDLC Pipeline System for enterprise-grade development.
 
 ## 📋 Quick Start
 
@@ -168,7 +168,7 @@ Essential Context Engineering commands for this project:
 ```
 
 ### Agent Specializations
-This project utilizes specialized AI agents:
+This project utilizes 26 specialized AI agents:
 
 - **feature-implementer**: New feature development with expert personas
 - **code-enhancement-specialist**: Code quality and performance improvements
@@ -198,6 +198,18 @@ Security implementation with security-analyzer agent:
 /analyze:security .                    # Comprehensive security assessment
 /implement:enhancement security-controls # Security improvement implementation
 /manage:test security-test-suite       # Security testing and validation
+```
+
+## 📚 Documentation
+
+- [SDLC Pipeline Guide](docs/guides/SDLC_GUIDE.md) ([한국어](docs/guides/SDLC_GUIDE.ko.md))
+- [PRD Guide](docs/guides/PRD_GUIDE.md) ([한국어](docs/guides/PRD_GUIDE.ko.md))
+- [Quick Start Guide](docs/guides/QUICKSTART.md) ([한국어](docs/guides/QUICKSTART.ko.md))
+
+## 🌏 Languages
+
+This document is also available in:
+- [한국어](README.ko.md)
 ```
 
 ## ⚡ Performance

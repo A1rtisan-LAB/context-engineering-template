@@ -6,7 +6,7 @@
 
 비즈니스 가치 제안과 대상 사용자를 포함한 프로젝트에 대한 간략한 설명.
 
-**구축 기술**: 23개 이상의 전문 명령어, 23개 이상의 AI 에이전트, 엔터프라이즈급 개발을 위한 SDLC 파이프라인 시스템을 갖춘 Context Engineering 템플릿.
+**구축 기술**: 26개의 전문 명령어, 26개의 AI 에이전트, 엔터프라이즈급 개발을 위한 SDLC 파이프라인 시스템을 갖춘 Context Engineering 템플릿.
 
 ## 📋 빠른 시작
 
@@ -168,7 +168,7 @@ SDLC 파이프라인 시스템은 8단계를 통해 체계적인 개발을 제�
 ```
 
 ### 에이전트 전문화
-이 프로젝트는 전문 AI 에이전트를 활용합니다:
+이 프로젝트는 26개의 전문 AI 에이전트를 활용합니다:
 
 - **feature-implementer**: 전문가 페르소나를 통한 새로운 기능 개발
 - **code-enhancement-specialist**: 코드 품질 및 성능 개선
@@ -198,6 +198,18 @@ security-analyzer 에이전트를 통한 보안 구현:
 /analyze:security .                    # 포괄적인 보안 평가
 /implement:enhancement security-controls # 보안 개선 구현
 /manage:test security-test-suite       # 보안 테스트 및 검증
+```
+
+## 📚 문서
+
+- [SDLC 파이프라인 가이드](docs/guides/SDLC_GUIDE.ko.md) ([English](docs/guides/SDLC_GUIDE.md))
+- [PRD 가이드](docs/guides/PRD_GUIDE.ko.md) ([English](docs/guides/PRD_GUIDE.md))
+- [빠른 시작 가이드](docs/guides/QUICKSTART.ko.md) ([English](docs/guides/QUICKSTART.md))
+
+## 🌏 언어
+
+이 문서는 다음 언어로도 제공됩니다:
+- [English](README.md)
 ```
 
 ## ⚡ 성능

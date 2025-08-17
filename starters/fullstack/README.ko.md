@@ -1,6 +1,6 @@
 # 풀스택 스타터 템플릿
 
-23+ 전문 AI 에이전트와 SDLC 파이프라인 시스템을 갖춘 풀스택 애플리케이션용 Context Engineering 템플릿입니다.
+26개의 전문 AI 에이전트와 SDLC 파이프라인 시스템을 갖춘 풀스택 애플리케이션용 Context Engineering 템플릿입니다.
 
 ## 🚀 프로젝트 구조
 
@@ -189,10 +189,8 @@ fullstack-project/
 ## 📚 문서
 
 - [SDLC 파이프라인 가이드](docs/guides/SDLC_GUIDE.ko.md) ([English](docs/guides/SDLC_GUIDE.md))
-- [아키텍처 가이드](docs/ARCHITECTURE.md)
-- [API 문서](docs/API.md)
-- [배포 가이드](docs/DEPLOYMENT.md)
-- [테스팅 전략](docs/TESTING.md)
+- [PRD 가이드](docs/guides/PRD_GUIDE.ko.md) ([English](docs/guides/PRD_GUIDE.md))
+- [빠른 시작 가이드](docs/guides/QUICKSTART.ko.md) ([English](docs/guides/QUICKSTART.md))
 
 ## 🌏 언어
 
