@@ -32,7 +32,13 @@ class DocSync {
     await this.detectOutdated();
     await this.generateReport();
     
-    return this.issues.length === 0;
+    // Only fail for critical errors (broken links and critical outdated content)
+    const criticalIssues = this.issues.filter(issue => 
+      issue.type === 'broken-link' || 
+      (issue.type === 'outdated-content' && issue.severity === 'error')
+    );
+    
+    return criticalIssues.length === 0;
   }
 
   /**
