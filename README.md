@@ -1,9 +1,19 @@
+---
+title: Context Engineering Template
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: documentation
+tags: [claude-code, ai-agents, template, monorepo]
+language: en
+---
+
 # Context Engineering Template for Claude Code
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-> 🚀 Advanced monorepo template system for Claude Code projects with 23+ specialized AI agents, SDLC Pipeline System, and PRD-driven development workflow
+> 🚀 Advanced monorepo template system for Claude Code projects with 26 specialized AI agents, 26 commands, SDLC Pipeline System, PRD-driven development workflow, and comprehensive documentation system
 
 ## 📦 New Monorepo Structure (v3.0)
 
@@ -58,22 +68,22 @@ npm install
 
 ### 3. Create New Project
 ```bash
-# Using the new CLI
-node cli/claude-init.js my-project [starter-type] [target-path]
+# Using the new CLI (PRD & SDLC included by default)
+node cli/claude-init.js [project-name] [starter-type] [target-path]
+
+# Recommended - Full installation:
+node cli/claude-init.js my-project basic . --full     # All systems included
 
 # Examples:
-node cli/claude-init.js                        # Basic project in ./my-claude-project
-node cli/claude-init.js my-api api             # API project
-node cli/claude-init.js my-app frontend ~/apps # Frontend app in ~/apps
+node cli/claude-init.js                               # Default with PRD & SDLC
+node cli/claude-init.js my-api api                    # API project with all features
+node cli/claude-init.js my-app frontend ~/apps        # Frontend app with full setup
 
-# With SDLC Pipeline System:
-node cli/claude-init.js my-project basic . --with-sdlc
-node cli/claude-init.js my-api api . --with-sdlc --sdlc-template=agile
-
-# With PRD System (included by default):
-node cli/claude-init.js my-project basic              # PRD included
-node cli/claude-init.js my-api api --no-prd          # Without PRD
-node cli/claude-init.js my-app frontend --prd-template=frontend  # Custom PRD template
+# Customization options:
+node cli/claude-init.js my-project basic . --minimal  # Lightweight setup
+node cli/claude-init.js my-api api . --sdlc-template=agile  # Use Agile SDLC
+node cli/claude-init.js my-app frontend . --no-sdlc   # Exclude SDLC only
+node cli/claude-init.js my-simple basic . --no-prd    # Exclude PRD only
 ```
 
 ## 📁 Project Structure
@@ -327,14 +337,32 @@ For common issues and solutions, refer to `docs/TROUBLESHOOTING.md`.
 **Q: Template modifications are not reflected**
 - A: Run `node cli/claude-init.js` again or manually copy the updated files from the starters directory
 
-## 📚 Resources
+## 📚 Documentation
 
-- [Claude Code Documentation](https://docs.anthropic.com/claude-code)
-- [PRD Guide](docs/PRD_GUIDE.md) - Product Requirements Document guide
-- [SDLC Pipeline Guide](docs/SDLC_GUIDE.md) - Comprehensive guide to the SDLC Pipeline System
-- [Architecture Overview](docs/ARCHITECTURE.md)
-- **[📋 Improvement Plan](docs/IMPROVEMENT_PLAN.md)** - Track project enhancement progress
-- **[📋 개선 계획 (Korean)](docs/IMPROVEMENT_PLAN.ko.md)** - 프로젝트 개선 진행 상황
+### 📖 Core Documentation
+- [Documentation Index](docs/README.md) ([한국어](docs/README.ko.md)) - Complete documentation index
+- [Quick Start Guide](docs/guides/QUICKSTART.md) ([한국어](docs/guides/QUICKSTART.ko.md)) - Get started in 5 minutes
+- [Architecture Overview](docs/architecture/ARCHITECTURE.md) ([한국어](docs/architecture/ARCHITECTURE.ko.md)) - System design and patterns
+
+### 🎓 Tutorials
+- [Getting Started](docs/tutorials/getting-started.md) ([한국어](docs/tutorials/getting-started.ko.md)) - First project setup
+- [PRD Development](docs/tutorials/prd-development.md) ([한국어](docs/tutorials/prd-development.ko.md)) - Writing effective PRDs
+- [SDLC Pipeline Usage](docs/tutorials/sdlc-pipeline-usage.md) ([한국어](docs/tutorials/sdlc-pipeline-usage.ko.md)) - Master the pipeline
+- [Agent Orchestration](docs/tutorials/agent-orchestration.md) ([한국어](docs/tutorials/agent-orchestration.ko.md)) - AI agent best practices
+
+### 📚 API Reference
+- [API Index](docs/api/index.md) ([한국어](docs/api/index.ko.md)) - Complete API reference
+- [Agents API](docs/api/agents.md) ([한국어](docs/api/agents.ko.md)) - 26 AI agents documentation
+- [Commands API](docs/api/commands.md) ([한국어](docs/api/commands.ko.md)) - 26 commands reference
+- [Workflows API](docs/api/workflows.md) ([한국어](docs/api/workflows.ko.md)) - Workflow orchestration
+
+### 📘 Guides
+- [PRD Guide](docs/guides/PRD_GUIDE.md) ([한국어](docs/guides/PRD_GUIDE.ko.md)) - Product Requirements Document guide
+- [SDLC Pipeline Guide](docs/guides/SDLC_GUIDE.md) ([한국어](docs/guides/SDLC_GUIDE.ko.md)) - SDLC Pipeline System guide
+- [Document Management](docs/guides/DOCUMENT_MANAGEMENT.md) ([한국어](docs/guides/DOCUMENT_MANAGEMENT.ko.md)) - Documentation system
+
+### 🔗 External Resources
+- [Claude Code Documentation](https://docs.anthropic.com/claude-code) - Official Claude Code docs
 
 ## 📄 License
 

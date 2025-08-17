@@ -1,6 +1,6 @@
 # API 스타터 템플릿
 
-23+ 전문 AI 에이전트와 SDLC 파이프라인 시스템을 갖춘 API 서버 프로젝트용 Context Engineering 템플릿입니다.
+26개의 전문 AI 에이전트와 SDLC 파이프라인 시스템을 갖춘 API 서버 프로젝트용 Context Engineering 템플릿입니다.
 
 ## 🚀 프로젝트 구조
 
@@ -42,7 +42,7 @@ api-project/
 - **SDLC 통합**: 승인된 PRD가 개발 파이프라인 트리거
 - **문서화 추적**: 아이디어부터 구현까지 완전한 이력
 
-자세한 안내는 [PRD 가이드](docs/PRD_GUIDE.ko.md) ([English](docs/PRD_GUIDE.md))를 참조하세요.
+자세한 안내는 [PRD 가이드](docs/guides/PRD_GUIDE.ko.md) ([English](docs/guides/PRD_GUIDE.md))를 참조하세요.
 ## 📊 SDLC 파이프라인 시스템
 
 ### 빠른 시작
@@ -154,10 +154,9 @@ api-project/
 
 ## 📚 문서
 
-- [SDLC 파이프라인 가이드](docs/SDLC_GUIDE.ko.md) ([English](docs/SDLC_GUIDE.md))
-- [API 설계 가이드라인](docs/API_DESIGN.md)
-- [보안 모범 사례](docs/SECURITY.md)
-- [테스팅 전략](docs/TESTING.md)
+- [SDLC 파이프라인 가이드](docs/guides/SDLC_GUIDE.ko.md) ([English](docs/guides/SDLC_GUIDE.md))
+- [PRD 가이드](docs/guides/PRD_GUIDE.ko.md) ([English](docs/guides/PRD_GUIDE.md))
+- [빠른 시작 가이드](docs/guides/QUICKSTART.ko.md) ([English](docs/guides/QUICKSTART.md))
 
 ## 🌏 언어
 

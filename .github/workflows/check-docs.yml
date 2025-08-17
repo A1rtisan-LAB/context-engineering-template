@@ -274,7 +274,7 @@ jobs:
         while IFS= read -r file; do
           # Skip certain files that don't need translation
           basename=$(basename "$file")
-          if [[ "$basename" != "LICENSE" ]] && [[ "$basename" != "CHANGELOG.md" ]]; then
+          if [[ "$basename" != "LICENSE" ]] && [[ ! "$file" =~ "docs/changelog/CHANGELOG" ]]; then
             expected=$((expected + 1))
           fi
         done < /tmp/md_files.txt

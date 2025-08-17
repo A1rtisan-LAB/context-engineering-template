@@ -20,6 +20,7 @@ const CONFIG = {
   defaultStarter: 'basic',
   sdlc: {
     available: true,
+    includedByDefault: true,  // Changed to true - SDLC now included by default
     templates: ['standard', 'agile', 'hotfix'],
     defaultTemplate: 'standard'
   },
@@ -48,15 +49,33 @@ function parseArgs() {
   const starterType = args[1] || CONFIG.defaultStarter;
   const targetPath = args[2] || path.join(process.cwd(), projectName);
   
+  // Full installation option (includes everything)
+  const fullInstall = args.includes('--full');
+  
+  // Minimal installation option (excludes SDLC and PRD)
+  const minimalInstall = args.includes('--minimal');
+  
+  // Validate conflicting options
+  if (minimalInstall && fullInstall) {
+    console.error('❌ Error: --minimal and --full options cannot be used together');
+    process.exit(1);
+  }
+  
+  if (minimalInstall && (args.includes('--with-sdlc') || args.includes('--with-prd'))) {
+    console.error('❌ Error: --minimal cannot be used with --with-sdlc or --with-prd');
+    console.error('  Use --full or remove --minimal to include SDLC/PRD features');
+    process.exit(1);
+  }
+  
   // SDLC options
-  const withSDLC = args.includes('--with-sdlc');
+  const withSDLC = fullInstall || (!minimalInstall && !args.includes('--no-sdlc')); // SDLC is included by default
   const sdlcTemplateIndex = args.findIndex(arg => arg.startsWith('--sdlc-template='));
   const sdlcTemplate = sdlcTemplateIndex !== -1 
     ? args[sdlcTemplateIndex].split('=')[1] 
     : CONFIG.sdlc.defaultTemplate;
   
   // PRD options
-  const withPRD = !args.includes('--no-prd'); // PRD is included by default
+  const withPRD = fullInstall || (!minimalInstall && !args.includes('--no-prd')); // PRD is included by default
   const prdTemplateIndex = args.findIndex(arg => arg.startsWith('--prd-template='));
   const prdTemplate = prdTemplateIndex !== -1
     ? args[prdTemplateIndex].split('=')[1]
@@ -81,19 +100,21 @@ Arguments:
 Options:
   --help, -h           Show this help message
   --version, -v        Show version information
-  --with-sdlc          Include SDLC pipeline configuration
+  --full               Include all systems (PRD, SDLC, Doc) - recommended
+  --minimal            Minimal installation without PRD and SDLC
+  --no-sdlc            Exclude SDLC pipeline (SDLC included by default)
+  --no-prd             Exclude PRD system (PRD included by default)
   --sdlc-template=     SDLC template: ${CONFIG.sdlc.templates.join(', ')} (default: ${CONFIG.sdlc.defaultTemplate})
-  --with-prd           Include PRD system (default: true)
-  --no-prd             Exclude PRD system
   --prd-template=      PRD template: ${CONFIG.prd.templates.join(', ')} (default: matches starter type)
 
 Examples:
-  claude-init                                    # Create basic project with PRD
-  claude-init my-api api                         # Create API project with API PRD template
-  claude-init my-app frontend ~/apps             # Create frontend app with frontend PRD
-  claude-init my-project basic . --with-sdlc     # Include SDLC pipeline
-  claude-init my-api api . --with-sdlc --sdlc-template=agile  # With Agile SDLC
-  claude-init my-simple basic . --no-prd         # Without PRD system
+  claude-init                                    # Create project with PRD & SDLC (default)
+  claude-init my-project basic . --full          # Include all systems (recommended)
+  claude-init my-api api                         # API project with PRD & SDLC
+  claude-init my-app frontend ~/apps             # Frontend app with full features
+  claude-init my-simple basic . --minimal        # Minimal setup without PRD/SDLC
+  claude-init my-api api . --sdlc-template=agile # Use Agile SDLC template
+  claude-init my-project basic . --no-sdlc       # Exclude only SDLC
 `);
 }
 
@@ -300,6 +321,7 @@ async function setupPRDSystem(projectPath, starterType, prdTemplate = null) {
     'docs/prd/approved',
     'docs/prd/in-development',
     'docs/prd/archived/2024',
+    'docs/prd/templates',  // Changed from .config/templates to templates
     'docs/prd/.config',
     'docs/releases',
     'docs/guides/user',
@@ -311,11 +333,9 @@ async function setupPRDSystem(projectPath, starterType, prdTemplate = null) {
     prdDirs.map(dir => fs.mkdir(path.join(projectPath, dir), { recursive: true }))
   );
   
-  // Copy PRD template based on starter type
-  const templateSource = path.join(__dirname, '..', 'starters', starterType, 'docs', 'prd-templates');
-  const templateDest = path.join(projectPath, 'docs', 'prd', '.config', 'templates');
-  
-  await fs.mkdir(templateDest, { recursive: true });
+  // Copy PRD template from starter's docs/templates/prd
+  const templateSource = path.join(__dirname, '..', 'starters', starterType, 'docs', 'templates', 'prd');
+  const templateDest = path.join(projectPath, 'docs', 'prd', 'templates');
   
   // Copy the appropriate template
   const templateFile = template === 'basic' ? 'standard.md' : `${template}.md`;
@@ -324,7 +344,7 @@ async function setupPRDSystem(projectPath, starterType, prdTemplate = null) {
   if (await pathExists(sourceFile)) {
     await fs.copyFile(sourceFile, path.join(templateDest, 'standard.md'));
     // Also copy as the specific template name if different
-    if (template !== 'standard') {
+    if (template !== 'standard' && template !== 'basic') {
       await fs.copyFile(sourceFile, path.join(templateDest, `${template}.md`));
     }
   }
@@ -335,7 +355,7 @@ async function setupPRDSystem(projectPath, starterType, prdTemplate = null) {
     template: template,
     autoTranslate: true,
     states: ['draft', 'review', 'approved', 'in-development', 'completed', 'archived'],
-    templates_path: 'docs/prd/.config/templates',
+    templates_path: 'docs/prd/templates',  // Changed path
     storage_path: 'docs/prd'
   };
   
@@ -383,8 +403,8 @@ async function createProject(projectName, starterType, targetPath, withSDLC = fa
   // Perform operations in parallel where possible
   const operations = [];
   
-  // Copy starter files (excluding prd-templates since they'll be handled by setupPRDSystem)
-  operations.push(copyRecursive(starterPath, projectPath, ['docs/prd-templates']));
+  // Copy starter files (excluding templates since PRD templates will be handled by setupPRDSystem)
+  operations.push(copyRecursive(starterPath, projectPath, ['docs/templates']));
   
   // Create .claude directory structure
   const claudeDir = path.join(projectPath, '.claude');

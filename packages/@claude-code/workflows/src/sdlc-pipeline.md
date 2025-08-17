@@ -204,44 +204,97 @@ Systematic development process with phase-based progression, quality gates, and 
 
 ### Workflow Sequence
 ```bash
+# Pre-documentation validation
+/manage:docs check →
+/manage:docs outdated →
+/manage:docs coverage --feature=[current-feature]
+
 # Documentation Update
-/Task project-knowledge-curator "Update comprehensive documentation" →
+/Task doc-manager "Comprehensive documentation update and synchronization" →
+/Task project-knowledge-curator "Update project knowledge base" →
 /Task focused-doc-generator "Generate API documentation" →
 /support:document [changelog-update] →
 /support:document [user-guide-update]
 
+# Bilingual synchronization
+/manage:docs sync →
+/manage:docs validate
+
 # Documentation Checklist
 /TodoWrite "Documentation Phase Checklist:
-- [ ] README.md updated with latest features
-- [ ] API documentation complete
-- [ ] CHANGELOG.md updated
-- [ ] User guide reflects current functionality
+- [ ] README.md/ko.md updated with latest features
+- [ ] API documentation complete (English & Korean)
+- [ ] docs/changelog/CHANGELOG.md updated
+- [ ] User guide reflects current functionality (bilingual)
 - [ ] Code examples tested and updated
 - [ ] Troubleshooting guide updated
 - [ ] Architecture diagrams current
-- [ ] Configuration documentation complete"
+- [ ] Configuration documentation complete
+- [ ] No broken internal links
+- [ ] All language versions synchronized
+- [ ] Documentation coverage > 90%"
 ```
 
-### Quality Gate: Documentation Complete
+### Enhanced Quality Gate: Documentation Complete
 ```
-✅ All public APIs documented
-✅ README reflects current state
+✅ All public APIs documented (bilingual)
+✅ README reflects current state (EN/KO synchronized)
 ✅ Changelog includes all changes
 ✅ Examples run successfully
 ✅ No outdated information
+✅ No broken links (validated by /manage:docs validate)
+✅ English/Korean versions synchronized
+✅ Documentation coverage meets threshold (>90%)
+✅ All code references are valid
+✅ Metadata is current (last_updated, version)
 ```
 
-### Documentation Artifacts
+### Documentation Validation & Artifacts
 ```bash
-# Generate comprehensive documentation
-/orchestrate "generate complete project documentation including API reference, user guides, and examples"
+# Comprehensive documentation validation
+/manage:docs validate →
+/manage:docs coverage →
+/manage:docs report
 
-# Validate documentation
+# Generate comprehensive documentation
+/orchestrate "generate complete project documentation including API reference, user guides, and examples in both English and Korean"
+
+# Fix any issues found
+/manage:docs fix-links →
+/manage:docs update-meta --all
+
+# Final validation
+/manage:docs check
 /analyze:code-quality --check-documentation
 /Bash "npm run docs:validate" # If documentation validation script exists
 
 # Publish documentation
-/manage:git "commit documentation updates"
+/manage:git "commit documentation updates with bilingual support"
+```
+
+### Documentation Requirements by Feature Type
+```bash
+# New Feature Documentation
+- Feature overview (guides/)
+- API reference (architecture/)
+- Usage examples
+- Configuration options
+- Migration guide (if breaking changes)
+
+# Bug Fix Documentation
+- docs/changelog/CHANGELOG.md entry
+- Known issues update
+- Troubleshooting guide update
+
+# Performance Improvement
+- Benchmark report update
+- Performance guide
+- Configuration tuning guide
+
+# Security Update
+- Security advisory
+- Migration steps
+- Best practices update
 ```
 
 ---
