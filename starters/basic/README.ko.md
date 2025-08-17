@@ -48,14 +48,44 @@ cp .env.example .env
 /manage:git [semantic-commit]
 ```
 
-## 📊 SDLC 파이프라인 시스템
+## 📝 PRD 기반 개발
 
-### 7단계 개발 생명주기
-SDLC 파이프라인 시스템은 7가지 명확한 단계를 통해 체계적인 개발을 제공합니다:
+### 제품 요구사항 문서
+명확한 요구사항과 자동 SDLC 통합을 위해 구조화된 PRD 프로세스로 개발을 시작하세요:
 
 ```bash
-# SDLC 파이프라인 초기화
-/sdlc "feature-name" --init --template=standard
+# 새 기능을 위한 PRD 생성
+/manage:prd create "기능-이름" --template=standard
+
+# PRD 품질 검토 (80점 이상 필요)
+/support:prd-review "기능-이름"
+
+# PRD 승인 (자동으로 SDLC 시작)
+/manage:prd approve "기능-이름"
+```
+
+### PRD 워크플로우 장점
+- **명확한 요구사항**: 코딩 전에 무엇을 만들지 정의
+- **품질 게이트**: 검토 프로세스로 완성도 보장
+- **자동 번역**: 한국어 PRD가 자동으로 영어로 번역
+- **SDLC 통합**: 승인된 PRD가 개발 파이프라인 트리거
+- **문서화 추적**: 아이디어부터 구현까지 완전한 이력
+
+자세한 안내는 [PRD 가이드](docs/PRD_GUIDE.ko.md) ([English](docs/PRD_GUIDE.md))를 참조하세요.
+
+## 📊 SDLC 파이프라인 시스템
+
+### 8단계 개발 생명주기
+SDLC 파이프라인 시스템은 8단계를 통해 체계적인 개발을 제공합니다 (선택적 PRD 단계 포함):
+
+```bash
+# 옵션 1: PRD로 시작 (권장)
+/manage:prd create "기능-이름" --template=standard
+# ... PRD 작성 및 개선 ...
+/manage:prd approve "기능-이름"  # 자동으로 SDLC 시작
+
+# 옵션 2: 직접 SDLC 초기화
+/sdlc "기능-이름" --init --template=standard
 
 # 사용 가능한 템플릿:
 # - standard: 전통적인 폭포수 (10-12일)
@@ -65,13 +95,14 @@ SDLC 파이프라인 시스템은 7가지 명확한 단계를 통해 체계적�
 
 ### 파이프라인 명령어
 ```bash
-/sdlc "feature-name" --status       # 파이프라인 상태 확인
-/sdlc "feature-name" --continue     # 다음 단계로 진행
-/sdlc "feature-name" --full         # 전체 파이프라인 실행
-/support:sdlc-report "feature-name" # 진행 보고서 생성
+/sdlc "기능-이름" --status       # 파이프라인 상태 확인
+/sdlc "기능-이름" --continue     # 다음 단계로 진행
+/sdlc "기능-이름" --full         # 전체 파이프라인 실행
+/support:sdlc-report "기능-이름" # 진행 보고서 생성
 ```
 
 ### 개발 단계
+0. **PRD 작성(PRD Creation)** (선택사항) - 제품 요구사항 문서화
 1. **계획(Planning)** - 요구사항 분석 및 작업 분해
 2. **설계(Design)** - 아키텍처 및 API 사양
 3. **구현(Implementation)** - AI 에이전트를 활용한 기능 개발

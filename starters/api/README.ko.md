@@ -19,6 +19,30 @@ api-project/
 └── .env.example        # 환경 변수 템플릿
 ```
 
+## 📝 PRD 기반 개발
+
+### 제품 요구사항 문서
+명확한 요구사항과 자동 SDLC 통합을 위해 구조화된 PRD 프로세스로 개발을 시작하세요:
+
+```bash
+# 새 기능을 위한 PRD 생성
+/manage:prd create "기능-이름" --template=api
+
+# PRD 품질 검토 (80점 이상 필요)
+/support:prd-review "기능-이름"
+
+# PRD 승인 (자동으로 SDLC 시작)
+/manage:prd approve "기능-이름"
+```
+
+### PRD 워크플로우 장점
+- **명확한 요구사항**: 코딩 전에 무엇을 만들지 정의
+- **품질 게이트**: 검토 프로세스로 완성도 보장
+- **자동 번역**: 한국어 PRD가 자동으로 영어로 번역
+- **SDLC 통합**: 승인된 PRD가 개발 파이프라인 트리거
+- **문서화 추적**: 아이디어부터 구현까지 완전한 이력
+
+자세한 안내는 [PRD 가이드](docs/PRD_GUIDE.ko.md) ([English](docs/PRD_GUIDE.md))를 참조하세요.
 ## 📊 SDLC 파이프라인 시스템
 
 ### 빠른 시작

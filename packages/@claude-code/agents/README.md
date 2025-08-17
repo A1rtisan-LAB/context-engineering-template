@@ -4,7 +4,7 @@ Specialized AI agents for Claude Code development tasks.
 
 ## Available Agents
 
-This package contains 22 specialized agents for different development scenarios:
+This package contains 25 specialized agents for different development scenarios:
 
 ### Analysis Agents
 - `architecture-analyzer` - Analyze software architecture and design patterns
@@ -35,10 +35,15 @@ This package contains 22 specialized agents for different development scenarios:
 ### Specialized Agents
 - `system-architect` - Design system architecture and APIs
 - `build-packager` - Build and package software projects
-- `prd-workflow-generator` - Transform PRDs into implementation workflows
+- `sdlc-coordinator` - Orchestrate SDLC pipeline phases and quality gates
 - `project-context-analyzer` - Understand project structure and dependencies
 - `agent-prompt-reviewer` - Evaluate agent prompt quality
 - `claude-code-structure-auditor` - Audit Claude Code project structure
+
+### PRD Management Agents
+- `prd-creator` - Create structured Product Requirements Documents
+- `prd-reviewer` - Review and validate PRD quality and completeness
+- `prd-workflow-generator` - Transform PRDs into implementation workflows
 
 ## Installation
 

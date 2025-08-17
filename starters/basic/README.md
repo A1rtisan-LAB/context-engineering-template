@@ -48,13 +48,43 @@ cp .env.example .env
 /manage:git [semantic-commit]
 ```
 
-## 📊 SDLC Pipeline System
+## 📝 PRD-Driven Development
 
-### 7-Phase Development Lifecycle
-The SDLC Pipeline System provides structured development through 7 distinct phases:
+### Product Requirements Documents
+Start your development with structured PRD process for clear requirements and automatic SDLC integration:
 
 ```bash
-# Initialize SDLC Pipeline
+# Create PRD for new feature
+/manage:prd create "feature-name" --template=standard
+
+# Review PRD quality (80+ score required)
+/support:prd-review "feature-name"
+
+# Approve PRD (automatically starts SDLC)
+/manage:prd approve "feature-name"
+```
+
+### PRD Workflow Benefits
+- **Clear Requirements**: Define what needs to be built before coding
+- **Quality Gates**: Review process ensures completeness
+- **Auto Translation**: Korean PRDs automatically translated to English
+- **SDLC Integration**: Approved PRDs trigger development pipeline
+- **Documentation Trail**: Complete history from idea to implementation
+
+For detailed guidance, see [PRD Guide](docs/PRD_GUIDE.md) ([한국어](docs/PRD_GUIDE.ko.md))
+
+## 📊 SDLC Pipeline System
+
+### 8-Phase Development Lifecycle
+The SDLC Pipeline System provides structured development through 8 phases (including optional PRD phase):
+
+```bash
+# Option 1: Start with PRD (Recommended)
+/manage:prd create "feature-name" --template=standard
+# ... write and refine PRD ...
+/manage:prd approve "feature-name"  # Auto-starts SDLC
+
+# Option 2: Direct SDLC initialization
 /sdlc "feature-name" --init --template=standard
 
 # Available Templates:
@@ -72,6 +102,7 @@ The SDLC Pipeline System provides structured development through 7 distinct phas
 ```
 
 ### Development Phases
+0. **PRD Creation** (Optional) - Product requirements documentation
 1. **Planning** - Requirements analysis and task breakdown
 2. **Design** - Architecture and API specifications
 3. **Implementation** - Feature development with AI agents
