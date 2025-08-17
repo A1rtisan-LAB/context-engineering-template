@@ -54,15 +54,21 @@ SDLC 파이프라인의 해결책:
 
 #### 2단계: 첫 파이프라인 초기화
 ```bash
+# 옵션 A: SDLC로 직접 시작
 /sdlc "my-feature" --init
+
+# 옵션 B: 승인된 PRD에서 시작 (권장)
+/manage:prd create "my-feature" --template=standard
+# ... PRD 작성 및 개선 ...
+/manage:prd approve "my-feature"  # SDLC 자동 시작
 ```
-표준 템플릿으로 새 파이프라인을 생성합니다.
 
 #### 3단계: 계획 단계 실행
 ```bash
 /sdlc "my-feature" --phase=planning
 ```
 시스템이 요구사항 수집을 안내합니다.
+참고: PRD에서 시작한 경우 요구사항이 자동으로 가져와집니다.
 
 #### 4단계: 상태 확인
 ```bash
@@ -81,12 +87,58 @@ SDLC 파이프라인의 해결책:
 | 명령어 | 목적 | 예시 |
 |--------|------|------|
 | `/sdlc --init` | 새 파이프라인 시작 | `/sdlc "auth-system" --init` |
+| `/sdlc --init --from-prd` | PRD에서 시작 | `/sdlc "auth-system" --init --from-prd` |
 | `/sdlc --status` | 진행 상황 확인 | `/sdlc "auth-system" --status` |
 | `/sdlc --continue` | 다음 단계 | `/sdlc "auth-system" --continue` |
 | `/sdlc --full` | 모든 단계 실행 | `/sdlc "auth-system" --full` |
 | `/support:sdlc-report` | 보고서 생성 | `/support:sdlc-report "auth-system"` |
 
 ## 단계별 상세 가이드
+
+### 0단계: PRD 작성 (PRD Creation) - 선택사항
+
+**소요 시간**: 1-2일  
+**목적**: 개발 전 제품 요구사항 정의
+
+#### 사용 시기
+- 명확한 사양이 필요한 새 기능
+- 여러 이해관계자가 있는 복잡한 프로젝트
+- 개발 전 승인이 필요한 프로젝트
+- 문서화 추적이 중요한 경우
+
+#### 주요 활동
+1. **요구사항 정의**
+   - 템플릿을 사용하여 포괄적인 PRD 작성
+   - 성공 지표 및 KPI 정의
+   - 기능 및 비기능 요구사항 명시
+   
+2. **검토 및 개선**
+   - 검토를 위해 PRD 제출
+   - 피드백 반영 및 반복
+   - 완성도와 명확성 보장
+   
+3. **승인 프로세스**
+   - 이해관계자 승인 획득
+   - 요구사항 최종 확정
+   - 개발 범위 확정
+
+#### 명령어
+```bash
+# PRD 생성
+/manage:prd create "feature-name" --template=api
+
+# PRD 품질 검토
+/support:prd-review "feature-name"
+
+# 승인 및 SDLC 시작
+/manage:prd approve "feature-name"
+```
+
+#### 품질 게이트
+- [ ] PRD 완성도 점수 ≥ 80
+- [ ] 모든 요구사항 명확하게 정의
+- [ ] 성공 지표 명시
+- [ ] 이해관계자 승인 획득
 
 ### 1단계: 계획 (Planning)
 
@@ -776,6 +828,7 @@ cat .claude/sdlc/pipelines/feature/state.json
 
 **`/sdlc` 옵션**:
 - `--init`: 새 파이프라인 초기화
+- `--from-prd`: 승인된 PRD에서 초기화
 - `--template=<type>`: 템플릿 지정 (standard/agile/hotfix)
 - `--phase=<name>`: 특정 단계 실행
 - `--continue`: 현재 단계에서 계속
@@ -873,13 +926,16 @@ SDLC 파이프라인 시스템은 소프트웨어 개발을 임시방편적인 �
 ### 시작하기
 
 1. `/analyze:sdlc-readiness`로 프로젝트 확인
-2. `/sdlc "your-feature" --init`으로 초기화
+2. 시작 지점 선택:
+   - **PRD 우선** (권장): `/manage:prd create "your-feature"`
+   - **직접 SDLC**: `/sdlc "your-feature" --init`
 3. 각 단계를 통한 가이드 프로세스 따르기
 4. 진행 상황 추적을 위한 보고서 생성
 5. 템플릿 반복 및 개선
 
 ### 추가 리소스
 
+- [PRD 가이드](PRD_GUIDE.ko.md) - 제품 요구사항 문서 가이드
 - [아키텍처 가이드](ARCHITECTURE.ko.md#sdlc-파이프라인-시스템-아키텍처)
 - [빠른 시작 가이드](QUICKSTART.ko.md#sdlc-파이프라인-사용)
 - [API 문서](API.ko.md#sdlc-cli-옵션)

@@ -22,6 +22,11 @@ const CONFIG = {
     available: true,
     templates: ['standard', 'agile', 'hotfix'],
     defaultTemplate: 'standard'
+  },
+  prd: {
+    available: true,
+    includedByDefault: true,
+    templates: ['standard', 'api', 'frontend', 'fullstack']
   }
 };
 
@@ -50,7 +55,14 @@ function parseArgs() {
     ? args[sdlcTemplateIndex].split('=')[1] 
     : CONFIG.sdlc.defaultTemplate;
   
-  return { projectName, starterType, targetPath, withSDLC, sdlcTemplate };
+  // PRD options
+  const withPRD = !args.includes('--no-prd'); // PRD is included by default
+  const prdTemplateIndex = args.findIndex(arg => arg.startsWith('--prd-template='));
+  const prdTemplate = prdTemplateIndex !== -1
+    ? args[prdTemplateIndex].split('=')[1]
+    : starterType; // Use starter type as PRD template by default
+  
+  return { projectName, starterType, targetPath, withSDLC, sdlcTemplate, withPRD, prdTemplate };
 }
 
 // Show help message
@@ -71,13 +83,17 @@ Options:
   --version, -v        Show version information
   --with-sdlc          Include SDLC pipeline configuration
   --sdlc-template=     SDLC template: ${CONFIG.sdlc.templates.join(', ')} (default: ${CONFIG.sdlc.defaultTemplate})
+  --with-prd           Include PRD system (default: true)
+  --no-prd             Exclude PRD system
+  --prd-template=      PRD template: ${CONFIG.prd.templates.join(', ')} (default: matches starter type)
 
 Examples:
-  claude-init                                    # Create basic project
-  claude-init my-api api                         # Create API project
-  claude-init my-app frontend ~/apps             # Create frontend app in ~/apps
+  claude-init                                    # Create basic project with PRD
+  claude-init my-api api                         # Create API project with API PRD template
+  claude-init my-app frontend ~/apps             # Create frontend app with frontend PRD
   claude-init my-project basic . --with-sdlc     # Include SDLC pipeline
   claude-init my-api api . --with-sdlc --sdlc-template=agile  # With Agile SDLC
+  claude-init my-simple basic . --no-prd         # Without PRD system
 `);
 }
 
@@ -119,7 +135,7 @@ async function getFiles(dir) {
 }
 
 // Copy files recursively (async version)
-async function copyRecursive(src, dest) {
+async function copyRecursive(src, dest, excludePaths = []) {
   const stats = await fs.stat(src);
   
   if (stats.isDirectory()) {
@@ -128,12 +144,19 @@ async function copyRecursive(src, dest) {
     
     // Copy all items in parallel for better performance
     await Promise.all(
-      items.map(item =>
-        copyRecursive(
-          path.join(src, item),
-          path.join(dest, item)
+      items
+        .filter(item => {
+          // Check if this path should be excluded
+          const fullPath = path.join(src, item);
+          return !excludePaths.some(excludePath => fullPath.endsWith(excludePath));
+        })
+        .map(item =>
+          copyRecursive(
+            path.join(src, item),
+            path.join(dest, item),
+            excludePaths
+          )
         )
-      )
     );
   } else {
     await fs.copyFile(src, dest);
@@ -266,8 +289,66 @@ async function copySDLCGuides(projectPath) {
   console.log('📚 SDLC guides copied');
 }
 
+// Setup PRD system
+async function setupPRDSystem(projectPath, starterType, prdTemplate = null) {
+  const template = prdTemplate || starterType;
+  
+  // Create PRD directory structure
+  const prdDirs = [
+    'docs/prd/draft',
+    'docs/prd/review',
+    'docs/prd/approved',
+    'docs/prd/in-development',
+    'docs/prd/archived/2024',
+    'docs/prd/.config',
+    'docs/releases',
+    'docs/guides/user',
+    'docs/guides/developer'
+  ];
+  
+  // Create all directories in parallel
+  await Promise.all(
+    prdDirs.map(dir => fs.mkdir(path.join(projectPath, dir), { recursive: true }))
+  );
+  
+  // Copy PRD template based on starter type
+  const templateSource = path.join(__dirname, '..', 'starters', starterType, 'docs', 'prd-templates');
+  const templateDest = path.join(projectPath, 'docs', 'prd', '.config', 'templates');
+  
+  await fs.mkdir(templateDest, { recursive: true });
+  
+  // Copy the appropriate template
+  const templateFile = template === 'basic' ? 'standard.md' : `${template}.md`;
+  const sourceFile = path.join(templateSource, templateFile);
+  
+  if (await pathExists(sourceFile)) {
+    await fs.copyFile(sourceFile, path.join(templateDest, 'standard.md'));
+    // Also copy as the specific template name if different
+    if (template !== 'standard') {
+      await fs.copyFile(sourceFile, path.join(templateDest, `${template}.md`));
+    }
+  }
+  
+  // Create PRD config file
+  const prdConfig = {
+    enabled: true,
+    template: template,
+    autoTranslate: true,
+    states: ['draft', 'review', 'approved', 'in-development', 'completed', 'archived'],
+    templates_path: 'docs/prd/.config/templates',
+    storage_path: 'docs/prd'
+  };
+  
+  await fs.writeFile(
+    path.join(projectPath, 'docs', 'prd', '.config', 'config.json'),
+    JSON.stringify(prdConfig, null, 2)
+  );
+  
+  console.log('📝 PRD system configured');
+}
+
 // Create project from starter (async version)
-async function createProject(projectName, starterType, targetPath, withSDLC = false, sdlcTemplate = 'standard') {
+async function createProject(projectName, starterType, targetPath, withSDLC = false, sdlcTemplate = 'standard', withPRD = true, prdTemplate = null) {
   const startTime = Date.now();
   
   // Determine the actual project path
@@ -302,8 +383,8 @@ async function createProject(projectName, starterType, targetPath, withSDLC = fa
   // Perform operations in parallel where possible
   const operations = [];
   
-  // Copy starter files
-  operations.push(copyRecursive(starterPath, projectPath));
+  // Copy starter files (excluding prd-templates since they'll be handled by setupPRDSystem)
+  operations.push(copyRecursive(starterPath, projectPath, ['docs/prd-templates']));
   
   // Create .claude directory structure
   const claudeDir = path.join(projectPath, '.claude');
@@ -324,17 +405,27 @@ async function createProject(projectName, starterType, targetPath, withSDLC = fa
     console.log(`📋 Including SDLC Pipeline with ${sdlcTemplate} template`);
   }
   
+  // Add PRD system if enabled
+  if (withPRD) {
+    parallelOps.push(setupPRDSystem(projectPath, starterType, prdTemplate));
+    console.log(`📝 Including PRD System with ${prdTemplate || starterType} template`);
+  }
+  
   await Promise.all(parallelOps);
   
   const duration = Date.now() - startTime;
   console.log(`⏱️  Project created in ${duration}ms`);
-  showSuccess(projectName, projectPath, withSDLC);
+  showSuccess(projectName, projectPath, withSDLC, withPRD);
 }
 
 // Show success message
-function showSuccess(projectName, targetPath, withSDLC = false) {
+function showSuccess(projectName, targetPath, withSDLC = false, withPRD = false) {
   const sdlcInfo = withSDLC 
     ? '\n  • SDLC Pipeline System for structured development\n  • 7-phase development lifecycle management'
+    : '';
+  
+  const prdInfo = withPRD
+    ? '\n  • PRD System for requirements management\n  • Automatic Korean to English translation\n  • Templates optimized for your project type'
     : '';
     
   console.log(`
@@ -347,8 +438,9 @@ Next steps:
 Your project includes:
   • Claude Code agents for AI-assisted development
   • Pre-configured commands and workflows
-  • Project templates and best practices${sdlcInfo}
+  • Project templates and best practices${sdlcInfo}${prdInfo}
 
+${withPRD ? 'Start with PRD:\n  /manage:prd create "feature-name"\n' : ''}
 Happy coding! 🎉
 `);
 }
@@ -356,9 +448,9 @@ Happy coding! 🎉
 // Main execution (async)
 async function main() {
   try {
-    const { projectName, starterType, targetPath, withSDLC, sdlcTemplate } = parseArgs();
+    const { projectName, starterType, targetPath, withSDLC, sdlcTemplate, withPRD, prdTemplate } = parseArgs();
     validateStarter(starterType);
-    await createProject(projectName, starterType, targetPath, withSDLC, sdlcTemplate);
+    await createProject(projectName, starterType, targetPath, withSDLC, sdlcTemplate, withPRD, prdTemplate);
   } catch (error) {
     console.error('Error:', error.message);
     if (error.stack) {

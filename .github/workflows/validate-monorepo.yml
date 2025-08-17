@@ -261,7 +261,7 @@ jobs:
           
           # Check for essential files in basic starter
           if [ "$starter" = "basic" ]; then
-            required_files=("CLAUDE.md" "INITIAL.md" "README.md")
+            required_files=("CLAUDE.md" "README.md")
             for file in "${required_files[@]}"; do
               if [ ! -f "$starter_dir/$file" ]; then
                 echo "❌ Missing $file in $starter starter"

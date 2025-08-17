@@ -54,15 +54,21 @@ This ensures your project is ready for SDLC pipeline integration.
 
 #### Step 2: Initialize Your First Pipeline
 ```bash
+# Option A: Start directly with SDLC
 /sdlc "my-feature" --init
+
+# Option B: Start from an approved PRD (recommended)
+/manage:prd create "my-feature" --template=standard
+# ... write and refine PRD ...
+/manage:prd approve "my-feature"  # This auto-starts SDLC
 ```
-This creates a new pipeline with the standard template.
 
 #### Step 3: Execute the Planning Phase
 ```bash
 /sdlc "my-feature" --phase=planning
 ```
 The system will guide you through requirements gathering.
+Note: If started from PRD, requirements are auto-imported.
 
 #### Step 4: Check Status
 ```bash
@@ -81,12 +87,58 @@ Automatically proceed to the design phase.
 | Command | Purpose | Example |
 |---------|---------|---------|
 | `/sdlc --init` | Start new pipeline | `/sdlc "auth-system" --init` |
+| `/sdlc --init --from-prd` | Start from PRD | `/sdlc "auth-system" --init --from-prd` |
 | `/sdlc --status` | Check progress | `/sdlc "auth-system" --status` |
 | `/sdlc --continue` | Next phase | `/sdlc "auth-system" --continue` |
 | `/sdlc --full` | Run all phases | `/sdlc "auth-system" --full` |
 | `/support:sdlc-report` | Generate report | `/support:sdlc-report "auth-system"` |
 
 ## Phase-by-Phase Guide
+
+### Phase 0: PRD Creation (PRD 작성) - Optional
+
+**Duration**: 1-2 days  
+**Purpose**: Define product requirements before development
+
+#### When to Use
+- New features requiring clear specifications
+- Complex projects with multiple stakeholders
+- Projects needing approval before development
+- When documentation trail is important
+
+#### Key Activities
+1. **Requirement Definition**
+   - Write comprehensive PRD using templates
+   - Define success metrics and KPIs
+   - Specify functional and non-functional requirements
+   
+2. **Review & Refinement**
+   - Submit PRD for review
+   - Address feedback and iterate
+   - Ensure completeness and clarity
+   
+3. **Approval Process**
+   - Get stakeholder sign-off
+   - Finalize requirements
+   - Lock scope for development
+
+#### Commands
+```bash
+# Create PRD
+/manage:prd create "feature-name" --template=api
+
+# Review PRD quality
+/support:prd-review "feature-name"
+
+# Approve and start SDLC
+/manage:prd approve "feature-name"
+```
+
+#### Quality Gates
+- [ ] PRD completeness score ≥ 80
+- [ ] All requirements clearly defined
+- [ ] Success metrics specified
+- [ ] Stakeholder approval obtained
 
 ### Phase 1: Planning (계획)
 
@@ -776,6 +828,7 @@ cat .claude/sdlc/pipelines/feature/state.json
 
 **`/sdlc` Options**:
 - `--init`: Initialize new pipeline
+- `--from-prd`: Initialize from approved PRD
 - `--template=<type>`: Specify template (standard/agile/hotfix)
 - `--phase=<name>`: Execute specific phase
 - `--continue`: Continue from current phase
@@ -873,13 +926,16 @@ The SDLC Pipeline System transforms software development from ad-hoc processes i
 ### Getting Started
 
 1. Run `/analyze:sdlc-readiness` to check your project
-2. Initialize with `/sdlc "your-feature" --init`
+2. Choose your starting point:
+   - **PRD-First** (Recommended): `/manage:prd create "your-feature"`
+   - **Direct SDLC**: `/sdlc "your-feature" --init`
 3. Follow the guided process through each phase
 4. Generate reports to track progress
 5. Iterate and improve your templates
 
 ### Further Resources
 
+- [PRD Guide](PRD_GUIDE.md) - Product Requirements Document guide
 - [Architecture Guide](ARCHITECTURE.md#sdlc-pipeline-system-architecture)
 - [Quick Start Guide](QUICKSTART.md#sdlc-pipeline-usage)
 - [API Documentation](API.md#sdlc-cli-options)

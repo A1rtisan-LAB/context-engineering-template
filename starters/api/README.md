@@ -19,6 +19,30 @@ api-project/
 └── .env.example        # Environment variables template
 ```
 
+## 📝 PRD-Driven Development
+
+### Product Requirements Documents
+Start your development with structured PRD process for clear requirements and automatic SDLC integration:
+
+```bash
+# Create PRD for new feature
+/manage:prd create "feature-name" --template=api
+
+# Review PRD quality (80+ score required)
+/support:prd-review "feature-name"
+
+# Approve PRD (automatically starts SDLC)
+/manage:prd approve "feature-name"
+```
+
+### PRD Workflow Benefits
+- **Clear Requirements**: Define what needs to be built before coding
+- **Quality Gates**: Review process ensures completeness
+- **Auto Translation**: Korean PRDs automatically translated to English
+- **SDLC Integration**: Approved PRDs trigger development pipeline
+- **Documentation Trail**: Complete history from idea to implementation
+
+For detailed guidance, see [PRD Guide](docs/PRD_GUIDE.md) ([한국어](docs/PRD_GUIDE.ko.md))
 ## 📊 SDLC Pipeline System
 
 ### Quick Start

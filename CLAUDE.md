@@ -24,6 +24,22 @@ node cli/claude-init.js my-api api ./projects  # API project in ./projects
 # With SDLC Pipeline System
 node cli/claude-init.js my-project basic . --with-sdlc
 node cli/claude-init.js my-api api . --with-sdlc --sdlc-template=agile
+
+# With PRD System (included by default)
+node cli/claude-init.js my-project basic       # PRD included by default
+node cli/claude-init.js my-api api --no-prd    # Exclude PRD system
+```
+
+### PRD Management Commands
+```bash
+# Create and manage PRDs
+/manage:prd create "feature-name" --template=api     # Create new PRD
+/manage:prd status "feature-name"                    # Check PRD status
+/manage:prd approve "feature-name"                   # Approve and start SDLC
+/manage:prd list --all                               # List all PRDs
+
+# PRD review and validation
+/support:prd-review "feature-name"                   # Review PRD quality
 ```
 
 ### SDLC Pipeline Commands
@@ -33,6 +49,7 @@ node cli/claude-init.js my-api api . --with-sdlc --sdlc-template=agile
 /sdlc "feature-name" --full            # Run all phases
 /sdlc "feature-name" --phase=design    # Run specific phase
 /sdlc "feature-name" --status          # Check status
+/sdlc "feature-name" --from-prd        # Start from approved PRD
 
 # SDLC support commands
 /analyze:sdlc-readiness                # Check project readiness

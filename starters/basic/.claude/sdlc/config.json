@@ -6,11 +6,24 @@
     "quality_gates": "standard"
   },
   "phases": {
+    "prd-creation": { 
+      "duration": "1 day", 
+      "optional": true,
+      "description": "Product Requirements Document creation and approval",
+      "triggers_sdlc": true
+    },
     "planning": { "duration": "1 day" },
     "design": { "duration": "2 days" },
     "implementation": { "duration": "5 days" },
     "review": { "duration": "1 day" },
     "testing": { "duration": "2 days" },
     "documentation": { "duration": "1 day", "required": true }
+  },
+  "prd": {
+    "enabled": true,
+    "auto_translate": true,
+    "templates_path": "docs/prd/.config/templates",
+    "storage_path": "docs/prd",
+    "states": ["draft", "review", "approved", "in-development", "completed", "archived"]
   }
 }

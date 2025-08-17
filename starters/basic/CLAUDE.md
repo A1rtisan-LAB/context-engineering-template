@@ -157,11 +157,33 @@ All major documentation MUST be provided in both English and Korean versions:
 - Code examples: Translate comments only
 - Keep versions synchronized
 
+## 📝 PRD-Driven Development
+
+### Product Requirements Documents
+- Start features with `/manage:prd create "feature-name"` for structured requirements
+- Use templates optimized for your project type (standard, api, frontend, fullstack)
+- Automatic Korean to English translation for global collaboration
+- PRD approval triggers automatic SDLC pipeline initialization
+
+### PRD Commands
+```bash
+# Create and manage PRDs
+/manage:prd create "feature-name" --template=standard
+/manage:prd status "feature-name"
+/manage:prd approve "feature-name"  # Auto-starts SDLC
+
+# Review and improve PRDs
+/support:prd-review "feature-name"
+/manage:prd list --all
+```
+
 ## 🔄 SDLC Pipeline Integration
 
 ### Pipeline-Driven Development
 - Use `/sdlc [feature] --init` to start any major feature development
+- Or start from approved PRD with `/sdlc [feature] --init --from-prd`
 - Follow the 7-phase lifecycle: Planning → Design → Implementation → Review → Testing → Deployment → Documentation
+- Optional Phase 0: PRD Creation for requirements-first development
 - Quality gates ensure each phase meets standards before progression
 - Templates available: standard (waterfall), agile (sprint-based), hotfix (emergency)
 
@@ -169,6 +191,7 @@ All major documentation MUST be provided in both English and Korean versions:
 ```bash
 # Initialize pipeline
 /sdlc "feature-name" --init --template=standard
+/sdlc "feature-name" --init --from-prd  # Start from approved PRD
 
 # Check status and progress
 /sdlc "feature-name" --status
