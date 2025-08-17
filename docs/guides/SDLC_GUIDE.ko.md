@@ -946,9 +946,9 @@ SDLC 파이프라인 시스템은 소프트웨어 개발을 임시방편적인 �
 ### 추가 리소스
 
 - [PRD 가이드](PRD_GUIDE.ko.md) - 제품 요구사항 문서 가이드
-- [아키텍처 가이드](ARCHITECTURE.ko.md#sdlc-파이프라인-시스템-아키텍처)
+- [아키텍처 가이드](../architecture/ARCHITECTURE.ko.md#sdlc-파이프라인-시스템-아키텍처)
 - [빠른 시작 가이드](QUICKSTART.ko.md#sdlc-파이프라인-사용)
-- [API 문서](API.ko.md#sdlc-cli-옵션)
+- [API 문서](../architecture/API.ko.md#sdlc-cli-옵션)
 - [에이전트 문서](../api/agents.md#sdlc-coordinator)
 
 ---

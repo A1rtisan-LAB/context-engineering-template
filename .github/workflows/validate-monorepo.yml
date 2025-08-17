@@ -85,7 +85,7 @@ jobs:
           ".claude/settings.json"
           "cli/claude-init.js"
           "cli/package.json"
-          "docs/ARCHITECTURE.md"
+          "docs/architecture/ARCHITECTURE.md"
         )
         
         missing_files=()

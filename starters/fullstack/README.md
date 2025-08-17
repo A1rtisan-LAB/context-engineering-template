@@ -41,7 +41,7 @@ Start your development with structured PRD process for clear requirements and au
 - **SDLC Integration**: Approved PRDs trigger development pipeline
 - **Documentation Trail**: Complete history from idea to implementation
 
-For detailed guidance, see [PRD Guide](docs/PRD_GUIDE.md) ([한국어](docs/PRD_GUIDE.ko.md))
+For detailed guidance, see [PRD Guide](docs/guides/PRD_GUIDE.md) ([한국어](docs/guides/PRD_GUIDE.ko.md))
 ## 📊 SDLC Pipeline System
 
 ### Quick Start
@@ -188,7 +188,7 @@ For detailed guidance, see [PRD Guide](docs/PRD_GUIDE.md) ([한국어](docs/PRD_
 
 ## 📚 Documentation
 
-- [SDLC Pipeline Guide](docs/SDLC_GUIDE.md) ([한국어](docs/SDLC_GUIDE.ko.md))
+- [SDLC Pipeline Guide](docs/guides/SDLC_GUIDE.md) ([한국어](docs/guides/SDLC_GUIDE.ko.md))
 - [Architecture Guide](docs/ARCHITECTURE.md)
 - [API Documentation](docs/API.md)
 - [Deployment Guide](docs/DEPLOYMENT.md)

@@ -273,7 +273,7 @@ npm test
 
 - [GitHub Issues](https://github.com/A1rtisan-LAB/context-engineering-template/issues)
 - [Documentation](https://docs.anthropic.com/claude-code)
-- [Contributing Guide](../CONTRIBUTING.md)
+- [Contributing Guide](../../CONTRIBUTING.md)
 
 ---
 

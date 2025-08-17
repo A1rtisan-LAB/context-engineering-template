@@ -599,4 +599,4 @@ tail -f .claude/workflows/logs/[workflow-name].log
 - [Commands API](commands.ko.md) - 사용 가능한 명령 참조
 - [AI Agents API](agents.ko.md) - 에이전트 기능
 - [SDLC 가이드](../guides/SDLC_GUIDE.ko.md) - 파이프라인 문서
-- [오케스트레이션 튜토리얼](../tutorials/workflow-orchestration.ko.md) - 실습 가이드
+- [오케스트레이션 튜토리얼](../tutorials/agent-orchestration.ko.md) - 실습 가이드

@@ -71,7 +71,7 @@ cp .env.example .env
 - **SDLC 통합**: 승인된 PRD가 개발 파이프라인 트리거
 - **문서화 추적**: 아이디어부터 구현까지 완전한 이력
 
-자세한 안내는 [PRD 가이드](docs/PRD_GUIDE.ko.md) ([English](docs/PRD_GUIDE.md))를 참조하세요.
+자세한 안내는 [PRD 가이드](docs/guides/PRD_GUIDE.ko.md) ([English](docs/guides/PRD_GUIDE.md))를 참조하세요.
 
 ## 📊 SDLC 파이프라인 시스템
 
@@ -111,7 +111,7 @@ SDLC 파이프라인 시스템은 8단계를 통해 체계적인 개발을 제�
 6. **배포(Deployment)** - 프로덕션 릴리스 관리
 7. **문서화(Documentation)** - 완전한 지식 관리
 
-자세한 안내는 [SDLC 파이프라인 가이드](docs/SDLC_GUIDE.ko.md) ([English](docs/SDLC_GUIDE.md))를 참조하세요.
+자세한 안내는 [SDLC 파이프라인 가이드](docs/guides/SDLC_GUIDE.ko.md) ([English](docs/guides/SDLC_GUIDE.md))를 참조하세요.
 
 ## 🏗️ 아키텍처
 

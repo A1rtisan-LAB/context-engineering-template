@@ -708,4 +708,3 @@ AGENT_TRACE=true \
 - [워크플로우 API 참조](../api/workflows.ko.md)
 - [오케스트레이션 명령](../api/commands.ko.md#orchestration)
 - [에이전트 구성 가이드](../../packages/@claude-code/agents/README.md)
-- [성능 튜닝 가이드](../guides/performance.md)

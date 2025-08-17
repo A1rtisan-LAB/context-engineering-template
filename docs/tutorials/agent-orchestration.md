@@ -707,4 +707,3 @@ Dashboard view:
 - [Workflow API Reference](../api/workflows.md)
 - [Orchestration Commands](../api/commands.md#orchestration)
 - [Agent Configuration Guide](../../packages/@claude-code/agents/README.md)
-- [Performance Tuning Guide](../guides/performance.md)

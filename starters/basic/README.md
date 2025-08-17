@@ -71,7 +71,7 @@ Start your development with structured PRD process for clear requirements and au
 - **SDLC Integration**: Approved PRDs trigger development pipeline
 - **Documentation Trail**: Complete history from idea to implementation
 
-For detailed guidance, see [PRD Guide](docs/PRD_GUIDE.md) ([한국어](docs/PRD_GUIDE.ko.md))
+For detailed guidance, see [PRD Guide](docs/guides/PRD_GUIDE.md) ([한국어](docs/guides/PRD_GUIDE.ko.md))
 
 ## 📊 SDLC Pipeline System
 
@@ -111,7 +111,7 @@ The SDLC Pipeline System provides structured development through 8 phases (inclu
 6. **Deployment** - Production release management
 7. **Documentation** - Complete knowledge management
 
-For detailed guidance, see [SDLC Pipeline Guide](docs/SDLC_GUIDE.md) ([한국어](docs/SDLC_GUIDE.ko.md))
+For detailed guidance, see [SDLC Pipeline Guide](docs/guides/SDLC_GUIDE.md) ([한국어](docs/guides/SDLC_GUIDE.ko.md))
 
 ## 🏗️ Architecture
 

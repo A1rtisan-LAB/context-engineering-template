@@ -384,10 +384,9 @@ CLAUDE_API_VERBOSE=true
 ## 추가 리소스
 
 ### 내부 문서
-- [아키텍처 개요](../ARCHITECTURE.ko.md)
-- [빠른 시작 가이드](../QUICKSTART.ko.md)
-- [마이그레이션 가이드](../MIGRATION.ko.md)
-
+- [아키텍처 개요](../architecture/ARCHITECTURE.ko.md)
+- [빠른 시작 가이드](../guides/QUICKSTART.ko.md)
+- 
 ### 튜토리얼
 - [PRD 개발 튜토리얼](../tutorials/prd-development.ko.md)
 - [SDLC 파이프라인 사용법](../tutorials/sdlc-pipeline-usage.ko.md)

@@ -598,4 +598,4 @@ tail -f .claude/workflows/logs/[workflow-name].log
 - [Commands API](commands.md) - Available commands reference
 - [AI Agents API](agents.md) - Agent capabilities
 - [SDLC Guide](../guides/SDLC_GUIDE.md) - Pipeline documentation
-- [Orchestration Tutorial](../tutorials/workflow-orchestration.md) - Hands-on guide
+- [Orchestration Tutorial](../tutorials/agent-orchestration.md) - Hands-on guide

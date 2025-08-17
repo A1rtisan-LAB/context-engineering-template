@@ -344,8 +344,8 @@ package-name/
 
 ## 기여하기
 
-개발 가이드라인은 [CONTRIBUTING.ko.md](../CONTRIBUTING.ko.md)를 참조하세요.
+개발 가이드라인은 [CONTRIBUTING.ko.md](../../CONTRIBUTING.ko.md)를 참조하세요.
 
 ## 라이선스
 
-MIT - 자세한 내용은 [LICENSE](../LICENSE)를 참조하세요.
+MIT - 자세한 내용은 [LICENSE](../../LICENSE)를 참조하세요.

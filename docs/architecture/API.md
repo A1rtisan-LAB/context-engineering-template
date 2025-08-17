@@ -343,8 +343,8 @@ package-name/
 
 ## Contributing
 
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for development guidelines.
+See [CONTRIBUTING.md](../../CONTRIBUTING.md) for development guidelines.
 
 ## License
 
-MIT - See [LICENSE](../LICENSE) for details.
+MIT - See [LICENSE](../../LICENSE) for details.

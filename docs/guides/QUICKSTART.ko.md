@@ -247,7 +247,7 @@ npm test
 
 1. [전체 문서](../README.md) 읽기
 2. [사용 가능한 에이전트](../api/agents.md) 탐색
-3. [API 문서](API.ko.md) 확인
+3. [API 문서](../architecture/API.ko.md) 확인
 4. 커뮤니티 토론 참여
 
 ## 도움 받기
