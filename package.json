@@ -9,6 +9,12 @@
   ],
   "scripts": {
     "init": "node cli/claude-init.js",
+    "init:full": "node cli/claude-init.js my-project basic . --full",
+    "init:api": "node cli/claude-init.js my-api api .",
+    "init:frontend": "node cli/claude-init.js my-frontend frontend .",
+    "init:fullstack": "node cli/claude-init.js my-fullstack fullstack .",
+    "init:minimal": "node cli/claude-init.js my-project basic . --minimal",
+    "create": "node cli/claude-init.js",
     "validate": "npm run validate --workspaces",
     "test": "jest",
     "test:watch": "jest --watch",

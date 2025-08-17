@@ -6,6 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Context Engineering Template repository that provides a structured framework for creating new Claude Code projects. It uses a modern monorepo architecture with modular packages for AI agents, commands, workflows, and core functionality.
 
+## Current Resources
+- **26 AI Agents** - Specialized agents for different development tasks
+- **26 Commands** - Comprehensive command suite organized by category
+- **4 Workflows** - Core development workflows
+- **PRD System** - Product Requirements Document management (included by default)
+- **SDLC Pipeline** - 7-phase development lifecycle (included by default)
+- **Document Management** - Bilingual documentation with validation and sync
+
 ## Key Commands
 
 ### Project Creation
@@ -16,18 +24,22 @@ node cli/claude-init.js [project-name] [starter-type] [target-path]
 # Available starter types: basic, api, frontend, fullstack
 node cli/claude-init.js my-api api ~/projects
 
-# Examples
-node cli/claude-init.js                        # Basic project
-node cli/claude-init.js my-app frontend        # Frontend project
-node cli/claude-init.js my-api api ./projects  # API project in ./projects
+# Examples (PRD and SDLC included by default)
+node cli/claude-init.js                        # Basic project with PRD & SDLC (default)
+node cli/claude-init.js my-app frontend        # Frontend project with all features
+node cli/claude-init.js my-api api ./projects  # API project in specific path
 
-# With SDLC Pipeline System
-node cli/claude-init.js my-project basic . --with-sdlc
-node cli/claude-init.js my-api api . --with-sdlc --sdlc-template=agile
+# Full installation (explicitly include everything - recommended)
+node cli/claude-init.js my-project basic . --full          # All systems included
 
-# With PRD System (included by default)
-node cli/claude-init.js my-project basic       # PRD included by default
-node cli/claude-init.js my-api api --no-prd    # Exclude PRD system
+# Customizing SDLC template (SDLC included by default)
+node cli/claude-init.js my-project basic . --sdlc-template=agile     # Use Agile template
+node cli/claude-init.js my-api api . --sdlc-template=hotfix         # Use Hotfix template
+
+# Excluding features (when you don't want them)
+node cli/claude-init.js my-project basic --no-prd        # Exclude PRD system only
+node cli/claude-init.js my-api api --no-sdlc            # Exclude SDLC pipeline only
+node cli/claude-init.js my-app frontend --minimal       # Minimal setup (no PRD/SDLC)
 ```
 
 ### PRD Management Commands
@@ -56,6 +68,27 @@ node cli/claude-init.js my-api api --no-prd    # Exclude PRD system
 /support:sdlc-report "feature-name"    # Generate report
 ```
 
+### Document Management Commands
+```bash
+# Check documentation health
+/manage:docs check                     # Comprehensive health check
+/manage:docs validate                  # Validate links and references
+/manage:docs outdated                  # List outdated documentation
+
+# Synchronize bilingual documentation
+/manage:docs sync                      # Sync English/Korean versions
+/manage:docs sync --post-merge         # Sync after git merge
+
+# Generate documentation
+/manage:docs generate api              # Generate API documentation
+/manage:docs generate guide            # Generate guide documentation
+/manage:docs generate architecture     # Generate architecture docs
+
+# Coverage and quality
+/manage:docs coverage                  # Check documentation coverage
+/manage:docs quality                   # Assess documentation quality
+```
+
 ### Development Commands
 ```bash
 # Install dependencies
@@ -78,9 +111,9 @@ npm run clean && npm install
 context-engineering-template/
 ├── packages/                      # Modular packages
 │   └── @claude-code/
-│       ├── agents/               # 23 AI agents (including sdlc-coordinator)
+│       ├── agents/               # 26 AI agents (including sdlc-coordinator, doc-manager)
 │       │   └── src/             # Agent .md files
-│       ├── commands/             # 24 commands (including 5 SDLC commands)
+│       ├── commands/             # 26 commands (including SDLC, PRD, and doc commands)
 │       │   └── src/             # Command .md files
 │       ├── workflows/            # Workflow definitions
 │       │   └── src/             # Workflow .md files
@@ -115,16 +148,21 @@ my-project/
 │   └── workflows/              # Workflows (files directly here)
 │       ├── development-lifecycle.md
 │       └── quality-assurance.md
+├── docs/
+│   └── prd/                   # PRD system (replaces INITIAL.md)
+│       ├── draft/             # Draft PRDs
+│       ├── review/            # PRDs under review
+│       ├── approved/          # Approved PRDs
+│       └── templates/         # PRD templates
 ├── CLAUDE.md                   # AI assistant instructions
-├── INITIAL.md                  # Feature request template
 └── README.md                   # Project documentation
 ```
 
 **Important:** The monorepo stores files in `packages/@claude-code/*/src/` directories, but generated projects receive these files directly in `.claude/*/` without the `src/` subdirectory. This ensures Claude Code can properly recognize and use the agents, commands, and workflows.
 
 ### Package Categories
-- **Agent Packages**: 22 specialized AI agents for different development tasks
-- **Command Packages**: 18 Claude Code commands organized by category (analyze, implement, manage, support)
+- **Agent Packages**: 26 specialized AI agents for different development tasks
+- **Command Packages**: 26 Claude Code commands organized by category (analyze, implement, manage, support)
 - **Workflow Packages**: Development lifecycle and quality assurance workflows
 - **Core Package**: Template generation, validation, and synchronization engine
 
@@ -142,10 +180,12 @@ All major documentation must be provided in both English (default) and Korean ve
 Each of these documents must have both English and Korean versions:
 - `README.md` / `README.ko.md` - Project overview and getting started
 - `CONTRIBUTING.md` / `CONTRIBUTING.ko.md` - Contribution guidelines
-- `docs/ARCHITECTURE.md` / `ARCHITECTURE.ko.md` - System architecture
-- `docs/QUICKSTART.md` / `QUICKSTART.ko.md` - Quick start guide
-- `docs/API.md` / `API.ko.md` - API reference
-- `docs/MIGRATION.md` / `MIGRATION.ko.md` - Migration guide
+- `docs/architecture/ARCHITECTURE.md` / `ARCHITECTURE.ko.md` - System architecture
+- `docs/architecture/API.md` / `API.ko.md` - API reference  
+- `docs/guides/QUICKSTART.md` / `QUICKSTART.ko.md` - Quick start guide
+- `docs/guides/PRD_GUIDE.md` / `PRD_GUIDE.ko.md` - PRD development guide
+- `docs/guides/SDLC_GUIDE.md` / `SDLC_GUIDE.ko.md` - SDLC pipeline guide
+- `docs/guides/DOCUMENT_MANAGEMENT.md` / `DOCUMENT_MANAGEMENT.ko.md` - Document management guide
 - Package READMEs - Each package should have bilingual documentation
 
 ### Translation Standards
@@ -158,12 +198,22 @@ Each of these documents must have both English and Korean versions:
 ### Documentation Structure Example
 ```
 docs/
-├── ARCHITECTURE.md          # English version
-├── ARCHITECTURE.ko.md       # Korean version
-├── QUICKSTART.md           # English version
-├── QUICKSTART.ko.md        # Korean version
-├── API.md                  # English version
-└── API.ko.md              # Korean version
+├── architecture/
+│   ├── ARCHITECTURE.md      # English version
+│   ├── ARCHITECTURE.ko.md   # Korean version
+│   ├── API.md              # English version
+│   └── API.ko.md           # Korean version
+├── guides/
+│   ├── QUICKSTART.md       # English version
+│   ├── QUICKSTART.ko.md    # Korean version
+│   ├── PRD_GUIDE.md        # English version
+│   ├── PRD_GUIDE.ko.md     # Korean version
+│   ├── SDLC_GUIDE.md       # English version
+│   └── SDLC_GUIDE.ko.md    # Korean version
+└── api/                     # API documentation
+    ├── agents.md
+    ├── commands.md
+    └── workflows.md
 ```
 
 ## Development Workflow

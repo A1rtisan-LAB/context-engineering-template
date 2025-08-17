@@ -224,7 +224,7 @@ Systematic development process with phase-based progression, quality gates, and 
 /TodoWrite "Documentation Phase Checklist:
 - [ ] README.md/ko.md updated with latest features
 - [ ] API documentation complete (English & Korean)
-- [ ] CHANGELOG.md updated
+- [ ] docs/changelog/CHANGELOG.md updated
 - [ ] User guide reflects current functionality (bilingual)
 - [ ] Code examples tested and updated
 - [ ] Troubleshooting guide updated
@@ -282,7 +282,7 @@ Systematic development process with phase-based progression, quality gates, and 
 - Migration guide (if breaking changes)
 
 # Bug Fix Documentation
-- CHANGELOG.md entry
+- docs/changelog/CHANGELOG.md entry
 - Known issues update
 - Troubleshooting guide update
 

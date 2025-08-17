@@ -1,4 +1,20 @@
+---
+title: API 문서
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: architecture
+tags: [api, cli, commands, reference]
+language: ko
+---
+
 # API 문서
+
+## 목차
+1. [CLI API](#cli-api)
+2. [명령어](#명령어)
+3. [패키지 API](#패키지-api)
+4. [확장 API](#확장-api)
 
 ## CLI API
 

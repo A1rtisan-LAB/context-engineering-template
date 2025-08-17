@@ -1,4 +1,33 @@
+---
+title: Architecture Guide
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: architecture
+tags: [architecture, system-design, monorepo, technical]
+---
+
 # Architecture Guide
+
+## Table of Contents
+
+- [System Overview](#system-overview)
+- [Core Architecture](#core-architecture)
+  - [1. Monorepo Structure](#1-monorepo-structure)
+  - [2. Package System](#2-package-system-packagesclaudecode)
+  - [3. CLI System](#3-cli-system-cli)
+  - [4. Template Generation Engine](#4-template-generation-engine)
+- [Component Architecture](#component-architecture)
+  - [AI Agent System](#ai-agent-system)
+  - [Command System](#command-system)
+  - [Workflow System](#workflow-system)
+- [SDLC Pipeline Architecture](#sdlc-pipeline-architecture)
+- [PRD System Architecture](#prd-system-architecture)
+- [Documentation Architecture](#documentation-architecture)
+- [Security Architecture](#security-architecture)
+- [Performance Optimizations](#performance-optimizations)
+- [Extension Points](#extension-points)
+- [Best Practices](#best-practices)
 
 ## System Overview
 
@@ -159,7 +188,7 @@ graph LR
 ### 1. Agent System
 - **Purpose**: Specialized AI assistants for specific tasks
 - **Architecture**: Markdown-based prompt definitions
-- **Integration**: Direct Claude Code recognition via `.claude/agents/`
+- **Integration**: Direct Claude Code recognition via `../api/agents.md`
 - **Activation**: Command-based or automatic based on context
 
 ### 2. Command System
@@ -309,6 +338,33 @@ graph LR
 - AI-powered documentation generation
 - Automatic code review
 - Intelligent refactoring suggestions
+
+## Related Documentation
+
+### Core Guides
+- **[Quick Start Guide](../guides/QUICKSTART.md)** - Get started in 5 minutes
+- **[PRD Guide](../guides/PRD_GUIDE.md)** - Product requirements documentation
+- **[SDLC Pipeline Guide](../guides/SDLC_GUIDE.md)** - 7-phase development pipeline
+- **[Document Management](../guides/DOCUMENT_MANAGEMENT.md)** - Documentation system
+
+### API References
+- **[API Index](../api/index.md)** - Complete API documentation
+- **[Agents API](../api/agents.md)** - 26 AI agents reference
+- **[Commands API](../api/commands.md)** - Command system reference
+- **[Workflows API](../api/workflows.md)** - Workflow orchestration
+- **[CLI API](API.md)** - CLI reference documentation
+
+### Tutorials
+- **[Getting Started](../tutorials/getting-started.md)** - Your first project
+- **[PRD Development](../tutorials/prd-development.md)** - Building effective PRDs
+- **[SDLC Pipeline Usage](../tutorials/sdlc-pipeline-usage.md)** - Pipeline mastery
+- **[Agent Orchestration](../tutorials/agent-orchestration.md)** - Agent coordination
+
+### Package Documentation
+- [Agents Package](../../packages/@claude-code/agents/README.md)
+- [Commands Package](../../packages/@claude-code/commands/README.md)
+- [Workflows Package](../../packages/@claude-code/workflows/README.md)
+- [Core Package](../../packages/@claude-code/core/README.md)
 
 ---
 

@@ -214,7 +214,7 @@ Systematic development process with phase-based progression, quality gates, and 
 /TodoWrite "Documentation Phase Checklist:
 - [ ] README.md updated with latest features
 - [ ] API documentation complete
-- [ ] CHANGELOG.md updated
+- [ ] docs/changelog/CHANGELOG.md updated
 - [ ] User guide reflects current functionality
 - [ ] Code examples tested and updated
 - [ ] Troubleshooting guide updated

@@ -1,3 +1,12 @@
+---
+title: SDLC Pipeline System Guide
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: guides
+tags: [sdlc, pipeline, development, automation]
+---
+
 # SDLC Pipeline System Guide
 
 ## Table of Contents
@@ -41,6 +50,26 @@ SDLC Pipeline solves these by:
 - Mandating quality checks at each phase
 - Providing real-time progress tracking
 - Catching issues early through phase gates
+
+```mermaid
+graph TD
+    subgraph "Traditional Development"
+        T1[Ad-hoc Process] --> T2[Quality Issues]
+        T2 --> T3[Rework]
+        T3 --> T4[Delays]
+    end
+    
+    subgraph "SDLC Pipeline"
+        S1[Structured Process] --> S2[Quality Gates]
+        S2 --> S3[Early Detection]
+        S3 --> S4[On-time Delivery]
+    end
+    
+    style T1 fill:#ffcdd2
+    style T4 fill:#ef5350
+    style S1 fill:#c8e6c9
+    style S4 fill:#4caf50
+```
 
 ## Quick Start
 
@@ -94,6 +123,28 @@ Automatically proceed to the design phase.
 | `/support:sdlc-report` | Generate report | `/support:sdlc-report "auth-system"` |
 
 ## Phase-by-Phase Guide
+
+```mermaid
+graph LR
+    subgraph "SDLC Pipeline Flow"
+        P0[PRD<br/>Optional] --> P1[Planning<br/>1-2 days]
+        P1 --> P2[Design<br/>2-3 days]
+        P2 --> P3[Implementation<br/>3-5 days]
+        P3 --> P4[Review<br/>1 day]
+        P4 --> P5[Testing<br/>2-3 days]
+        P5 --> P6[Deployment<br/>1 day]
+        P6 --> P7[Documentation<br/>1 day]
+    end
+    
+    style P0 fill:#e1f5fe
+    style P1 fill:#fff3e0
+    style P2 fill:#e3f2fd
+    style P3 fill:#fce4ec
+    style P4 fill:#f3e5f5
+    style P5 fill:#e8f5e9
+    style P6 fill:#ffebee
+    style P7 fill:#f5f5f5
+```
 
 ### Phase 0: PRD Creation (PRD 작성) - Optional
 
@@ -935,11 +986,23 @@ The SDLC Pipeline System transforms software development from ad-hoc processes i
 
 ### Further Resources
 
-- [PRD Guide](PRD_GUIDE.md) - Product Requirements Document guide
-- [Architecture Guide](ARCHITECTURE.md#sdlc-pipeline-system-architecture)
-- [Quick Start Guide](QUICKSTART.md#sdlc-pipeline-usage)
-- [API Documentation](API.md#sdlc-cli-options)
-- [Agent Documentation](.claude/agents/sdlc-coordinator.md)
+#### Core Documentation
+- **[PRD Guide](PRD_GUIDE.md)** - Product Requirements Document guide
+- **[PRD Tutorial](../tutorials/prd-development.md)** - Hands-on PRD creation
+- **[SDLC Tutorial](../tutorials/sdlc-pipeline-usage.md)** - Step-by-step pipeline usage
+- **[Architecture Guide](../architecture/ARCHITECTURE.md#sdlc-pipeline-architecture)** - System architecture
+- **[Quick Start Guide](QUICKSTART.md#using-sdlc-pipeline)** - Quick pipeline setup
+
+#### API References
+- **[Commands API](../api/commands.md#sdlc-commands)** - SDLC command reference
+- **[Workflows API](../api/workflows.md#development-lifecycle)** - Development workflow
+- **[Agents API](../api/agents.md#sdlc-coordinator)** - SDLC coordinator agent
+- **[CLI API](../architecture/API.md#cli-api)** - CLI reference
+
+#### Related Guides
+- **[Agent Orchestration](../tutorials/agent-orchestration.md)** - Agent best practices
+- **[Document Management](DOCUMENT_MANAGEMENT.md)** - Documentation in Phase 7
+- **[Git Workflow](../api/agents.md#git-workflow-manager)** - Git operations
 
 ---
 

@@ -1,3 +1,13 @@
+---
+title: PRD (제품 요구사항 문서) 가이드
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: guides
+tags: [prd, requirements, documentation, planning]
+language: ko
+---
+
 # PRD (제품 요구사항 문서) 가이드
 
 ## 목차
@@ -362,10 +372,17 @@ Error: Failed to initialize SDLC pipeline
 ## 고급 주제
 
 ### 사용자 정의 템플릿
-`docs/prd/.config/templates/`에 사용자 정의 PRD 템플릿 생성:
-1. 기존 템플릿 복사
+PRD 템플릿은 스타터 프로젝트의 `starters/*/docs/templates/prd/`에 위치합니다:
+- `starters/basic/docs/templates/prd/standard.md`
+- `starters/api/docs/templates/prd/standard.md`
+- `starters/frontend/docs/templates/prd/standard.md`
+- `starters/fullstack/docs/templates/prd/standard.md`
+
+사용자 정의 템플릿 생성 방법:
+1. 스타터에서 기존 템플릿 복사
 2. 필요에 맞게 수정
-3. `--template=custom`로 사용
+3. 프로젝트의 `docs/prd/templates/` 디렉토리에 배치
+4. `--template=custom`로 사용
 
 ### 일괄 작업
 ```bash

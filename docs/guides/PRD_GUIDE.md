@@ -1,3 +1,12 @@
+---
+title: PRD (Product Requirements Document) Guide
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: guides
+tags: [prd, requirements, documentation, planning]
+---
+
 # PRD (Product Requirements Document) Guide
 
 ## Table of Contents
@@ -51,6 +60,13 @@ graph LR
     Approved --> InDevelopment[In Development]
     InDevelopment --> Completed
     Completed --> Archived
+    
+    style Draft fill:#fff3e0
+    style Review fill:#e3f2fd
+    style Approved fill:#e8f5e9
+    style InDevelopment fill:#fce4ec
+    style Completed fill:#f3e5f5
+    style Archived fill:#eceff1
 ```
 
 ### States Explained
@@ -246,6 +262,22 @@ When a PRD is approved:
 # /sdlc "feature-name" --init --from-prd
 ```
 
+```mermaid
+sequenceDiagram
+    participant User
+    participant PRD System
+    participant SDLC Pipeline
+    participant Agents
+    
+    User->>PRD System: /manage:prd approve "feature"
+    PRD System->>PRD System: Move to approved/
+    PRD System->>SDLC Pipeline: Trigger --init --from-prd
+    SDLC Pipeline->>SDLC Pipeline: Parse requirements
+    SDLC Pipeline->>SDLC Pipeline: Generate tasks
+    SDLC Pipeline->>Agents: Initialize phase agents
+    Agents-->>User: Pipeline ready
+```
+
 ### PRD to Task Conversion
 Requirements are automatically converted to development tasks:
 - Functional requirements → Implementation tasks
@@ -362,10 +394,17 @@ Shows all PRDs with their current locations and states.
 ## Advanced Topics
 
 ### Custom Templates
-Create custom PRD templates in `docs/prd/.config/templates/`:
-1. Copy existing template
+PRD templates are located in starter projects at `starters/*/docs/templates/prd/`:
+- `starters/basic/docs/templates/prd/standard.md`
+- `starters/api/docs/templates/prd/standard.md`
+- `starters/frontend/docs/templates/prd/standard.md`
+- `starters/fullstack/docs/templates/prd/standard.md`
+
+To create custom templates:
+1. Copy an existing template from the starter
 2. Modify for your needs
-3. Use with `--template=custom`
+3. Place in your project's `docs/prd/templates/` directory
+4. Use with `--template=custom`
 
 ### Bulk Operations
 ```bash
@@ -438,6 +477,24 @@ Current system lacks secure user authentication...
 - Support 10,000 concurrent users
 - 99.9% availability
 ```
+
+## Related Documentation
+
+### Guides and References
+- **[SDLC Pipeline Guide](SDLC_GUIDE.md)** - Complete pipeline documentation
+- **[Quick Start Guide](QUICKSTART.md#using-prd-system)** - Quick PRD setup
+- **[Document Management](DOCUMENT_MANAGEMENT.md)** - Documentation best practices
+- **[Architecture Overview](../architecture/ARCHITECTURE.md#prd-system-architecture)** - System design
+
+### Tutorials
+- **[PRD Development Tutorial](../tutorials/prd-development.md)** - Step-by-step PRD creation
+- **[SDLC Pipeline Usage](../tutorials/sdlc-pipeline-usage.md)** - From PRD to deployment
+- **[Getting Started](../tutorials/getting-started.md)** - First project tutorial
+
+### API Documentation
+- **[Commands API](../api/commands.md#management-commands)** - PRD management commands
+- **[Workflows API](../api/workflows.md#prd-to-implementation)** - PRD workflow automation
+- **[Agent API](../api/agents.md#prd-workflow-generator)** - PRD workflow generator agent
 
 ## Conclusion
 

@@ -1,9 +1,43 @@
+---
+title: Changelog
+author: Claude Code Team
+date: 2025-08-17
+version: 3.3.0
+category: documentation
+tags: [changelog, releases, versions, updates]
+language: en
+---
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [3.3.0] - 2025-08-17
+
+### Added
+- **Comprehensive Documentation System**
+  - API Reference documentation for all 26 agents, 26 commands, and 4 workflows
+  - 4 detailed tutorials (getting-started, prd-development, sdlc-pipeline-usage, agent-orchestration)
+  - Complete Korean translations for all API docs and tutorials
+  - API index with capabilities matrix and performance benchmarks
+  - Interactive examples and code snippets throughout documentation
+
+### Changed
+- **Documentation Structure Improvements**
+  - Created organized `docs/api/` directory with index, agents, commands, workflows documentation
+  - Created `docs/tutorials/` directory with hands-on learning guides
+  - Updated `docs/README.ko.md` with complete navigation to new documentation
+  - Enhanced root README.md with comprehensive documentation section
+  - Metadata headers added to all 24+ documentation files
+
+### Fixed
+- Corrected metadata dates from 2025-01-17 to 2025-08-17 across all documents
+- Fixed broken links in documentation (`.claude/agents/` → `../api/agents.md`)
+- Updated agent count from 25 to 26 in all references
+- Synchronized Korean and English documentation versions
 
 ## [3.2.1] - 2025-08-16
 

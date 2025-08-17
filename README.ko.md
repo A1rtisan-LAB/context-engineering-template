@@ -1,9 +1,19 @@
+---
+title: 컨텍스트 엔지니어링 템플릿
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: documentation
+tags: [claude-code, ai-agents, template, monorepo]
+language: ko
+---
+
 # Claude Code를 위한 컨텍스트 엔지니어링 템플릿
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.ko.md)
 
-> 🚀 25개의 전문 AI 에이전트, 26개의 커맨드, SDLC 파이프라인 시스템, PRD 기반 개발 워크플로우를 포함한 Claude Code 프로젝트용 고급 모노레포(monorepo) 템플릿 시스템
+> 🚀 26개의 전문 AI 에이전트, 26개의 커맨드, SDLC 파이프라인 시스템, PRD 기반 개발 워크플로우, 포괄적인 문서 시스템을 포함한 Claude Code 프로젝트용 고급 모노레포(monorepo) 템플릿 시스템
 
 ## 📦 새로운 모노레포 구조 (v3.0)
 
@@ -58,22 +68,22 @@ npm install
 
 ### 3. 새 프로젝트 생성
 ```bash
-# 새로운 CLI 사용
-node cli/claude-init.js my-project [starter-type] [target-path]
+# 새로운 CLI 사용 (PRD & SDLC 기본 포함)
+node cli/claude-init.js [프로젝트명] [스타터-타입] [대상-경로]
+
+# 권장 - 전체 설치:
+node cli/claude-init.js my-project basic . --full     # 모든 시스템 포함
 
 # 예제:
-node cli/claude-init.js                        # ./my-claude-project에 기본 프로젝트 생성
-node cli/claude-init.js my-api api             # API 프로젝트 생성
-node cli/claude-init.js my-app frontend ~/apps # ~/apps에 프론트엔드 앱 생성
+node cli/claude-init.js                               # PRD & SDLC 포함 기본 설치
+node cli/claude-init.js my-api api                    # 모든 기능 포함 API 프로젝트
+node cli/claude-init.js my-app frontend ~/apps        # 전체 설정 프론트엔드 앱
 
-# SDLC 파이프라인 시스템 포함:
-node cli/claude-init.js my-project basic . --with-sdlc
-node cli/claude-init.js my-api api . --with-sdlc --sdlc-template=agile
-
-# PRD 시스템 포함 (기본적으로 포함됨):
-node cli/claude-init.js my-project basic              # PRD 포함
-node cli/claude-init.js my-api api --no-prd          # PRD 제외
-node cli/claude-init.js my-app frontend --prd-template=frontend  # 커스텀 PRD 템플릿
+# 커스터마이징 옵션:
+node cli/claude-init.js my-project basic . --minimal  # 경량 설치
+node cli/claude-init.js my-api api . --sdlc-template=agile  # Agile SDLC 사용
+node cli/claude-init.js my-app frontend . --no-sdlc   # SDLC만 제외
+node cli/claude-init.js my-simple basic . --no-prd    # PRD만 제외
 ```
 
 ## 📁 프로젝트 구조

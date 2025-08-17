@@ -1,3 +1,12 @@
+---
+title: Performance Benchmark Report
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: reports
+tags: [benchmark, performance, testing, metrics]
+---
+
 # Performance Benchmark Report
 
 **Generated**: 2025-08-17T10:57:35.207Z

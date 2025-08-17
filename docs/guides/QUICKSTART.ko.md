@@ -1,6 +1,30 @@
+---
+title: 빠른 시작 가이드
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: guides
+tags: [quickstart, setup, installation, getting-started]
+language: ko
+---
+
 # 빠른 시작 가이드
 
 Claude Code Context Engineering Template를 5분 안에 시작하세요!
+
+## 목차
+1. [사전 요구사항](#사전-요구사항)
+2. [설치](#설치)
+3. [프로젝트 구조](#프로젝트-구조)
+4. [Claude Code 명령어 사용](#claude-code-명령어-사용)
+5. [PRD 시스템 사용](#prd-시스템-사용)
+6. [SDLC 파이프라인 사용](#sdlc-파이프라인-사용)
+7. [성능 팁](#성능-팁)
+8. [설정 테스트](#설정-테스트)
+9. [일반적인 워크플로우](#일반적인-워크플로우)
+10. [문제 해결](#문제-해결)
+11. [다음 단계](#다음-단계)
+12. [도움 받기](#도움-받기)
 
 ## 사전 요구사항
 
@@ -58,8 +82,13 @@ my-project/
 │   ├── agents/             # AI 에이전트 정의
 │   ├── commands/           # 커스텀 명령어
 │   └── workflows/          # 워크플로우 정의
+├── docs/
+│   └── prd/                # PRD 시스템 (INITIAL.md를 대체)
+│       ├── draft/          # 초안 PRD
+│       ├── review/         # 검토 중인 PRD
+│       ├── approved/       # 승인된 PRD
+│       └── templates/      # PRD 템플릿
 ├── CLAUDE.md               # AI 어시스턴트 지침
-├── INITIAL.md              # 기능 요청 템플릿
 └── README.md               # 프로젝트 문서
 ```
 
@@ -217,7 +246,7 @@ npm test
 ## 다음 단계
 
 1. [전체 문서](../README.md) 읽기
-2. [사용 가능한 에이전트](.claude/agents/) 탐색
+2. [사용 가능한 에이전트](../api/agents.md) 탐색
 3. [API 문서](API.ko.md) 확인
 4. 커뮤니티 토론 참여
 
@@ -225,7 +254,7 @@ npm test
 
 - [GitHub 이슈](https://github.com/A1rtisan-LAB/context-engineering-template/issues)
 - [문서](https://docs.anthropic.com/claude-code)
-- [기여 가이드](../CONTRIBUTING.ko.md)
+- [기여 가이드](../../CONTRIBUTING.ko.md)
 
 ---
 

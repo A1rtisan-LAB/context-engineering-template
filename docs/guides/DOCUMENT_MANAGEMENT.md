@@ -1,4 +1,24 @@
+---
+title: Document Management Guide
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: guides
+tags: [documentation, management, bilingual, automation]
+---
+
 # Document Management Guide
+
+## Table of Contents
+1. [Overview](#overview)
+2. [Key Features](#key-features)
+3. [Document Structure](#document-structure)
+4. [Using the doc-manager Agent](#using-the-doc-manager-agent)
+5. [Document Commands](#document-commands)
+6. [Validation Features](#validation-features)
+7. [Translation Management](#translation-management)
+8. [Best Practices](#best-practices)
+9. [Troubleshooting](#troubleshooting)
 
 ## Overview
 
@@ -263,6 +283,31 @@ meta:
 - Current metadata
 - Complete coverage
 - Clear examples
+
+## Workflow Integration Diagram
+
+```mermaid
+flowchart LR
+    subgraph "Documentation Workflow"
+        Dev[Developer] --> Write[Write Code]
+        Write --> Doc[Write Docs]
+        Doc --> Both[Both Languages]
+        Both --> Commit[Git Commit]
+        Commit --> Hook[Pre-commit Hook]
+        Hook --> Validate[Validate Docs]
+        Validate --> Pass{Pass?}
+        Pass -->|Yes| Push[Push to Repo]
+        Pass -->|No| Fix[Fix Issues]
+        Fix --> Doc
+        Push --> CICD[CI/CD Pipeline]
+        CICD --> Deploy[Deploy]
+    end
+    
+    style Dev fill:#e3f2fd
+    style Both fill:#e8f5e9
+    style Pass fill:#fff3e0
+    style Deploy fill:#c8e6c9
+```
 
 ## Troubleshooting
 

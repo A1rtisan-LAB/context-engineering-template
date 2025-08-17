@@ -1,6 +1,29 @@
+---
+title: Quick Start Guide
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: guides
+tags: [quickstart, setup, installation, getting-started]
+---
+
 # Quick Start Guide
 
 Get up and running with Claude Code Context Engineering Template in under 5 minutes!
+
+## Table of Contents
+1. [Prerequisites](#prerequisites)
+2. [Installation](#installation)
+3. [Project Structure](#project-structure)
+4. [Using Claude Code Commands](#using-claude-code-commands)
+5. [Using PRD System](#using-prd-system)
+6. [Using SDLC Pipeline](#using-sdlc-pipeline)
+7. [Performance Tips](#performance-tips)
+8. [Testing Your Setup](#testing-your-setup)
+9. [Common Workflows](#common-workflows)
+10. [Troubleshooting](#troubleshooting)
+11. [Next Steps](#next-steps)
+12. [Getting Help](#getting-help)
 
 ## Prerequisites
 
@@ -58,8 +81,13 @@ my-project/
 │   ├── agents/             # AI agent definitions
 │   ├── commands/           # Custom commands
 │   └── workflows/          # Workflow definitions
+├── docs/
+│   └── prd/                # PRD system (replaces INITIAL.md)
+│       ├── draft/          # Draft PRDs
+│       ├── review/         # PRDs under review
+│       ├── approved/       # Approved PRDs
+│       └── templates/      # PRD templates
 ├── CLAUDE.md               # AI assistant instructions
-├── INITIAL.md              # Feature request template
 └── README.md               # Project documentation
 ```
 
@@ -145,7 +173,7 @@ The SDLC Pipeline System provides structured development through 7 phases:
 
 **Available Templates**: `standard` (waterfall), `agile` (sprint-based), `hotfix` (emergency)
 
-For comprehensive SDLC pipeline guidance, see the [SDLC Pipeline Guide](SDLC_GUIDE.md).
+For comprehensive SDLC pipeline guidance, see the [SDLC Pipeline Guide](SDLC_GUIDE.md) and [SDLC Pipeline Tutorial](../tutorials/sdlc-pipeline-usage.md).
 
 ## Performance Tips
 
@@ -169,6 +197,8 @@ npm run benchmark
 ```
 
 ## Common Workflows
+
+For detailed workflow patterns, see the [Workflows API](../api/workflows.md) and [Agent Orchestration Tutorial](../tutorials/agent-orchestration.md).
 
 ### 1. Starting a New Feature
 ```bash
@@ -216,9 +246,27 @@ npm test
 
 ## Next Steps
 
+### Essential Reading
+1. **[Architecture Overview](../architecture/ARCHITECTURE.md)** - Understand the system design
+2. **[PRD Guide](PRD_GUIDE.md)** - Learn requirements-driven development
+3. **[SDLC Pipeline Guide](SDLC_GUIDE.md)** - Master the development pipeline
+4. **[Document Management](DOCUMENT_MANAGEMENT.md)** - Documentation best practices
+
+### API References
+1. **[API Index](../api/index.md)** - Complete API documentation
+2. **[Agents API](../api/agents.md)** - Explore 26 AI agents
+3. **[Commands API](../api/commands.md)** - All available commands
+4. **[Workflows API](../api/workflows.md)** - Workflow patterns
+
+### Tutorials
+1. **[PRD Development](../tutorials/prd-development.md)** - Build your first PRD
+2. **[SDLC Pipeline Usage](../tutorials/sdlc-pipeline-usage.md)** - Pipeline mastery
+3. **[Agent Orchestration](../tutorials/agent-orchestration.md)** - Agent best practices
+
+### Community
 1. Read the [full documentation](../README.md)
-2. Explore [available agents](.claude/agents/)
-3. Check the [API documentation](API.md)
+2. Check the [CLI API](../architecture/API.md)
+3. Review [Contributing Guidelines](../../CONTRIBUTING.md)
 4. Join the community discussions
 
 ## Getting Help

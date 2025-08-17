@@ -66,7 +66,7 @@ jobs:
         missing_ko=""
         for file in $(find . -name "*.md" -not -name "*.ko.md" -not -path "./node_modules/*" -not -path "./.git/*"); do
           ko_file="${file%.md}.ko.md"
-          if [ ! -f "$ko_file" ] && [[ ! "$file" == *"node_modules"* ]] && [[ ! "$file" == *"CHANGELOG"* ]] && [[ ! "$file" == *"LICENSE"* ]]; then
+          if [ ! -f "$ko_file" ] && [[ ! "$file" == *"node_modules"* ]] && [[ ! "$file" == *"docs/changelog/CHANGELOG"* ]] && [[ ! "$file" == *"LICENSE"* ]]; then
             missing_ko="$missing_ko- ${file#./}\n"
           fi
         done

@@ -1,3 +1,13 @@
+---
+title: SDLC 파이프라인 시스템 가이드
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: guides
+tags: [sdlc, pipeline, development, automation]
+language: ko
+---
+
 # SDLC 파이프라인 시스템 가이드
 
 ## 목차
@@ -939,7 +949,7 @@ SDLC 파이프라인 시스템은 소프트웨어 개발을 임시방편적인 �
 - [아키텍처 가이드](ARCHITECTURE.ko.md#sdlc-파이프라인-시스템-아키텍처)
 - [빠른 시작 가이드](QUICKSTART.ko.md#sdlc-파이프라인-사용)
 - [API 문서](API.ko.md#sdlc-cli-옵션)
-- [에이전트 문서](.claude/agents/sdlc-coordinator.md)
+- [에이전트 문서](../api/agents.md#sdlc-coordinator)
 
 ---
 

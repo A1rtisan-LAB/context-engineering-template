@@ -1,4 +1,19 @@
+---
+title: API Documentation
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: architecture
+tags: [api, cli, commands, reference]
+---
+
 # API Documentation
+
+## Table of Contents
+1. [CLI API](#cli-api)
+2. [Commands](#commands)
+3. [Package API](#package-api)
+4. [Extension API](#extension-api)
 
 ## CLI API
 

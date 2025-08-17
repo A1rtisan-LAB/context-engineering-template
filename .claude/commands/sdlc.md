@@ -138,7 +138,7 @@ Transform ad-hoc development into structured, repeatable processes:
 📊 **Outputs**:
   - Updated README.md
   - API documentation
-  - CHANGELOG.md
+  - docs/changelog/CHANGELOG.md
   - User guides
   - Troubleshooting guides
   - Code examples

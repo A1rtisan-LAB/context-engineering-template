@@ -1,4 +1,25 @@
+---
+title: 문서 관리 가이드
+author: Claude Code Team
+date: 2025-08-17
+version: 1.0.0
+category: guides
+tags: [documentation, management, bilingual, automation]
+language: ko
+---
+
 # 문서 관리 가이드
+
+## 목차
+1. [개요](#개요)
+2. [주요 기능](#주요-기능)
+3. [문서 구조](#문서-구조)
+4. [doc-manager 에이전트 사용](#doc-manager-에이전트-사용)
+5. [문서 명령어](#문서-명령어)
+6. [검증 기능](#검증-기능)
+7. [번역 관리](#번역-관리)
+8. [모범 사례](#모범-사례)
+9. [문제 해결](#문제-해결)
 
 ## 개요
 
