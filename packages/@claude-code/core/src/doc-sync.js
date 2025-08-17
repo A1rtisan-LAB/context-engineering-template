@@ -10,7 +10,15 @@ const path = require('path');
 
 class DocSync {
   constructor(rootDir = process.cwd()) {
-    this.rootDir = rootDir;
+    // Validate and normalize the root directory path
+    const normalizedPath = path.resolve(rootDir);
+    
+    // Ensure the path doesn't contain any directory traversal attempts
+    if (normalizedPath.includes('..') || !normalizedPath.startsWith(path.resolve(process.cwd()))) {
+      throw new Error('Invalid root directory: path traversal detected');
+    }
+    
+    this.rootDir = normalizedPath;
     this.issues = [];
     this.stats = {
       totalFiles: 0,

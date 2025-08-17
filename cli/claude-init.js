@@ -55,6 +55,18 @@ function parseArgs() {
   // Minimal installation option (excludes SDLC and PRD)
   const minimalInstall = args.includes('--minimal');
   
+  // Validate conflicting options
+  if (minimalInstall && fullInstall) {
+    console.error('❌ Error: --minimal and --full options cannot be used together');
+    process.exit(1);
+  }
+  
+  if (minimalInstall && (args.includes('--with-sdlc') || args.includes('--with-prd'))) {
+    console.error('❌ Error: --minimal cannot be used with --with-sdlc or --with-prd');
+    console.error('  Use --full or remove --minimal to include SDLC/PRD features');
+    process.exit(1);
+  }
+  
   // SDLC options
   const withSDLC = fullInstall || (!minimalInstall && !args.includes('--no-sdlc')); // SDLC is included by default
   const sdlcTemplateIndex = args.findIndex(arg => arg.startsWith('--sdlc-template='));
