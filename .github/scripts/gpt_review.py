@@ -472,7 +472,7 @@ Changed Files:
         print(f"Review completed. Total tokens: {self.total_tokens:,}, Total cost: ${self.total_cost:.4f}")
     
     def run_chunked_review(self, files: List[Dict[str, Any]]):
-        """Run review in chunks for large PRs"""
+        """Run review in chunks for large PRs and post each chunk separately"""
         # Create chunks
         chunks = self.chunk_manager.create_chunks(files)
         print(f"Created {len(chunks)} chunks for review")
@@ -485,13 +485,23 @@ Changed Files:
         chunk_reviews = []
         files_reviewed = set()
         total_lines = 0
+        critical_count = 0
+        warning_count = 0
+        suggestion_count = 0
+        
+        # First, post a summary comment
+        summary_comment = self._create_summary_header(len(chunks), len(files))
+        self.pr.create_issue_comment(summary_comment)
+        print("Posted summary comment")
         
         for i, chunk in enumerate(chunks):
             print(f"Processing chunk {i+1}/{len(chunks)}...")
             
             # Track files
+            chunk_files = []
             for file in chunk:
                 files_reviewed.add(file['filename'])
+                chunk_files.append(file['filename'])
                 total_lines += file['additions'] + file['deletions']
             
             # Create prompt for chunk
@@ -502,23 +512,27 @@ Changed Files:
             review = self.review_with_gpt(prompt)
             chunk_reviews.append(review)
             
+            # Count issues in this chunk
+            critical_count += review.count('🔴 Critical')
+            warning_count += review.count('🟡 Warning')
+            suggestion_count += review.count('🟢 Suggestion')
+            
+            # Post this chunk's review as a separate comment
+            chunk_comment = self._format_chunk_comment(i+1, len(chunks), chunk_files, review)
+            self.pr.create_issue_comment(chunk_comment)
+            print(f"Posted review for chunk {i+1}/{len(chunks)}")
+            
             # Rate limit handling
             if i < len(chunks) - 1:
-                time.sleep(1)  # 1 second delay between chunks
+                time.sleep(2)  # 2 second delay between chunks to avoid rate limits
         
-        # Merge all reviews
-        merged_review = self.merge_chunk_reviews(chunk_reviews)
-        
-        # Create chunk info
-        chunk_info = {
-            'total_chunks': len(chunks),
-            'files_reviewed': len(files_reviewed),
-            'total_lines': total_lines
-        }
-        
-        # Format and post merged review
-        comment = self.format_review_comment(merged_review, chunk_info)
-        self.post_review(comment)
+        # Post final summary with statistics
+        final_summary = self._create_final_summary(
+            len(chunks), len(files_reviewed), total_lines,
+            critical_count, warning_count, suggestion_count
+        )
+        self.pr.create_issue_comment(final_summary)
+        print("Posted final summary")
     
     def merge_chunk_reviews(self, reviews: List[str]) -> str:
         """Merge multiple chunk reviews into one coherent review"""
@@ -574,6 +588,69 @@ Changed Files:
         
         summary.append("*Full review was too large for a single comment. Consider reviewing smaller PRs for detailed feedback.*")
         
+        return '\n'.join(summary)
+    
+    def _create_summary_header(self, total_chunks: int, total_files: int) -> str:
+        """Create initial summary header for chunked review"""
+        header = []
+        header.append("## 🤖 AI Code Review by GPT-4o-mini (Large PR)")
+        header.append("")
+        header.append(f"### 📦 Chunked Review Starting")
+        header.append(f"- Total chunks to process: {total_chunks}")
+        header.append(f"- Total files to review: {total_files}")
+        header.append(f"- Model: {MODEL}")
+        header.append("")
+        header.append("📝 **Note**: This large PR will be reviewed in multiple parts.")
+        header.append("Each chunk will be posted as a separate comment for better readability.")
+        header.append("")
+        header.append("⏳ Processing chunks...")
+        return '\n'.join(header)
+    
+    def _format_chunk_comment(self, chunk_num: int, total_chunks: int, 
+                             files: List[str], review: str) -> str:
+        """Format individual chunk review comment"""
+        comment = []
+        comment.append(f"## 📦 AI Review - Part {chunk_num}/{total_chunks}")
+        comment.append("")
+        comment.append(f"### Files in this chunk ({len(files)} files):")
+        for file in files[:10]:  # Show first 10 files
+            comment.append(f"- `{file}`")
+        if len(files) > 10:
+            comment.append(f"- ... and {len(files) - 10} more files")
+        comment.append("")
+        comment.append("### 🔍 Review Details")
+        comment.append("")
+        comment.append(review)
+        comment.append("")
+        comment.append("---")
+        comment.append(f"*Part {chunk_num} of {total_chunks} - Review continues in next comment*")
+        return '\n'.join(comment)
+    
+    def _create_final_summary(self, chunks: int, files: int, lines: int,
+                            critical: int, warnings: int, suggestions: int) -> str:
+        """Create final summary comment after all chunks"""
+        summary = []
+        summary.append("## ✅ AI Code Review Complete")
+        summary.append("")
+        summary.append("### 📊 Final Statistics")
+        summary.append(f"- **Total chunks processed**: {chunks}")
+        summary.append(f"- **Files reviewed**: {files}")
+        summary.append(f"- **Lines analyzed**: {lines:,}")
+        summary.append("")
+        summary.append("### 🎯 Issue Summary")
+        summary.append(f"- 🔴 **Critical Issues**: {critical}")
+        summary.append(f"- 🟡 **Warnings**: {warnings}")
+        summary.append(f"- 🟢 **Suggestions**: {suggestions}")
+        summary.append(f"- **Total Issues**: {critical + warnings + suggestions}")
+        summary.append("")
+        summary.append("### 💰 Usage")
+        summary.append(f"- Tokens used: {self.total_tokens:,}")
+        summary.append(f"- Estimated cost: ${self.total_cost:.4f}")
+        summary.append("")
+        summary.append("---")
+        summary.append("*This review was split into multiple comments due to size.*")
+        summary.append("*Please review all parts above for complete feedback.*")
+        summary.append("*Reply with `/review` to trigger a new review.*")
         return '\n'.join(summary)
 
 if __name__ == "__main__":
