@@ -414,52 +414,56 @@ Changed Files:
         if len(reviews) == 1:
             return reviews[0]
         
-        merged = []
-        critical_issues = []
-        warnings = []
-        suggestions = []
+        all_issues = []
         
-        # Parse and categorize issues from each review
+        # Simply combine all reviews with chunk markers
         for i, review in enumerate(reviews):
-            lines = review.split('\n')
-            section = f"\n**Chunk {i+1}:**\n"
-            
-            for line in lines:
-                if '🔴' in line or 'Critical' in line.lower():
-                    critical_issues.append(line)
-                elif '🟡' in line or 'Warning' in line.lower():
-                    warnings.append(line)
-                elif '🟢' in line or 'Suggestion' in line.lower():
-                    suggestions.append(line)
-                else:
-                    # Keep other content
-                    if line.strip():
-                        merged.append(line)
+            if review.strip():
+                chunk_header = f"\n## 📦 Chunk {i+1} of {len(reviews)}\n"
+                all_issues.append(chunk_header)
+                all_issues.append(review)
         
-        # Build merged review
-        result = []
+        # Join all reviews
+        merged_content = '\n'.join(all_issues)
         
-        if critical_issues:
-            result.append("### 🔴 Critical Issues")
-            result.extend(critical_issues[:10])  # Limit to top 10
-            result.append("")
+        # Return a summarized version if too long
+        if len(merged_content) > 20000:  # GitHub comment limit
+            return self._summarize_reviews(reviews)
         
-        if warnings:
-            result.append("### 🟡 Warnings")
-            result.extend(warnings[:10])  # Limit to top 10
-            result.append("")
+        return merged_content
+    
+    def _summarize_reviews(self, reviews: List[str]) -> str:
+        """Create a summary when full review is too long"""
+        summary = []
+        summary.append("## 📊 Review Summary (Content truncated due to size)")
+        summary.append("")
         
-        if suggestions:
-            result.append("### 🟢 Suggestions")
-            result.extend(suggestions[:10])  # Limit to top 10
-            result.append("")
+        critical_count = 0
+        warning_count = 0
+        suggestion_count = 0
         
-        # Add general observations if any
-        if merged:
-            result.append("### 📝 General Observations")
-            result.extend(merged[:5])  # Limit general comments
+        for review in reviews:
+            critical_count += review.count('🔴 Critical')
+            warning_count += review.count('🟡 Warning')
+            suggestion_count += review.count('🟢 Suggestion')
         
-        return '\n'.join(result)
+        summary.append(f"- **Critical Issues**: {critical_count}")
+        summary.append(f"- **Warnings**: {warning_count}")
+        summary.append(f"- **Suggestions**: {suggestion_count}")
+        summary.append("")
+        summary.append("### Key Findings (First 3 chunks)")
+        summary.append("")
+        
+        # Include first 3 chunks partially
+        for i, review in enumerate(reviews[:3]):
+            lines = review.split('\n')[:20]  # First 20 lines of each chunk
+            summary.append(f"#### Chunk {i+1}")
+            summary.extend(lines)
+            summary.append("")
+        
+        summary.append("*Full review was too large for a single comment. Consider reviewing smaller PRs for detailed feedback.*")
+        
+        return '\n'.join(summary)
 
 if __name__ == "__main__":
     # Check for required environment variables
