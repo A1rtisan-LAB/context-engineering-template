@@ -4,9 +4,9 @@ Get up and running with Claude Code Context Engineering Template in under 5 minu
 
 ## Prerequisites
 
-- Node.js 16.0.0 or higher
+- Node.js 18.0.0 or higher
 - npm 8.0.0 or higher
-- Git (optional, for version control)
+- Git configured (for version control and GitHub features)
 
 ## Installation
 

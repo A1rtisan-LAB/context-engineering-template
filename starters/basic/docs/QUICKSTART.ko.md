@@ -4,9 +4,9 @@ Claude Code Context Engineering Template를 5분 안에 시작하세요!
 
 ## 사전 요구사항
 
-- Node.js 16.0.0 이상
+- Node.js 18.0.0 이상
 - npm 8.0.0 이상
-- Git (선택사항, 버전 관리용)
+- Git 설정 완료 (버전 관리 및 GitHub 기능용)
 
 ## 설치
 
